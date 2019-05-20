@@ -1,7 +1,7 @@
-const Mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 module.exports = class Database {
-  constructor (type, bot) {
+  constructor (bot) {
     console.log(`Shard #${bot.shard.id}: Initizlizing database connection: ${type}`)
     // this.sequilize = new Sequelize('database', 'user', 'password', {
     //     host: 'localhost',
@@ -12,11 +12,8 @@ module.exports = class Database {
     //     storage: 'database.sqlite',
     // });
 
-    if (type === 'members') {
-      this.db = this.setupMemberModel()
-    }
-    if (type === 'guilds') {
-      this.db = this.setupGuildModel()
+    this.models = {
+      Member: this.setupMemberModel
     }
   }
 
@@ -25,41 +22,15 @@ module.exports = class Database {
   }
 
   setupMemberModel () {
-
-    // let members = this.sequelize.define('Members', {
-    //     id: {
-    //         type: Sequelize.STRING,
-    //         unique: true,
-    //         allowNull: false,
-    //         primaryKey: true,
-    //     },
-    //     isBanned: {
-    //         type: Sequelize.BOOLEAN,
-    //         defaultValue: false,
-    //         allowNull: false,
-    //     },
-    //     level: {
-    //         type: Sequelize.INTEGER,
-    //         defaultValue: 1,
-    //         allowNull: false,
-    //     },
-    //     exp: {
-    //         type: Sequelize.INTEGER,
-    //         defaultValue: 0,
-    //         allowNull: false,
-    //     },
-    //     reputation: {
-    //         type: Sequelize.INTEGER,
-    //         defaultValue: 0,
-    //         allowNull: false,
-    //     },
-    //     credits: {
-    //         type: Sequelize.INTEGER,
-    //         defaultValue: 0,
-    //         allowNull: false,
-    //     },
-    // });
-    // return members;
+    return mongoose.model('members', {
+      id: { type: Number, required: true },
+      level: { type: Number, default: 0 },
+      credits: { type: Number, default: 0 },
+      reputation: { type: Number, default: 0 },
+      exp: { type: Number, default: 0 },
+      isBanned: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now() }
+    })
   }
 
   setupGuildModel () {
