@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const fs = require('fs')
-const Database = require('./database.js')
+const Database = require('@lib/database')
 
 module.exports = class Main {
   constructor () {
@@ -70,10 +70,11 @@ module.exports = class Main {
 
       files.forEach((f, i) => {
         // initiate the command class
-        let props = new (require(`./commands/${f}`))(this.DB)
+        let props = new (require(`./commands/${f}`))()
+        props.init(this.DB) // Passes the DB object to the class
 
         console.log(`Shard #${this.bot.shard.id}: Command ${f} Loaded!`)
-        this.bot.commands.set(props.help.name, props)
+        this.bot.commands.set(props.name, props)
       })
       console.log(`Shard #${this.bot.shard.id}: Commands loaded!`)
     })
