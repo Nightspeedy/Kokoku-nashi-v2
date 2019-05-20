@@ -3,7 +3,7 @@ const Discord = new Main();
 
 Discord.bot.on("ready", () => {
 
-    console.log(`shard with id: ${Discord.bot.shard.id} logged in!`);
+    console.log(`Shard #${Discord.bot.shard.id}: logged in!`);
 
 })
 

@@ -2,6 +2,10 @@ module.exports.run = async(bot, message, args, members) => {
 
     message.reply("test");
 
+    console.log(bot.commands);
+    console.log(message);
+    console.log(args);
+
 }
 
 module.exports.help = {

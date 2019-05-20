@@ -47,19 +47,19 @@ module.exports = class Main {
     runCommand(command, message, args){
 
         //Trying to run the command
+        console.log(`Shard #${this.bot.shard.id}: Received a command, checking if it's valid`);
         try {
 
-            console.log(`Shard #${this.bot.shard.id}: Received a command, checking if it's valid`);
             let commandFile = this.bot.commands.get(command);
+            if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`);
             commandFile.run(this.bot, message, args, this.members);
-            console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`);
 
         //And if an error is catched, no such command exists.
         } catch (error) {
 
             console.log(`Shard #${this.bot.shard.id}: Received invalid command, returning.`);
 
-            message.channel.send("**Error!** Unknown command!");
+            return message.channel.send("**Error!** Unknown command!");
         }
     }
 

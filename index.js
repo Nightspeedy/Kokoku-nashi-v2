@@ -7,6 +7,6 @@ console.log("Deploying shards...")
 manager.spawn();
 manager.on('launch', shard =>{
 
-    console.log(`Shard #${shard.id} spawned!`);
+    console.log(`Shard #${shard.id}: spawned!`);
 
 });
