@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const fs = require('fs')
-const Database = require('./database.js')
+const Database = require('@lib/database')
 
 module.exports = class Main {
   constructor () {
@@ -46,7 +46,7 @@ module.exports = class Main {
     try {
       let commandFile = this.bot.commands.get(command)
       if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`)
-      commandFile.run(this.bot, message, args, this.DB)
+      commandFile.trigger(message, args)
 
       // And if an error is catched, no such command exists.
     } catch (error) {
@@ -69,10 +69,12 @@ module.exports = class Main {
       }
 
       files.forEach((f, i) => {
-        let props = require(`./commands/${f}`)
+        // initiate the command class
+        let props = new (require(`./commands/${f}`))()
+        props.init(this.DB) // Passes the DB object to the class
 
         console.log(`Shard #${this.bot.shard.id}: Command ${f} Loaded!`)
-        this.bot.commands.set(props.help.name, props)
+        this.bot.commands.set(props.name, props)
       })
       console.log(`Shard #${this.bot.shard.id}: Commands loaded!`)
     })
