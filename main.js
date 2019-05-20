@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const fs = require('fs')
-const DB = require('./database.js')
+const Database = require('./database.js')
 
 module.exports = class Main {
   constructor () {
@@ -18,8 +18,7 @@ module.exports = class Main {
     this.prefix = this.config.prefix
 
     // Setting up database
-    this.members = new DB('members', this.bot)
-    this.guilds = new DB('guilds', this.bot)
+    this.DB = new Database(this.bot)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
@@ -47,7 +46,7 @@ module.exports = class Main {
     try {
       let commandFile = this.bot.commands.get(command)
       if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`)
-      commandFile.run(this.bot, message, args, this.members)
+      commandFile.run(this.bot, message, args, this.DB)
 
       // And if an error is catched, no such command exists.
     } catch (error) {
