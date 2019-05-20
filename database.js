@@ -11,10 +11,8 @@ module.exports = class Database {
       useNewUrlParser: true
     })
 
-    this.models = {
-      Member: this.setupMemberModel(),
-      Guild: this.setupGuildModel()
-    }
+    this.Member = this.setupMemberModel()
+    this.Guild = this.setupGuildModel()
   }
 
   setupMemberModel () {
