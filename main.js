@@ -46,7 +46,7 @@ module.exports = class Main {
     try {
       let commandFile = this.bot.commands.get(command)
       if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`)
-      commandFile.run(this.bot, message, args, this.DB)
+      commandFile.trigger(message, args)
 
       // And if an error is catched, no such command exists.
     } catch (error) {
@@ -69,7 +69,8 @@ module.exports = class Main {
       }
 
       files.forEach((f, i) => {
-        let props = require(`./commands/${f}`)
+        // initiate the command class
+        let props = new (require(`./commands/${f}`))(this.DB)
 
         console.log(`Shard #${this.bot.shard.id}: Command ${f} Loaded!`)
         this.bot.commands.set(props.help.name, props)
