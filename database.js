@@ -15,6 +15,11 @@ module.exports = class Database {
     this.Guild = this.setupGuildModel()
   }
 
+  async findMember (id) {
+    const member = await this.Member.findOne({ id })
+    return member
+  }
+
   setupMemberModel () {
     return mongoose.model('members', {
       id: { type: Number, required: true },
