@@ -1,13 +1,16 @@
-module.exports.run = async (bot, message, args, DB) => {
-  // Added an example of using the DB
-  message.reply(JSON.stringify(await DB.findMember(message.author.id)))
+const Command = require('@lib/command')
 
-  console.log(bot.commands)
-  console.log(message)
-  console.log(args)
-}
+module.exports = class extends Command {
+  constructor () {
+    super({
+      name: 'help',
+      description: "The help command, you're using this dummy!"
+    }) // Pass the appropriate command information to the base class.
 
-module.exports.help = {
-  name: 'help',
-  description: "The help command, you're using this dummy!"
+    this.fetch.member = true // Fetch the Member object from DB on trigger.
+  }
+
+  async run (message, args, fetched) {
+    message.reply(JSON.stringify(fetched.member))
+  }
 }
