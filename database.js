@@ -1,130 +1,49 @@
-const Mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 module.exports = class Database {
+  constructor (bot) {
+    console.log(`Shard #${bot.shard.id}: Initizlizing database connection...`)
 
-    constructor(type, bot) {
+    mongoose.connect(`mongodb://${process.env.KOKO_DB_ADDRESS}`, {
+      auth: { authSource: process.env.KOKO_DB_AUTH_SOURCE },
+      user: process.env.KOKO_DB_USER,
+      pass: process.env.KOKO_DB_PASS,
+      useNewUrlParser: true
+    })
 
-        console.log(`Shard #${bot.shard.id}: Initizlizing database connection: ${type}`);
-        // this.sequilize = new Sequelize('database', 'user', 'password', {
-        //     host: 'localhost',
-        //     dialect: 'sqlite',
-        //     logging: false,
-        //     operatorsAliases: false,
-        //     // SQLite only
-        //     storage: 'database.sqlite',
-        // });
+    this.Member = this.setupMemberModel()
+    this.Guild = this.setupGuildModel()
+  }
 
-        if(type == "members") {
-            this.db = this.setupMemberModel();
-        }
-        if(type == "guilds") {
-            this.db = this.setupGuildModel();
-        }
-    }
+  async findMember (id) {
+    const member = await this.Member.findOne({ id })
+    return member
+  }
 
-    findOne(id){
+  setupMemberModel () {
+    return mongoose.model('members', {
+      id: { type: Number, required: true },
+      level: { type: Number, default: 0 },
+      credits: { type: Number, default: 0 },
+      reputation: { type: Number, default: 0 },
+      exp: { type: Number, default: 0 },
+      isBanned: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now() }
+    })
+  }
 
-        return id;
-
-    }
-
-    setupMemberModel() {
-
-        // let members = this.sequelize.define('Members', {
-        //     id: {
-        //         type: Sequelize.STRING,
-        //         unique: true,
-        //         allowNull: false,
-        //         primaryKey: true,
-        //     },
-        //     isBanned: {
-        //         type: Sequelize.BOOLEAN,
-        //         defaultValue: false,
-        //         allowNull: false,
-        //     },
-        //     level: {
-        //         type: Sequelize.INTEGER,
-        //         defaultValue: 1,
-        //         allowNull: false,
-        //     },
-        //     exp: {
-        //         type: Sequelize.INTEGER,
-        //         defaultValue: 0,
-        //         allowNull: false,
-        //     },
-        //     reputation: {
-        //         type: Sequelize.INTEGER,
-        //         defaultValue: 0,
-        //         allowNull: false,
-        //     },
-        //     credits: {
-        //         type: Sequelize.INTEGER,
-        //         defaultValue: 0,
-        //         allowNull: false,
-        //     },
-        // });
-        // return members;
-    }
-
-    setupGuildModel(){
-
-        // let guilds = this.sequilize.define('guilds', {
-
-        //     id: {
-        //         type: Sequelize.STRING,
-        //         unique: true,
-        //         allowNull: false,
-        //         primaryKey: true,
-        //     },
-        //     logChannel: {
-        //         type: Sequelize.STRING,
-        //         allowNull: true,
-        //         defaultValue: "",
-        //     },
-        //     enableLogfiles: {
-        //         type: Sequelize.BOOLEAN,
-        //         allowNull: false,
-        //         defaultValue: false,
-        //     },
-        //     welcomeMessage: {
-        //         type: Sequelize.STRING,
-        //         allowNull: false,
-        //         defaultValue: `Welcome {MEMBER} just joined!`,
-        //     },
-        //     enableWelcomeMessage: {
-        //         type: Sequelize.BOOLEAN,
-        //         allowNull: false,
-        //         defaultValue: false,
-        //     },
-        //     leaveMessage: {
-        //         type: Sequelize.STRING,
-        //         allowNull: false,
-        //         defaultValue: `Bye {MEMBER} We're sad to see you go!`,
-        //     },
-        //     enableLeaveMessage: {
-        //         type: Sequelize.BOOLEAN,
-        //         allowNull: false,
-        //         defaultValue: false,
-        //     },
-        //     banMessage: {
-        //         type: Sequelize.STRING,
-        //         allowNull: false,
-        //         defaultValue: `{MEMBER} has experienced the true power of the banhammer!`,
-        //     },
-        //     enableBanMessage: {
-        //         type: Sequelize.BOOLEAN,
-        //         allowNull: false,
-        //         defaultValue: false,
-        //     },
-        //     isPremium: {
-        //         type: Sequelize.BOOLEAN,
-        //         allowNull: false,
-        //         defaultValue: false,
-        //     }
-
-        // });
-
-        // return guilds;
-    }
-
+  setupGuildModel () {
+    return mongoose.model('guilds', {
+      id: { type: Number, required: true },
+      logChannel: { type: String },
+      enableLogfiles: { type: Boolean, default: false },
+      welcomeMessage: { type: String, default: `Welcome {MEMBER} just joined!` },
+      enableWelcomeMessage: { type: Boolean, default: false },
+      leaveMessage: { type: String, default: `Bye {MEMBER} We're sad to see you go!` },
+      enableLeaveMessage: { type: Boolean, default: false },
+      banMessage: { type: String, default: `{MEMBER} has experienced the true power of the banhammer!` },
+      enableBanMessage: { type: Boolean, default: false },
+      isPremium: { type: Boolean, default: false }
+    })
+  }
 }
