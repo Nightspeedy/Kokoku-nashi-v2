@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const path = require('path')
-const Database = require('@lib/database')
+const DatabaseConnection = require('@lib/database')
 const CommandHandler = require('@lib/commandHandler')
 
 module.exports = class Main {
@@ -19,7 +19,7 @@ module.exports = class Main {
     this.prefix = this.config.prefix
 
     // Setting up database
-    this.DB = new Database(this.bot, this.config.db)
+    this.DB = new DatabaseConnection(this.bot, this.config.db)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
@@ -30,7 +30,7 @@ module.exports = class Main {
   }
 
   async setupCommands () {
-    await this.bot.cmdhandler.install(path.resolve('./commands'), this.DB)
+    await this.bot.cmdhandler.install(path.resolve('./commands'))
     this.bot.cmdhandler.listen(this.bot)
   }
 }
