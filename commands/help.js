@@ -10,7 +10,7 @@ module.exports = class extends Command {
     this.fetch.member = true // Fetch the Member object from DB on trigger.
   }
 
-  async run (message, args, fetched) {
-    message.reply(JSON.stringify(fetched.member))
+  async run ({message, args, member}) {
+    message.reply(JSON.stringify(member))
   }
 }
