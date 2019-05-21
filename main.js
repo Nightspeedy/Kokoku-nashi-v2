@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const fs = require('fs')
 const path = require('path')
 const Database = require('@lib/database')
 const CommandHandler = require('@lib/commandHandler')
@@ -29,8 +28,8 @@ module.exports = class Main {
 
     this.bot.login(this.token)
   }
-  
-  async setupCommands() {
+
+  async setupCommands () {
     await this.bot.cmdhandler.install(path.resolve('./commands'), this.DB)
     this.bot.cmdhandler.listen(this.bot)
   }
