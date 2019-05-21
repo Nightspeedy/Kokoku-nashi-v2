@@ -1,6 +1,8 @@
 const Discord = require('discord.js')
 const fs = require('fs')
+const path = require('path')
 const Database = require('@lib/database')
+const CommandHandler = require('@lib/commandHandler')
 
 module.exports = class Main {
   constructor () {
@@ -22,8 +24,8 @@ module.exports = class Main {
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.commands = new Discord.Collection()
-    this.setupCommandFiles()
+    this.bot.cmdhandler = new CommandHandler()
+    this.setupCommands()
 
     this.bot.login(this.token)
   }
@@ -44,9 +46,9 @@ module.exports = class Main {
     // Trying to run the command
     console.log(`Shard #${this.bot.shard.id}: Received a command, checking if it's valid`)
     try {
-      let commandFile = this.bot.commands.get(command)
-      if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`)
-      commandFile.trigger(message, args)
+      let command = this.bot.cmdhandler.commands.get(command)
+      if (command) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command.`)
+      command.trigger(message, args)
 
       // And if an error is catched, no such command exists.
     } catch (error) {
@@ -55,28 +57,8 @@ module.exports = class Main {
       return message.channel.send('**Error!** Unknown command!')
     }
   }
-
-  setupCommandFiles () {
-    fs.readdir('./commands/', (err, files) => {
-      console.log(`Shard #${this.bot.shard.id}: Loading commands...`)
-
-      if (err) console.log(err)
-
-      let jsfile = files.filter(f => f.split('.').pop() === 'js')
-
-      if (jsfile.length <= 0) {
-        throw new Error('CommandsNotFoundException: No command files have been found!')
-      }
-
-      files.forEach((f, i) => {
-        // initiate the command class
-        let props = new (require(`./commands/${f}`))()
-        props.init(this.DB) // Passes the DB object to the class
-
-        console.log(`Shard #${this.bot.shard.id}: Command ${f} Loaded!`)
-        this.bot.commands.set(props.name, props)
-      })
-      console.log(`Shard #${this.bot.shard.id}: Commands loaded!`)
-    })
+  
+  async setupCommands() {
+    await this.bot.cmdhandler.install(path.resolve('./commands'), this.DB)
   }
 }
