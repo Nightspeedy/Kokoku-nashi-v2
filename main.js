@@ -30,7 +30,7 @@ module.exports = class Main {
   }
 
   async setupCommands () {
-    await this.bot.cmdhandler.install(path.resolve('./commands'))
+    await this.bot.cmdhandler.install(path.resolve('./commands'), this.bot)
     this.bot.cmdhandler.listen(this.bot)
   }
 }
