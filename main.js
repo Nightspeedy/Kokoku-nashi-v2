@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
-const fs = require('fs')
-const Database = require('@lib/database')
+const path = require('path')
+const DatabaseConnection = require('@lib/database')
+const CommandHandler = require('@lib/commandHandler')
 
 module.exports = class Main {
   constructor () {
@@ -18,65 +19,18 @@ module.exports = class Main {
     this.prefix = this.config.prefix
 
     // Setting up database
-    this.DB = new Database(this.bot)
+    this.DB = new DatabaseConnection(this.bot, this.config.db)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.commands = new Discord.Collection()
-    this.setupCommandFiles()
+    this.bot.cmdhandler = new CommandHandler(this.prefix)
+    this.setupCommands()
 
     this.bot.login(this.token)
   }
 
-  handleMessage (message) {
-    // Checking whether or not the code should continue to run
-    if (message.author.bot) return
-    if (message.channel.type === 'dm') return
-
-    // Splitting up command and arguments so they are easily usable and accessible
-    const args = message.content.slice(this.prefix.length).trim().split(/ +/g)
-    const command = args.shift()
-
-    if (message.content.startsWith(this.config.prefix) && !message.content.includes(`${this.config.prefix} `)) this.runCommand(command, message, args)
-  }
-
-  runCommand (command, message, args) {
-    // Trying to run the command
-    console.log(`Shard #${this.bot.shard.id}: Received a command, checking if it's valid`)
-    try {
-      let commandFile = this.bot.commands.get(command)
-      if (commandFile) console.log(`Shard #${this.bot.shard.id}: Received valid command, running command file.`)
-      commandFile.trigger(message, args)
-
-      // And if an error is catched, no such command exists.
-    } catch (error) {
-      console.log(`Shard #${this.bot.shard.id}: Received invalid command, returning.`)
-
-      return message.channel.send('**Error!** Unknown command!')
-    }
-  }
-
-  setupCommandFiles () {
-    fs.readdir('./commands/', (err, files) => {
-      console.log(`Shard #${this.bot.shard.id}: Loading commands...`)
-
-      if (err) console.log(err)
-
-      let jsfile = files.filter(f => f.split('.').pop() === 'js')
-
-      if (jsfile.length <= 0) {
-        throw new Error('CommandsNotFoundException: No command files have been found!')
-      }
-
-      files.forEach((f, i) => {
-        // initiate the command class
-        let props = new (require(`./commands/${f}`))()
-        props.init(this.DB) // Passes the DB object to the class
-
-        console.log(`Shard #${this.bot.shard.id}: Command ${f} Loaded!`)
-        this.bot.commands.set(props.name, props)
-      })
-      console.log(`Shard #${this.bot.shard.id}: Commands loaded!`)
-    })
+  async setupCommands () {
+    await this.bot.cmdhandler.install(path.resolve('./commands'))
+    this.bot.cmdhandler.listen(this.bot)
   }
 }

@@ -6,11 +6,10 @@ module.exports = class extends Command {
       name: 'help',
       description: "The help command, you're using this dummy!"
     }) // Pass the appropriate command information to the base class.
-
     this.fetch.member = true // Fetch the Member object from DB on trigger.
   }
 
-  async run (message, args, fetched) {
-    message.reply(JSON.stringify(fetched.member))
+  async run ({ message, args, member }) {
+    message.reply(JSON.stringify(member))
   }
 }
