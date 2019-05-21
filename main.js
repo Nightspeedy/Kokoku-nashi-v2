@@ -19,7 +19,7 @@ module.exports = class Main {
     this.prefix = this.config.prefix
 
     // Setting up database
-    this.DB = new Database(this.bot)
+    this.DB = new Database(this.bot, this.config.db)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
