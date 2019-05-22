@@ -7,7 +7,8 @@ module.exports = class extends Command {
     super({
       name: 'avatar',
       description: "Get your avater, or someone else's",
-      type: "utility"
+      type: "utility",
+      args: "[@user]"
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 
