@@ -46,56 +46,6 @@ module.exports = class extends Command {
             return message.channel.send("Please tell me how many messages you want me to purge!")
         }
     }
-    // purgeLoop(number, message, loop){
-        
-    //     let a = number;
-    //     let b = message;
-    //     let c = loop;
-    //     if(c == false) return;
-
-    //     if (number > 100) message.channel.send("Deleting messages, this might take a while!");
-
-    //     number++
-    //     if (number <= 1) return message.channel.send("Sucessfully deleted messages!").delete(10000)
-    //     setTimeout( () => {
-
-    //         if (number > 100){
-    //             message.channel.fetchMessages({limit: 100}).then(fetched => {
-
-    //                 console.log(fetched)
-
-    //                 message.channel.bulkDelete(100).catch(err => {
-
-    //                     console.log(err)
-                        
-    //                     message.channel.send("**ERROR!** I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?")
-    //                     c = false
-
-    //                 });
-    //                 number -= 100
-    //             })
-    //         } else {
-    //             message.channel.fetchMessages({limit: number}).then(fetched => {
-
-    //                 console.log(fetched)
-
-    //                 message.channel.bulkDelete(number).catch(err => {
-
-    //                     console.log(err)
-
-    //                     message.channel.send("**ERROR!** I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?")
-    //                     c = false
-
-    //                 });
-    //                 number = 0
-
-    //                 c = false;                    
-    //             })
-    //         }
-
-    //         this.purgeLoop(a, b, c);
-    //     }, 5000)
-    // }
     purgeLoop(number, message, loop) {
         if(!loop) return
         if (number > 100) message.channel.send("Deleting messages, this might take a while!")
