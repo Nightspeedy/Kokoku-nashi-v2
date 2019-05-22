@@ -14,7 +14,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, member, args, color }) {
+  async run ({ message, args, color }) {
 
     let object = {
       general: "-",
