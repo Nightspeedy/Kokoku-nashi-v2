@@ -13,7 +13,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, member }) {
+  async run ({ message, member, color }) {
 
     let object = {
       general: "-",
@@ -38,6 +38,7 @@ module.exports = class extends Command {
 
     let embed = new RichEmbed()
     .setDescription("Use k!help [command] for detailed command information.")
+    .setColor(color)
     .addField("General commands", object.general)
     .addField("Game commands", object.games)
     .addField("Social commands", object.social)
