@@ -16,17 +16,20 @@ module.exports = class Main {
 
     // Creating easy access variables
     this.token = this.config.token
+    this.devToken = this.config.devToken
+    
     this.prefix = this.config.prefix
+    this.devPrefix = this.config.devPrefix
 
     // Setting up database
     this.DB = new DatabaseConnection(this.bot, this.config.db)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.cmdhandler = new CommandHandler(this.prefix)
+    this.bot.cmdhandler = new CommandHandler(this.devPrefix)
     this.setupCommands()
 
-    this.bot.login(this.token)
+    this.bot.login(this.devToken)
   }
 
   async setupCommands () {
