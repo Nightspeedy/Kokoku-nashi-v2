@@ -16,8 +16,7 @@ module.exports = class extends Command {
     }
 
     async run ({ message, args, color }) {
-
-
+        
         let embed = new RichEmbed()
         .setColor(color)
         
