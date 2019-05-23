@@ -12,7 +12,6 @@ module.exports = class extends Command {
       args: "{#channel} {'message in quotations'}",
       permissions: [PERMISSIONS.SEND_MESSAGES]
     }) // Pass the appropriate command information to the base class.
-    this.fetch.member = false // Fetch the Member object from DB on trigger.
 
     this.bot = bot
   }
