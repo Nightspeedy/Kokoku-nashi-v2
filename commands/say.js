@@ -1,5 +1,6 @@
 
 const Command = require('@lib/command')
+const PERMISSIONS = require('@lib/permissions')
 // const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
@@ -9,7 +10,7 @@ module.exports = class extends Command {
       description: 'Make the bot say something',
       type: 'social',
       args: "{#channel} {'message in quotations'}",
-      permissions: ['SEND_MESSAGES']
+      permissions: [PERMISSIONS.SEND_MESSAGES]
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = false // Fetch the Member object from DB on trigger.
 
