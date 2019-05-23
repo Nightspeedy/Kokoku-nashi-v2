@@ -8,7 +8,8 @@ module.exports = class extends Command {
       name: 'purge',
       description: 'Purge a specific amount of messages (maximum 1000 messages)',
       type: 'modCommand',
-      args: '{Amount}'
+      args: '{Amount}',
+      permissions: ['DELETE_MESSAGES']
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = false // Fetch the Member object from DB on trigger.
 

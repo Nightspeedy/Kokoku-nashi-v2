@@ -8,7 +8,8 @@ module.exports = class extends Command {
       name: 'say',
       description: 'Make the bot say something',
       type: 'social',
-      args: "{#channel} {'message in quotations'}"
+      args: "{#channel} {'message in quotations'}",
+      permissions: ['SEND_MESSAGES']
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = false // Fetch the Member object from DB on trigger.
 
