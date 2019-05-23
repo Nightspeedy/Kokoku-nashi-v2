@@ -17,7 +17,7 @@ module.exports = class Main {
     // Creating easy access variables
     this.token = this.config.token
     this.devToken = this.config.devToken
-    
+
     this.prefix = this.config.prefix
     this.devPrefix = this.config.devPrefix
 
