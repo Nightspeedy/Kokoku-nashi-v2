@@ -26,10 +26,10 @@ module.exports = class Main {
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.cmdhandler = new CommandHandler(this.devPrefix)
+    this.bot.cmdhandler = new CommandHandler(this.devPrefix || this.prefix)
     this.setupCommands()
 
-    this.bot.login(this.devToken)
+    this.bot.login(this.devToken || this.token)
   }
 
   async setupCommands () {

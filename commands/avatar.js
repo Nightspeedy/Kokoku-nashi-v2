@@ -10,7 +10,6 @@ module.exports = class extends Command {
       type: 'utility',
       args: '[@user]'
     }) // Pass the appropriate command information to the base class.
-    this.fetch.member = false // Fetch the Member object from DB on trigger.
 
     this.bot = bot
   }
