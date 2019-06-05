@@ -43,9 +43,11 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
+    if (!args[0]) return message.channel.send('syntax error') // replace with new error handler
     switch (args[0].toLowerCase()) {
       case 'set': await this.set({ message, args }); break
       case 'list': await this.list({ message, args }); break
+      default: message.channel.send('syntax error') // replace with new error handler
     }
   }
 }
