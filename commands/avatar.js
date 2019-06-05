@@ -1,5 +1,6 @@
 
 const Command = require('@lib/command')
+const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
@@ -8,7 +9,8 @@ module.exports = class extends Command {
       name: 'avatar',
       description: "Get your avater, or someone else's",
       type: 'utility',
-      args: '[@user]'
+      args: '[@user]',
+      permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

@@ -10,7 +10,7 @@ module.exports = class extends Command {
       description: 'Make the bot say something',
       type: 'social',
       args: "{#channel} {'message in quotations'}",
-      permissions: [PERMISSIONS.SEND_MESSAGES]
+      permissions: [PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
