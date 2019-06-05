@@ -23,7 +23,7 @@ module.exports = class extends Command {
 
     let permission = await Permission.findOne({ guild: message.guild.id, role: role.id })
     if (!permission) {
-      await Permission.create({ guild: message.guild.id, role: role.id, granted: [] })
+      permission = await Permission.create({ guild: message.guild.id, role: role.id, granted: [] })
     }
 
     let permName = Object.keys(PERMISSIONS).find(name => name === args[2].toUpperCase())
@@ -40,6 +40,23 @@ module.exports = class extends Command {
       await Permission.findOneAndUpdate({ guild: message.guild.id, role: role.id }, { $pull: { granted: permName } })
       return message.channel.send(`✅ ${permName} has been revoked from ${role.name}`)
     }
+  }
+
+  // very basic, make prettier later
+  async list ({ message, args }) {
+    let str = 'Role Permissions:'
+    let rules = await Permission.find({ guild: message.guild.id })
+    if (rules.length === 0) {
+      str += '\nnone'
+    }
+    rules.forEach(rule => {
+      str += `\n=====${message.guild.roles.find(r => parseInt(r.id) === rule.role).name}=====`
+      rule.granted.forEach(granted => {
+        str += `\n${granted}`
+      })
+    })
+
+    return message.channel.send(str)
   }
 
   async run ({ message, args }) {
