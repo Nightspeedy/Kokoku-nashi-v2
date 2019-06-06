@@ -41,7 +41,7 @@ module.exports = class extends Command {
       embed.setTitle('Command help: ' + args[0])
         .setColor(color)
         .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\n ${cmddesc}`)
-        .addField('Usage', `k!${command} ${cmdargs}`)
+        .addField('Usage:', `k!${command} ${cmdargs}`)
     } else {
       this.bot.cmdhandler.commands.forEach(cmd => {
         i++
