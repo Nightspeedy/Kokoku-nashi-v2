@@ -12,7 +12,8 @@ module.exports = class extends Command {
       name: 'permission',
       description: 'Manage permissions',
       type: TYPES.GUILD_OWNER,
-      args: '{set, list} {role name/id} {permission} {true/false}'
+      args: '{set, list} {role name/id} {permission} {true/false}',
+      permissions: [PERMISSIONS.GUILD_OWNER]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
