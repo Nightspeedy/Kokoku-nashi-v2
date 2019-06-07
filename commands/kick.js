@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
     this.fetch.guild = true
 
-    this.bot = bot
+    this.bot = bot;
   }
 
   async run ({ message, args, guild }) {
