@@ -1,5 +1,7 @@
 
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 

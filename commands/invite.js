@@ -1,4 +1,6 @@
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 
 module.exports = class extends Command {
@@ -6,7 +8,7 @@ module.exports = class extends Command {
     super({
       name: 'invite',
       description: "Send the bot invite URL via DM",
-      type: 'utility',
+      type: TYPES.UTILITY,
       args: '',
       permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.

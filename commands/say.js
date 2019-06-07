@@ -1,5 +1,6 @@
-
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 // const { RichEmbed } = require('discord.js')
 
@@ -8,7 +9,7 @@ module.exports = class extends Command {
     super({
       name: 'say',
       description: 'Make the bot say something',
-      type: 'social',
+      type: TYPES.MOD_COMMAND,
       args: "{#channel} {'message in quotations'}",
       permissions: [PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.

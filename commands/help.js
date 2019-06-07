@@ -1,4 +1,6 @@
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 
@@ -7,7 +9,7 @@ module.exports = class extends Command {
     super({
       name: 'help',
       description: "The help command, you're using this dummy!",
-      type: 'utility',
+      type: TYPES.UTILITY,
       args: '[Command]',
       permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.
@@ -17,18 +19,23 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
+
+    // Instead of having 20 variables, i put them in an object
     let object = {
-      general: '-',
-      modCommand: '-',
-      botOwner: '-',
-      utility: '-',
-      social: '-',
-      games: '-'
+      "general": '-',
+      "modCommand": '-',
+      "guildOwner": '-',
+      "botOwner": '-',
+      "utility": '-',
+      "social": '-',
+      "games": '-'
     }
-    let i = 0
 
     let embed = new RichEmbed()
-      .setColor(color)
+    .setColor(color)
+
+    // Total commands, will get value later
+    let i = 0
 
     if (args[0]) {
       let command = args[0]
@@ -54,6 +61,7 @@ module.exports = class extends Command {
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)
         .addField('Mod commands', object.modCommand)
+        .addField('Server owner commands', object.guildOwner)
         .addField('Bot owner commands', object.botOwner)
         .setFooter('Total commands: ' + i)
     }
