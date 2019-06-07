@@ -26,7 +26,7 @@ module.exports = class Main {
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.cmdhandler = new CommandHandler(this.devPrefix || this.prefix)
+    this.bot.cmdhandler = new CommandHandler(this.devPrefix || this.prefix, this.bot)
     this.setupCommands()
 
     this.bot.login(this.devToken || this.token)
