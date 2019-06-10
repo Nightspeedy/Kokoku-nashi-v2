@@ -31,7 +31,7 @@ module.exports = class extends Command {
       try {
         message.guild.channels.get(message.mentions.channels.first().id).send(string)
       } catch (err) {
-        message.channel.send('**ERROR!** You can only send messages to a channel in this server!')
+        return this.error({ message: 'You can only send messages to a channel in this server!' })
       }
     }
   }
