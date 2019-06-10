@@ -9,6 +9,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'permission',
+      aliases: ['perm'],
       description: 'Manage permissions',
       type: TYPES.GUILD_OWNER,
       args: '{set, list} {role name/id} {permission} {true/false}',
