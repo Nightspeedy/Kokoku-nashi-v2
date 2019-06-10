@@ -51,7 +51,7 @@ module.exports = class extends Command {
       str += '\nnone'
     }
     rules.forEach(rule => {
-      str += `\n=====${message.guild.roles.find(r => parseInt(r.id) === rule.role).name}=====`
+      str += `\n=====${message.guild.roles.find(r => r.id === rule.role).name}=====`
       rule.granted.forEach(granted => {
         str += `\n${granted}`
       })
