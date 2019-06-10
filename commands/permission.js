@@ -1,6 +1,6 @@
-
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { Permission } = require('@lib/models') // eslint-disable-line
 // const { RichEmbed } = require('discord.js')
@@ -11,7 +11,8 @@ module.exports = class extends Command {
       name: 'permission',
       description: 'Manage permissions',
       type: TYPES.GUILD_OWNER,
-      args: '{set, list} {role name/id} {permission} {true/false}'
+      args: '{set, list} {role name/id} {permission} {true/false}',
+      permissions: [PERMISSIONS.GUILD_OWNER]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
@@ -19,7 +20,7 @@ module.exports = class extends Command {
 
   async set ({ message, args }) {
     let role = message.guild.roles.find(role => role[typeof (args[1]) === 'number' ? 'id' : 'name'] === args[1])
-    if (!role) return message.channel.send(`Error: I couldn't find the role "${args[1]}"`)
+    if (!role) return this.error({ message: `I couldn't find the permission "${args[1]}"` }, { message, args })
 
     let permission = await Permission.findOne({ guild: message.guild.id, role: role.id })
     if (!permission) {
@@ -27,7 +28,7 @@ module.exports = class extends Command {
     }
 
     let permName = Object.keys(PERMISSIONS).find(name => name === args[2].toUpperCase())
-    if (!permName) return message.channel.send(`Error: I couldn't find the permission "${args[2]}"`)
+    if (!permName) return this.error({ message: `I couldn't find the permission "${args[2]}"` }, { message, args })
 
     let shouldAdd = args[3].toLowerCase() === 'true'
 
@@ -60,11 +61,11 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
-    if (!args[0]) return message.channel.send('syntax error') // replace with new error handler
+    if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     switch (args[0].toLowerCase()) {
       case 'set': await this.set({ message, args }); break
       case 'list': await this.list({ message, args }); break
-      default: message.channel.send('syntax error') // replace with new error handler
+      default: return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     }
   }
 }
