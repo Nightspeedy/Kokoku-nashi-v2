@@ -45,19 +45,38 @@ module.exports = class extends Command {
 
   // very basic, make prettier later
   async list ({ message, args }) {
-    let str = 'Role Permissions:'
-    let rules = await Permission.find({ guild: message.guild.id })
-    if (rules.length === 0) {
-      str += '\nnone'
-    }
-    rules.forEach(rule => {
-      str += `\n=====${message.guild.roles.find(r => r.id === rule.role).name}=====`
-      rule.granted.forEach(granted => {
-        str += `\n${granted}`
-      })
-    })
+    let fields = []
 
-    return message.channel.send(str)
+    let rules = await Permission.find({ guild: message.guild.id })
+
+    if (args[1]) {
+      rules.filter(rule => message.guild.roles.find(r => r.id === rule.role).name === args[1]).forEach(rule => {
+        fields.push({
+          name: message.guild.roles.find(r => r.id === rule.role).name || rule.role,
+          value: rule.granted.map(perm => `\`${perm}\``).join(' ')
+        })
+      })
+    } else {
+      fields.push({
+        name: 'Available Permissions',
+        value: Object.keys(PERMISSIONS).map(perm => `\`${perm}\``).join(' ')
+      })
+      fields.push({
+        name: 'Roles with custom rules',
+        value: rules.map(rule => `\`${message.guild.roles.find(r => r.id === rule.role).name || rule.role}\``).join(' ')
+      })
+    }
+
+    return message.channel.send({
+      embed: {
+        color: 0,
+        author: {
+          name: 'Permissions',
+          icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
+        },
+        fields: fields
+      }
+    })
   }
 
   async run ({ message, args }) {
