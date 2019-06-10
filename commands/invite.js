@@ -7,7 +7,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'invite',
-      description: "Send the bot invite URL via DM",
+      description: 'Send the bot invite URL via DM',
       type: TYPES.UTILITY,
       args: '',
       permissions: [PERMISSIONS.GENERAL]
@@ -17,10 +17,8 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-
-    message.author.send("Invite me to your server using this link: this.is.a.placeholder.com").catch( () => {
-        message.channel.send("I coultn't DM you, have you disabled it in your account settings?")
+    message.author.send('Invite me to your server using this link: this.is.a.placeholder.com').catch(() => {
+      message.channel.send("I coultn't DM you, have you disabled it in your account settings?")
     })
-
   }
 }

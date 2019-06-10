@@ -19,20 +19,19 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-
     // Instead of having 20 variables, i put them in an object
     let object = {
-      "general": '-',
-      "modCommand": '-',
-      "guildOwner": '-',
-      "botOwner": '-',
-      "utility": '-',
-      "social": '-',
-      "games": '-'
+      'general': '-',
+      'modCommand': '-',
+      'guildOwner': '-',
+      'botOwner': '-',
+      'utility': '-',
+      'social': '-',
+      'games': '-'
     }
 
     let embed = new RichEmbed()
-    .setColor(color)
+      .setColor(color)
 
     // Total commands, will get value later
     let i = 0

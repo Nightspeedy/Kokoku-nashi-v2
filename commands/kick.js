@@ -7,7 +7,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'kick',
-      description: "Kicks a user from the server.",
+      description: 'Kicks a user from the server.',
       type: TYPES.MOD_COMMAND,
       args: '{@mention} ["reason"]',
       permissions: [PERMISSIONS.KICK || PERMISSIONS.MODERATOR]
@@ -15,11 +15,10 @@ module.exports = class extends Command {
 
     this.fetch.guild = true
 
-    this.bot = bot;
+    this.bot = bot
   }
 
   async run ({ message, args, guild }) {
-
     let memberToKick = message.mentions.members.first()
     let reason = args[1]
 
@@ -28,15 +27,13 @@ module.exports = class extends Command {
 
     // TODO: Check guild DB to see if a reason needs to be forced.
 
-    //if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     try {
-
       memberToKick.kick(reason).catch(e => {
         return this.error(ERROR.NO_PERMISSION, { message, args })
       })
       message.channel.send('Successfully kicked user!')
-
     } catch (e) {
       console.error(e)
     }
