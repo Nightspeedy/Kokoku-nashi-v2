@@ -51,6 +51,7 @@ module.exports = class extends Command {
     } else {
       this.bot.cmdhandler.commands.forEach(cmd => {
         i++
+        if (object[cmd.type].indexOf(`\`${cmd.name}\``) > -1) return
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
