@@ -10,7 +10,7 @@ module.exports = class extends Command {
     super({
       name: 'permission',
       aliases: ['perm'],
-      description: 'Manage permissions',
+      description: 'Manage permissions, give a specific role access to a specific command.',
       type: TYPES.GUILD_OWNER,
       args: '{set, list} {role name/id} {permission} {true/false}',
       permissions: [PERMISSIONS.GUILD_OWNER]
@@ -70,7 +70,7 @@ module.exports = class extends Command {
 
     return message.channel.send({
       embed: {
-        color: 0,
+        color: this.color,
         author: {
           name: 'Permissions',
           icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
