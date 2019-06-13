@@ -11,7 +11,7 @@ module.exports = class extends Command {
       name: 'profile',
       aliases: ['account'],
       description: 'Shows your, or someone\'s profile!',
-      type: TYPES.MOD_COMMAND,
+      type: TYPES.SOCIAL,
       args: '[@mention]',
       permissions: [PERMISSIONS.KICK || PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.

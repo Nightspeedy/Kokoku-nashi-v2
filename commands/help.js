@@ -50,8 +50,8 @@ module.exports = class extends Command {
         .addField('Usage:', `k!${command} ${cmdargs}`)
     } else {
       this.bot.cmdhandler.commands.forEach(cmd => {
-        i++
         if (object[cmd.type].indexOf(`\`${cmd.name}\``) > -1) return
+        i++
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
