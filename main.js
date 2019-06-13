@@ -30,7 +30,7 @@ module.exports = class Main {
     this.handler = new Handler(this.bot)
     this.setup()
 
-    this.bot.login(this.token)
+    this.bot.login(this.devToken)
   }
 
   async setup() {
