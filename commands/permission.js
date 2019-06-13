@@ -1,4 +1,3 @@
-
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
@@ -10,9 +9,11 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'permission',
-      description: 'Manage permissions',
+      aliases: ['perm'],
+      description: 'Manage permissions, give a specific role access to a specific command.',
       type: TYPES.GUILD_OWNER,
-      args: '{set, list} {role name/id} {permission} {true/false}'
+      args: '{set, list} {role name/id} {permission} {true/false}',
+      permissions: [PERMISSIONS.GUILD_OWNER]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
@@ -45,19 +46,38 @@ module.exports = class extends Command {
 
   // very basic, make prettier later
   async list ({ message, args }) {
-    let str = 'Role Permissions:'
-    let rules = await Permission.find({ guild: message.guild.id })
-    if (rules.length === 0) {
-      str += '\nnone'
-    }
-    rules.forEach(rule => {
-      str += `\n=====${message.guild.roles.find(r => parseInt(r.id) === rule.role).name}=====`
-      rule.granted.forEach(granted => {
-        str += `\n${granted}`
-      })
-    })
+    let fields = []
 
-    return message.channel.send(str)
+    let rules = await Permission.find({ guild: message.guild.id })
+
+    if (args[1]) {
+      rules.filter(rule => message.guild.roles.find(r => r.id === rule.role).name === args[1]).forEach(rule => {
+        fields.push({
+          name: message.guild.roles.find(r => r.id === rule.role).name || rule.role,
+          value: rule.granted.map(perm => `\`${perm}\``).join(' ')
+        })
+      })
+    } else {
+      fields.push({
+        name: 'Available Permissions',
+        value: Object.keys(PERMISSIONS).map(perm => `\`${perm}\``).join(' ')
+      })
+      fields.push({
+        name: 'Roles with custom rules',
+        value: rules.map(rule => `\`${message.guild.roles.find(r => r.id === rule.role).name || rule.role}\``).join(' ')
+      })
+    }
+
+    return message.channel.send({
+      embed: {
+        color: this.color,
+        author: {
+          name: 'Permissions',
+          icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
+        },
+        fields: fields
+      }
+    })
   }
 
   async run ({ message, args }) {

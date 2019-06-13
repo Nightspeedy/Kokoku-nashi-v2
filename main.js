@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const path = require('path')
 const DatabaseConnection = require('@lib/database')
 const CommandHandler = require('@lib/commandHandler')
+const Handler = require('@lib/eventHandler')
 
 module.exports = class Main {
   constructor () {
@@ -26,14 +27,14 @@ module.exports = class Main {
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.bot.cmdhandler = new CommandHandler(this.devPrefix || this.prefix)
-    this.setupCommands()
+    this.handler = new Handler(this.bot)
+    this.setup()
 
-    this.bot.login(this.devToken || this.token)
+    this.bot.login(this.token)
   }
 
-  async setupCommands () {
-    await this.bot.cmdhandler.install(path.resolve('./commands'), this.bot)
-    this.bot.cmdhandler.listen(this.bot)
+  async setup() {
+    this.handler.setup();
+    this.handler.listen();
   }
 }

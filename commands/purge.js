@@ -1,5 +1,6 @@
-
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 
@@ -8,9 +9,9 @@ module.exports = class extends Command {
     super({
       name: 'purge',
       description: 'Purge a specific amount of messages (maximum 1000 messages)',
-      type: 'modCommand',
+      type: TYPES.MOD_COMMAND,
       args: '{Amount}',
-      permissions: [PERMISSIONS.MODERATOR]
+      permissions: [PERMISSIONS.MANAGE_MESSAGES || PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

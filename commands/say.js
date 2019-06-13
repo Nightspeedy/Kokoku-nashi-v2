@@ -1,5 +1,5 @@
-
 const Command = require('@lib/command')
+const TYPES = require('@lib/types')
 const PERMISSIONS = require('@lib/permissions')
 // const { RichEmbed } = require('discord.js')
 
@@ -8,7 +8,7 @@ module.exports = class extends Command {
     super({
       name: 'say',
       description: 'Make the bot say something',
-      type: 'social',
+      type: TYPES.MOD_COMMAND,
       args: "{#channel} {'message in quotations'}",
       permissions: [PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.
@@ -31,7 +31,7 @@ module.exports = class extends Command {
       try {
         message.guild.channels.get(message.mentions.channels.first().id).send(string)
       } catch (err) {
-        message.channel.send('**ERROR!** You can only send messages to a channel in this server!')
+        return this.error({ message: 'You can only send messages to a channel in this server!' })
       }
     }
   }
