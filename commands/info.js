@@ -63,7 +63,7 @@ module.exports = class extends Command {
       .addField('Bot Owner', `${owner.username}#${owner.discriminator}`)
       .addField('Bot Developers', developers)
       .addField('Shard ID', shard)
-      .addField('Shard latency', this.bot.ping + 'ms')
+      .addField('Shard latency', Math.round(this.bot.ping)+ 'ms')
       .addField('Shard uptime', onlineTime)
 
     message.channel.send(embed)
