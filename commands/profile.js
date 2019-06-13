@@ -13,7 +13,6 @@ module.exports = class extends Command {
       description: 'Shows your, or someone\'s profile!',
       type: TYPES.SOCIAL,
       args: '[@mention]',
-      permissions: [PERMISSIONS.KICK || PERMISSIONS.MODERATOR]
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
