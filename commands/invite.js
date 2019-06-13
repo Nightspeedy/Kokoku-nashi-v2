@@ -11,7 +11,6 @@ module.exports = class extends Command {
       description: 'Send the bot invite URL via DM',
       type: TYPES.UTILITY,
       args: '',
-      permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

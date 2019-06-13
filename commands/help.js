@@ -11,7 +11,6 @@ module.exports = class extends Command {
       description: "The help command, you're using this dummy!",
       type: TYPES.UTILITY,
       args: '[Command]',
-      permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 

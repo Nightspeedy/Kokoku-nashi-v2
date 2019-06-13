@@ -12,7 +12,6 @@ module.exports = class extends Command {
       description: "Get your avater, or someone else's",
       type: 'utility',
       args: '[@user]',
-      permissions: [PERMISSIONS.GENERAL]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
