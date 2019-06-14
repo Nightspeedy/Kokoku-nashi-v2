@@ -49,11 +49,11 @@ module.exports = class extends Command {
     let onlineTime = `${time[0]} ${str[0]}, ${time[1]} ${str[1]}, ${time[2]} ${str[2]}, ${time[3]} ${str[3]}`
     let shard = '#' + this.bot.shard.id
     let owner = { username: 'unknown', discriminator: '0000' }
-    try { this.bot.users.get('365452203982323712') } catch (e) {}
+    try { owner = this.bot.users.get('365452203982323712') } catch (e) {}
     let developers = ''
     for (let i = 0; i < OWNERS.length; i++) {
       let user = { username: 'unknown', discriminator: '0000' }
-      try { this.bot.users.get(OWNERS[i]) } catch (e) {}
+      try { user = this.bot.users.get(OWNERS[i]) } catch (e) {}
       developers += `${user.username}#${user.discriminator}\n`
     }
 
