@@ -42,7 +42,7 @@ module.exports = class extends Command {
 
       let mentionMember = await Member.findOne({id: message.mentions.members.first().id})
 
-      if (!mentionMember) return message.channel.send(this.error(ERROR.MEMBER_NOT_FOUND, { message, args }))
+      if (!mentionMember) return message.channel.send(this.error(ERROR.UNKNOWN_MEMBER, { message, args }))
       //if (message.mentions.members.first().user.bot) return message.channel.send("**Error!** Target user is a bot!");
 
       let nxtLvl = mentionMember.level * 200;
