@@ -9,10 +9,10 @@ module.exports = class extends Command {
     super({
       name: 'guild',
       aliases: ['server'],
-      description: 'Shows your, or someone\'s profile!',
+      description: 'Shows your guild\'s settings',
       type: TYPES.MOD_COMMAND,
       args: '[@mention]',
-      permissions: [PERMISSIONS.KICK || PERMISSIONS.MODERATOR]
+      permissions: [PERMISSIONS.SETTINGS]
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.guild = true

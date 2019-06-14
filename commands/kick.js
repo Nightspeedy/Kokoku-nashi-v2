@@ -10,7 +10,7 @@ module.exports = class extends Command {
       description: 'Kicks a user from the server.',
       type: TYPES.MOD_COMMAND,
       args: '{@mention} ["reason"]',
-      permissions: [PERMISSIONS.KICK || PERMISSIONS.MODERATOR]
+      permissions: [PERMISSIONS.KICK]
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.guild = true
