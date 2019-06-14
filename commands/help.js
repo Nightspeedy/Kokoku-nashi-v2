@@ -54,7 +54,7 @@ module.exports = class extends Command {
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
-      embed.setDescription('Use k!help [command] for detailed command information.')
+      embed.setDescription('Use k!help [command] for detailed command information. or [join the support server](https://discord.gg/rRSTX4w)')
         .addField('General commands', object.general)
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
