@@ -10,7 +10,7 @@ module.exports = class extends Command {
     super({
       name: 'avatar',
       description: "Get your avater, or someone else's",
-      type: 'utility',
+      type: TYPES.UTILITY,
       args: '[@user]',
     }) // Pass the appropriate command information to the base class.
 
