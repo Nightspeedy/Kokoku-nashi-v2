@@ -9,7 +9,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'info',
-      aliases: ['uptime', 'onlinetime', 'shardinfo'],
+      aliases: ['uptime', 'onlinetime', 'shardinfo', 'ping', 'pong'],
       description: 'Shows the shard\'s uptime!',
       type: TYPES.UTILITY,
       args: ''
@@ -57,15 +57,18 @@ module.exports = class extends Command {
       developers += `${user.username}#${user.discriminator}\n`
     }
 
-    let embed = new RichEmbed()
+    message.channel.send("Fetching information").then(sent =>{
+      let embed = new RichEmbed()
       .setColor(color)
       .setTitle(`:information_source: Information about ${this.bot.user.username}`)
       .addField('Bot Owner', `${owner.username}#${owner.discriminator}`)
       .addField('Bot Developers', developers)
       .addField('Shard ID', shard)
-      .addField('Shard latency', Math.round(this.bot.ping)+ 'ms')
+      .addField('API latency', Math.round(this.bot.ping)+ 'ms' )
+      .addField('Shard latency', `${sent.createdTimestamp - message.createdTimestamp}ms`)
       .addField('Shard uptime', onlineTime)
 
-    message.channel.send(embed)
+      sent.edit(embed);
+    });
   }
 }

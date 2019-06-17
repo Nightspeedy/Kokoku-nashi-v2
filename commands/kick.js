@@ -27,7 +27,7 @@ module.exports = class extends Command {
 
     // TODO: Check guild DB to see if a reason needs to be forced.
 
-    // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    //if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     try {
       memberToKick.kick(reason).catch(e => {

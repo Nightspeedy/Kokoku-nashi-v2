@@ -22,6 +22,7 @@ module.exports = class extends Command {
 
   async run ({ message, args, guild }) {
 
+    // TODO: Make nice embed with settings
     return message.reply(JSON.stringify(guild))
 
   }
