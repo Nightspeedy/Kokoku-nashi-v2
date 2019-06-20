@@ -11,7 +11,7 @@ module.exports = class extends Command {
       name: 'setdescription',
       aliases: ['set-description', 'description'],
       description: "Set your profile title",
-      type: 'utility',
+      type: TYPES.SOCIAL,
       args: '["New description"]',
     }) // Pass the appropriate command information to the base class.
 

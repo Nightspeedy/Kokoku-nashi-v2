@@ -1,5 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 // const { RichEmbed } = require('discord.js')
 
@@ -17,13 +18,15 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
-    message.delete()
+    message.delete().catch(e => {})
 
     let string = args[1]
 
-    if (!string) {
+    if (args[0] != message.mentions.channels.first()) {
       string = args[0]
     }
+
+    if (args[1] && args[0] != typeof Object) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (!message.mentions.channels.first()) {
       message.channel.send(string)
