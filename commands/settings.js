@@ -38,7 +38,7 @@ module.exports = class extends Command {
       // TODO: Make config using reactions, (leave this to Meme, he's a god at that.)
 
       switch(args[0]) {
-        case 'welcomemessage':
+        case 'setwelcomemessage':
           console.log("Inside case welcomemessage")
           let newMessage = args[1]
           if (!guild.isPremium && newMessage.length >= 100) return this.error({message: "Your message is longer then 100 characters! Upgrade to Premium to remove this restriction."})
@@ -56,15 +56,26 @@ module.exports = class extends Command {
 
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           } catch (e) {}
-
-        break
-      case 'setwelcomechannel': 
+          break
+        case 'setleavemessage':
+        
+          // TODO: Change the leave message in the database
+          return message.reply("Working on this, don't use.")
+          break
+        case 'setwelcomechannel': 
           if (!message.mentions.channels.first()) return this.error(ERROR.INVALID_CHANNEL, { message, args })
           let channel = message.guild.channels.get(message.mentions.channels.first().id)
           if(!channel) return this.error(ERROR.INVALID_CHANNEL, { message, args })
-          message.reply("PONGGGG!!!!")
-      }
 
+          // TODO: Change the welcome channel in the database
+          return message.reply("Working on this, don't use.")
+          break
+        case 'setbanmessage':
+        
+          // TODO: Change the ban message in the database
+          return message.reply("Working on this, don't use.")
+          break
+      }
     }
   }
 }
