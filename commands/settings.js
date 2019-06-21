@@ -25,12 +25,18 @@ module.exports = class extends Command {
 
     console.log("Ran settings.js")
     if (!args) {
+
       // TODO: Make embed with current settings
+      message.reply("We're currently working on a nice embed for your guild's settings! In the meantime, heres the raw data, sorry for the inconveinience!")
+      message.channel.send(JSON.stringify(guild))
+
     } else {
       args[0] = args[0].toLowerCase()
 
       if(!args[1]) return this.error(ERROR.INVALID_ARGUMENTS, {message, args})
+
       // TODO: Make config using reactions, (leave this to Meme, he's a god at that.)
+
       switch(args[0]) {
         case 'welcomemessage':
           console.log("Inside case welcomemessage")
