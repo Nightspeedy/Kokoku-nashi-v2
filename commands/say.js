@@ -22,17 +22,22 @@ module.exports = class extends Command {
 
     let string = args[1]
 
-    if (args[0] != message.mentions.channels.first()) {
-      string = args[0]
+    if (args[1]) {
+      console.log(args[0])
+      let channelMention = message.mentions.channels.firts()
+      if (!channelMention) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+      if (!message.guild.channels.get(channelMention.id)) return this.error(ERROR.INVALID_CHANNEL, { message, args })
     }
 
-    if (args[1] && args[0] != typeof Object) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (args[0] != message.mentions.channels.first() || !string) {
+      string = args[0]
+    }
 
     if (!message.mentions.channels.first()) {
       message.channel.send(string)
     } else {
       try {
-        message.guild.channels.get(message.mentions.channels.first().id).send(string)
+        message.guild.channels.get(message.mentions.channels.first().id).send(string).catch(e => console.error(e))
       } catch (err) {
         return this.error({ message: 'You can only send messages to a channel in this server!' })
       }
