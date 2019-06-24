@@ -1,7 +1,5 @@
 const Discord = require('discord.js')
-const path = require('path')
 const DatabaseConnection = require('@lib/database')
-const CommandHandler = require('@lib/commandHandler')
 const Handler = require('@lib/eventHandler')
 
 module.exports = class Main {
@@ -33,8 +31,8 @@ module.exports = class Main {
     this.bot.login(this.devToken)
   }
 
-  async setup() {
-    this.handler.setup();
-    this.handler.listen();
+  async setup () {
+    this.handler.setup()
+    this.handler.listen()
   }
 }

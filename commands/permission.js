@@ -21,25 +21,45 @@ module.exports = class extends Command {
 
   async set ({ message, args }) {
     let role = message.guild.roles.find(role => role[typeof (args[1]) === 'number' ? 'id' : 'name'] === args[1])
-    if (!role) return this.error({ message: `I couldn't find the permission "${args[1]}"` }, { message, args })
-
-    let permission = await Permission.findOne({ guild: message.guild.id, role: role.id })
-    if (!permission) {
-      permission = await Permission.create({ guild: message.guild.id, role: role.id, granted: [] })
+    if (!role) {
+      return message.channel.send({
+        embed: {
+          color: 0xff0000,
+          author: {
+            name: 'Permissions',
+            icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
+          },
+          description: `I couldn't find the role "${args[2]}"`
+        }
+      })
     }
 
-    let permName = Object.keys(PERMISSIONS).find(name => name === args[2].toUpperCase())
-    if (!permName) return this.error({ message: `I couldn't find the permission "${args[2]}"` }, { message, args })
+    let permName = Object.keys(PERMISSIONS).find(name => name === (args[2] || '').toUpperCase())
+    if (!permName) {
+      return message.channel.send({
+        embed: {
+          color: 0xff0000,
+          author: {
+            name: 'Permissions',
+            icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
+          },
+          description: `I couldn't find the permission "${args[2]}"`,
+          fields: [{
+            name: 'Available Permissions',
+            value: Object.keys(PERMISSIONS).map(perm => `\`${perm}\``).join(' ')
+          }]
+        }
+      })
+    }
 
     let shouldAdd = args[3].toLowerCase() === 'true'
+    let permission = await Permission.findOne({ guild: message.guild.id, role: role.id, granted: permName })
 
     if (shouldAdd) {
-      if (permission.granted.indexOf(permName) === -1) {
-        await Permission.findOneAndUpdate({ guild: message.guild.id, role: role.id }, { $push: { granted: permName } })
-      }
+      !permission && await Permission.create({ guild: message.guild.id, role: role.id, granted: permName })
       return message.channel.send(`✅ ${role.name} has been given ${permName}`)
     } else {
-      await Permission.findOneAndUpdate({ guild: message.guild.id, role: role.id }, { $pull: { granted: permName } })
+      permission && await permission.remove()
       return message.channel.send(`✅ ${permName} has been revoked from ${role.name}`)
     }
   }
@@ -51,20 +71,26 @@ module.exports = class extends Command {
     let rules = await Permission.find({ guild: message.guild.id })
 
     if (args[1]) {
-      rules.filter(rule => message.guild.roles.find(r => r.id === rule.role).name === args[1]).forEach(rule => {
-        fields.push({
-          name: message.guild.roles.find(r => r.id === rule.role).name || rule.role,
-          value: rule.granted.map(perm => `\`${perm}\``).join(' ')
-        })
+      let role = message.guild.roles.find(r => r.name === args[1])
+      fields.push({
+        name: role.name,
+        value: rules.filter(rule => rule.role === role.id).map(rule => `\`${rule.granted}\``).join(' ')
       })
     } else {
       fields.push({
         name: 'Available Permissions',
         value: Object.keys(PERMISSIONS).map(perm => `\`${perm}\``).join(' ')
       })
+
+      let roles = []
+      rules.forEach(rule => {
+        let role = message.guild.roles.find(r => r.id === rule.role) || { name: rule.id }
+        roles.indexOf(role.name) === -1 && roles.push(role.name)
+      })
+
       fields.push({
         name: 'Roles with custom rules',
-        value: rules.map(rule => `\`${message.guild.roles.find(r => r.id === rule.role).name || rule.role}\``).join(' ')
+        value: roles.map(role => `\`${role}\``).join(' ')
       })
     }
 
