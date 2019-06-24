@@ -3,6 +3,7 @@ const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { Guild } = require('@lib/models')
+const { RichEmbed } = require('discord.js')
 
 
 module.exports = class extends Command {
@@ -21,14 +22,27 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild }) {
+  async run ({ message, args, guild, color }) {
 
-    console.log("Ran settings.js")
+    // If no args are given, send the current configuration in an embed
     if (!args[0]) {
 
+      let object = await this.formatGuildSettings(guild)
+
+      let embed = new RichEmbed()
+      .setTitle("Guild settings for: " + message.guild.name)
+      .setColor(color)
+      .setDescription("Here you can see all the current settings for your server :D\n\nLegend:\n<:Enabled:524627369386967042> Setting enabled.\n<:Disabled:524627368757690398> Setting disabled.")
+      .addField("Logging", `Logfiles channel: ${object.logChannel}\nLevels channel: ${object.customLevelupChannel}\nWelcome/leave channel: ${object.joinLeaveChannel}`)
+      .addField("Enabled/disabled loggers", `${object.enableLogfiles} Logfiles\n${object.enableWelcomeMessage} Welcome messages\n${object.enableLeaveMessage} Leave messages\n${object.enableBanMessage} Ban messages`)
+      .addBlankField(false)
+      .addField("Custom messages", `Join message: ${object.welcomeMessage}\nLeave message: ${object.leaveMessage}\nBan message: ${object.banMessage}`)
+      .addBlankField(false)
+      .addField("Premium status", object.premiumStatus)
       // TODO: Make embed with current settings
-      message.reply("We're currently working on a nice embed for your guild's settings! In the meantime, heres the raw data, sorry for the inconveinience!")
-      message.channel.send(JSON.stringify(guild))
+
+      message.channel.send("We're currently working on a nice embed for your guild's settings! Not all data might show, sorry for the inconveinience!")
+      message.channel.send(embed)
 
     } else {
       args[0] = args[0].toLowerCase()
@@ -116,4 +130,69 @@ module.exports = class extends Command {
       }
     }
   }
+
+  // TODO: Make pretty, and less performance heavy.
+  async formatGuildSettings(guild) {
+    
+    // Get all logger channels
+    let logChannel = this.bot.channels.get(guild.logChannel)
+    let joinLeaveChannel = this.bot.channels.get(guild.joinLeaveChannel)
+    let customLevelupChannel = this.bot.channels.get(guild.customLevelupChannel)
+
+    // Check if channels exist
+    if (!logChannel) logChannel = "Not set"
+    if (!joinLeaveChannel) joinLeaveChannel = "Not set"
+    if (!customLevelupChannel) customLevelupChannel = "Not set"
+    
+    // Much variables, gets value later
+    let premiumStatus, enableBanMessage, enableLeaveMessage, enableLevelupMessages, enableLogfiles, enableWelcomeMessage
+
+    // A heck ton of checks for the variables that are just made
+    if(guild.isPremium) {premiumStatus = "Premium enabled"} else {premiumStatus = "Premium disabled"}
+    if(guild.enableBanMessage) {enableBanMessage = "<:Enabled:524627369386967042>"} else {enableBanMessage = "<:Disabled:524627368757690398>"}
+    if(guild.enableLeaveMessage) {enableLeaveMessage = "<:Enabled:524627369386967042>"} else {enableLeaveMessage = "<:Disabled:524627368757690398>"}
+    if(guild.enableLevelupMessages) {enableLevelupMessages = "<:Enabled:524627369386967042>"} else {enableLevelupMessages = "<:Disabled:524627368757690398>"}
+    if(guild.enableLogfiles) {enableLogfiles = "<:Enabled:524627369386967042>"} else {enableLogfiles = "<:Disabled:524627368757690398>"}
+    if(guild.enableWelcomeMessage) {enableWelcomeMessage = "<:Enabled:524627369386967042>"} else {enableWelcomeMessage = "<:Disabled:524627368757690398>"}
+
+    // Return all the data in an object
+    return {
+
+      // String values
+      logChannel: logChannel,
+      joinLeaveChannel: joinLeaveChannel,
+      customLevelupChannel: customLevelupChannel,
+
+      // String values
+      welcomeMessage: guild.welcomeMessage,
+      leaveMessage: guild.leaveMessage,
+      banMessage: guild.banMessage,
+
+      // Boolean values
+      enableWelcomeMessage: enableLeaveMessage,
+      enableLeaveMessage: enableLeaveMessage,
+      enableBanMessage: enableBanMessage,
+      enableLogfiles: enableLogfiles,
+      enableLevelupMessages: enableLevelupMessages,
+
+      premiumStatus: premiumStatus,
+    }
+  }
 }
+// id: { type: String, required: true },
+// logChannel: { type: String },
+// autoRoles: { type: Array, default: []},
+// autoRolesEnabled: { type: Boolean, default: false },
+// mustHaveReason: { type: Boolean, default: false },
+// enableLogfiles: { type: Boolean, default: false },
+// enableLevelupMessages: { type: Boolean, default: true },
+// customLevelupChannel: { type: String, default: undefined },
+// joinLeaveChannel: { type: String, default: undefined},
+// welcomeMessage: { type: String, default: `Welcome {MEMBER} just joined!` },
+// enableWelcomeMessage: { type: Boolean, default: false },
+// leaveMessage: { type: String, default: `Bye {MEMBER} We're sad to see you go!` },
+// enableLeaveMessage: { type: Boolean, default: false },
+// banMessage: { type: String, default: `{MEMBER} has experienced the true power of the banhammer!` },
+// enableBanMessage: { type: Boolean, default: false },
+// isPremium: { type: Boolean, default: false },
+// PREMIUMembedColor: { type: String }
