@@ -19,6 +19,9 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild }) {
+
+    if (!message.guild.me.hasPermission("KICK_MEMBERS")) return this.error(ERROR.BOT_NO_PERMISSION, {message, args})
+
     let memberToKick = message.mentions.members.first()
     let reason = args[1]
 
