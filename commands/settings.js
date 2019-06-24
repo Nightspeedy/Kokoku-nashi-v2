@@ -41,7 +41,7 @@ module.exports = class extends Command {
       .addField("Premium status", object.premiumStatus)
       // TODO: Make embed with current settings
 
-      message.channel.send("We're currently working on a nice embed for your guild's settings! Not all data might show, sorry for the inconveinience!")
+      message.channel.send("We're currently working on a nice embed for your guild's settings! Not all data might show, sorry for the inconvenience!")
       message.channel.send(embed)
 
     } else {
