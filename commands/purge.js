@@ -11,7 +11,7 @@ module.exports = class extends Command {
       description: 'Purge a specific amount of messages (maximum 1000 messages)',
       type: TYPES.MOD_COMMAND,
       args: '{Amount}',
-      permissions: [PERMISSIONS.MANAGE_MESSAGES || PERMISSIONS.MODERATOR]
+      permissions: [PERMISSIONS.PURGE]
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

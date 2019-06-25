@@ -43,6 +43,7 @@ module.exports = class extends Command {
 
       message.channel.send("We're currently working on a nice embed for your guild's settings! Not all data might show, sorry for the inconvenience!")
       message.channel.send(embed)
+      message.channel.send(JSON.stringify(guild))
 
     } else {
       args[0] = args[0].toLowerCase()
@@ -118,6 +119,22 @@ module.exports = class extends Command {
             guild.updateOne({enableLeaveMessage: true}).then(result => {
 
               return message.channel.send("Successfully enabled leave messages") 
+
+            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
+          }
+          break
+        case 'toggleautoroles':
+          if (args[1].toLowerCase() == "off") {
+            guild.updateOne({autoRolesEnabled: false}).then(result => {
+
+              return message.channel.send("Successfully disabled autoroles") 
+
+            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
+          } 
+          if (args[1].toLowerCase() == "on") {
+            guild.updateOne({autoRolesEnabled: true}).then(result => {
+
+              return message.channel.send("Successfully enabled autoroles") 
 
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           }
