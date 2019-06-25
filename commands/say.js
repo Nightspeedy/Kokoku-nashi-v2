@@ -9,7 +9,7 @@ module.exports = class extends Command {
     super({
       name: 'say',
       description: 'Make the bot say something',
-      type: TYPES.MOD_COMMAND,
+      type: TYPES.UTILITY,
       args: "{#channel} {'message in quotations'}",
     }) // Pass the appropriate command information to the base class.
 
