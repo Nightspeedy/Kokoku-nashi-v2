@@ -40,7 +40,7 @@ module.exports = class extends Command {
       
       try {
         let channel = message.guild.channels.get(message.mentions.channels.first().id)
-        if (!channel.permissionsFor(message.author.id).includes("SEND_MESSAGES")) return message.channel.send("You don't have permission to send messages to this channel!")
+        if (!channel.permissionsFor(message.author.id).has("SEND_MESSAGES")) return message.channel.send("You don't have permission to send messages to this channel!")
         channel.send(string).catch(e => console.error(e))
       } catch (err) {
         console.log(err)
