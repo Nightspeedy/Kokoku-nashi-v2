@@ -33,6 +33,5 @@ module.exports = class Main {
 
   async setup () {
     this.handler.setup()
-    this.handler.listen()
   }
 }
