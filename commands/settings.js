@@ -28,16 +28,15 @@ module.exports = class extends Command {
     if (!args[0]) {
 
       let object = await this.formatGuildSettings(guild)
-
+      console.log(object)
       let embed = new RichEmbed()
       .setTitle("Guild settings for: " + message.guild.name)
       .setColor(color)
       .setDescription("Here you can see all the current settings for your server :D\n\nLegend:\n<:Enabled:524627369386967042> Setting enabled.\n<:Disabled:524627368757690398> Setting disabled.")
       .addField("Logging", `Logfiles channel: ${object.logChannel}\nLevels channel: ${object.customLevelupChannel}\nWelcome/leave channel: ${object.joinLeaveChannel}`)
-      .addField("Enabled/disabled loggers", `${object.enableLogfiles} Logfiles\n${object.enableWelcomeMessage} Welcome messages\n${object.enableLeaveMessage} Leave messages\n${object.enableBanMessage} Ban messages`)
-      .addBlankField(false)
-      .addField("Custom messages", `Join message: ${object.welcomeMessage}\nLeave message: ${object.leaveMessage}\nBan message: ${object.banMessage}`)
-      .addBlankField(false)
+      .addField("General configuration", {})
+      .addField("Enabled messages", `${object.enableLogfiles} Logfiles\n${object.enableWelcomeMessage} Welcome messages\n${object.enableLeaveMessage} Leave messages\n${object.enableBanMessage} Ban messages`)
+      .addField("Custom messages", `Welcome message: ${object.welcomeMessage}\nLeave message: ${object.leaveMessage}\nBan message: ${object.banMessage}`)
       .addField("Premium status", object.premiumStatus)
       // TODO: Make embed with current settings
 
@@ -53,6 +52,7 @@ module.exports = class extends Command {
       // TODO: Make config using reactions, (leave this to Meme, he's a god at that.)
 
       switch(args[0]) {
+        // Set Welcome message
         case 'setwelcomemessage':
           let newMessage = args[1]
           if (!guild.isPremium && newMessage.length >= 100) return this.error({message: "Your message is longer then 100 characters! Upgrade to Premium to remove this restriction."})
@@ -70,11 +70,13 @@ module.exports = class extends Command {
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           } catch (e) {}
           break
+        // Set Leave message
         case 'setleavemessage':
         
           // TODO: Change the leave message in the database
           //return message.reply("Working on this, don't use.")
           break
+        // Set the join/leave message channel
         case 'setjoinleavechannel': 
           if (!message.mentions.channels.first()) return this.error(ERROR.INVALID_CHANNEL, { message, args })
           let channel = message.guild.channels.get(message.mentions.channels.first().id)
@@ -82,15 +84,13 @@ module.exports = class extends Command {
 
           let id = message.mentions.channels.first().id
           
-          if (!id) return
+          if (!id) return this.error(ERROR.INVALID_CHANNEL, { message, args })
 
           guild.updateOne({joinLeaveChannel: id}).then(result => {
 
           })
-
-          // TODO: Change the welcome channel in the database
-          //return message.reply("Working on this, don't use.")
           break
+        // Turn welcome messages on/off
         case 'togglewelcome':
           if (args[1].toLowerCase() == "off") {
             guild.updateOne({enableWelcomeMessage: false}).then(result => {
@@ -107,6 +107,7 @@ module.exports = class extends Command {
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           }
           break
+        // Turn leave messages on/off
         case 'toggleleave':
           if (args[1].toLowerCase() == "off") {
             guild.updateOne({enableLeaveMessage: false}).then(result => {
@@ -123,6 +124,7 @@ module.exports = class extends Command {
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           }
           break
+        // Toggle autoroles on/off
         case 'toggleautoroles':
           if (args[1].toLowerCase() == "off") {
             guild.updateOne({autoRolesEnabled: false}).then(result => {
@@ -139,6 +141,7 @@ module.exports = class extends Command {
             }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
           }
           break
+        // Set the server's ban message
         case 'setbanmessage':
         
           // TODO: Change the ban message in the database
@@ -165,28 +168,25 @@ module.exports = class extends Command {
     let premiumStatus, enableBanMessage, enableLeaveMessage, enableLevelupMessages, enableLogfiles, enableWelcomeMessage
 
     // A heck ton of checks for the variables that are just made
-    if(guild.isPremium) {premiumStatus = "Premium enabled"} else {premiumStatus = "Premium disabled"}
-    if(guild.enableBanMessage) {enableBanMessage = "<:Enabled:524627369386967042>"} else {enableBanMessage = "<:Disabled:524627368757690398>"}
-    if(guild.enableLeaveMessage) {enableLeaveMessage = "<:Enabled:524627369386967042>"} else {enableLeaveMessage = "<:Disabled:524627368757690398>"}
-    if(guild.enableLevelupMessages) {enableLevelupMessages = "<:Enabled:524627369386967042>"} else {enableLevelupMessages = "<:Disabled:524627368757690398>"}
-    if(guild.enableLogfiles) {enableLogfiles = "<:Enabled:524627369386967042>"} else {enableLogfiles = "<:Disabled:524627368757690398>"}
-    if(guild.enableWelcomeMessage) {enableWelcomeMessage = "<:Enabled:524627369386967042>"} else {enableWelcomeMessage = "<:Disabled:524627368757690398>"}
+    if(guild.isPremium == true) {premiumStatus = "Premium enabled"} else {premiumStatus = "Premium disabled"}
+    if(guild.enableBanMessage == true) {enableBanMessage = "<:Enabled:524627369386967042>"} else {enableBanMessage = "<:Disabled:524627368757690398>"}
+    if(guild.enableLeaveMessage == true) {enableLeaveMessage = "<:Enabled:524627369386967042>"} else {enableLeaveMessage = "<:Disabled:524627368757690398>"}
+    if(guild.enableLevelupMessages == true) {enableLevelupMessages = "<:Enabled:524627369386967042>"} else {enableLevelupMessages = "<:Disabled:524627368757690398>"}
+    if(guild.enableLogfiles == true) {enableLogfiles = "<:Enabled:524627369386967042>"} else {enableLogfiles = "<:Disabled:524627368757690398>"}
+    if(guild.enableWelcomeMessage == true) {enableWelcomeMessage = "<:Enabled:524627369386967042>"} else {enableWelcomeMessage = "<:Disabled:524627368757690398>"}
 
-    // Return all the data in an object
+    // Return all the data in an object 
     return {
 
-      // String values
       logChannel: logChannel,
       joinLeaveChannel: joinLeaveChannel,
       customLevelupChannel: customLevelupChannel,
 
-      // String values
       welcomeMessage: guild.welcomeMessage,
       leaveMessage: guild.leaveMessage,
       banMessage: guild.banMessage,
 
-      // Boolean values
-      enableWelcomeMessage: enableLeaveMessage,
+      enableWelcomeMessage: enableWelcomeMessage,
       enableLeaveMessage: enableLeaveMessage,
       enableBanMessage: enableBanMessage,
       enableLogfiles: enableLogfiles,
