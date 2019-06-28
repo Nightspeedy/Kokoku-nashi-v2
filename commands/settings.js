@@ -2,17 +2,14 @@ const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
-const { Guild } = require('@lib/models')
-const { RichEmbed } = require('discord.js')
-
 
 module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'settings',
       aliases: ['config', 'configuration'],
-      description: 'Shows your guild\'s settings, or sets them.\n Command always begins with k!settings\n\nAvailable settings are:\nsetwelcomemessage {"Message in quotations"}\nsetleavemessage {"Message in quotations"}\nsetbanmessage {"Message in quotations"}\n\nsetjoinleavechannel {#channelMention}\nsetlogchannel {#channelMention}\n\ntogglewelcome {on/off}\ntoggleleave {on/off}',
-      args: "{setting} {setting argument}",
+      description: 'Shows your guild\'s settings, or sets them.\n Command always begins with k!settings\n\nAvailable settings are:',
+      args: '{setting} {setting argument}',
       type: TYPES.MOD_COMMAND,
       permissions: [PERMISSIONS.SETTINGS]
     }) // Pass the appropriate command information to the base class.
@@ -20,179 +17,123 @@ module.exports = class extends Command {
     this.fetch.guild = true
 
     this.bot = bot
+
+    // Metadata for the different types,
+    // right now just used for help usage
+    this.types = {
+      text: { usage: '{"String in quotations"}' },
+      channel: { usage: '{#channelMention}' },
+      toggle: { usage: '{on/off}' }
+    }
+
+    // This array contains all the possible settings
+    // Type: text {name, dbField, limit, premiumLimit}
+    // Type: channel {name, dbField}
+    // Type: toggle {name, dbField}
+    // All settings can also have {needsPremium: true} to limit a setting to premium users.
+    this.settings = [
+      { type: 'text', name: 'welcomemessage', prettyName: 'Welcome Message', dbField: 'welcomeMessage', limit: 100, premiumLimit: 1000 },
+      { type: 'text', name: 'leavemessage', prettyName: 'Leave Message', dbField: 'leaveMessage', limit: 100, premiumLimit: 1000 },
+      { type: 'text', name: 'banmessage', prettyName: 'Ban Message', dbField: 'banMessage', limit: 100, premiumLimit: 1000 },
+      { type: 'channel', name: 'joinleavechannel', prettyName: 'Join/Leave Channel', dbField: 'joinLeaveChannel' },
+      { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
+      { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' }
+    ]
+
+    this.categories = [
+
+    ]
+
+    this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type]}` })
+  }
+
+  // Updates a single field in a provided document.
+  async update (document, field, value) {
+    let update = {}
+    update[field] = value
+    let result = await document.updateOne(update)
+    return result
+  }
+
+  // The handler for {type:text}
+  // Gets the 2nd argument, can be a word of
+  // a string in "quotes". If length is within
+  // limits, update the guild document.
+  async text ({ args, guild, setting }) {
+    let value = args[1]
+    if (value.length > setting[guild.isPremium ? 'premiumLimit' : 'limit']) return // error
+    await this.update(guild, setting.dbField, value)
+  }
+
+  // The handler for {type:channel}
+  // Gets the first mentioned channel and updates
+  // the guild document if channel isnt undefined.
+  async channel ({ message, guild, setting }) {
+    let channel = message.mentions.channels.first()
+    if (!channel) return // error
+    await this.update(guild, setting.dbField, channel.id)
+  }
+
+  // The handle for {type:toggle}
+  // on = true
+  // anything else = false
+  async toggle ({ message, args, guild, setting }) {
+    let value = args[1] === 'on'
+    await this.update(guild, setting.dbField, value)
   }
 
   async run ({ message, args, guild, color }) {
-
-    // If no args are given, send the current configuration in an embed
     if (!args[0]) {
-
-      let object = await this.formatGuildSettings(guild)
-
-      let embed = new RichEmbed()
-      .setTitle("Guild settings for: " + message.guild.name)
-      .setColor(color)
-      .setDescription("Here you can see all the current settings for your server :D\n\nLegend:\n<:Enabled:524627369386967042> Setting enabled.\n<:Disabled:524627368757690398> Setting disabled.")
-      .addField("Logging", `Logfiles channel: ${object.logChannel}\nLevels channel: ${object.customLevelupChannel}\nWelcome/leave channel: ${object.joinLeaveChannel}`)
-      .addField("Enabled/disabled loggers", `${object.enableLogfiles} Logfiles\n${object.enableWelcomeMessage} Welcome messages\n${object.enableLeaveMessage} Leave messages\n${object.enableBanMessage} Ban messages`)
-      .addBlankField(false)
-      .addField("Custom messages", `Join message: ${object.welcomeMessage}\nLeave message: ${object.leaveMessage}\nBan message: ${object.banMessage}`)
-      .addBlankField(false)
-      .addField("Premium status", object.premiumStatus)
-      // TODO: Make embed with current settings
-
-      message.channel.send("We're currently working on a nice embed for your guild's settings! Not all data might show, sorry for the inconvenience!")
-      message.channel.send(embed)
-
+      return this.overview({ message, guild })
     } else {
-      args[0] = args[0].toLowerCase()
+      // Get the setting from this.settings
+      let setting = this.settings.find(setting => setting.name === args[0].toLowerCase())
+      if (!setting) return this.error({ message: 'Couldn\'t find that setting.' }, { message })
 
-      if(!args[1]) return this.error(ERROR.INVALID_ARGUMENTS, {message, args})
+      try {
+        // Check if setting needs premium and, if so, the guild has premuim.
+        if (setting.needsPremium && !guild.isPremium) return this.error(ERROR.NEEDS_PREMIUM, { message })
 
-      // TODO: Make config using reactions, (leave this to Meme, he's a god at that.)
+        // This class has functions named after the possible types.
+        // Therefore you can do this[type]() to run the types handler.
+        // Ex. {type=text}, this[setting.type]() === this.text()
+        this[setting.type]({ message, args, guild, setting })
 
-      switch(args[0]) {
-        case 'setwelcomemessage':
-          let newMessage = args[1]
-          if (!guild.isPremium && newMessage.length >= 100) return this.error({message: "Your message is longer then 100 characters! Upgrade to Premium to remove this restriction."})
-          if (newMessage.length >= 1000) return this.error({message: "Your message is longer then 1000 characters!"})
-          try {
-            guild.updateOne({welcomeMessage: newMessage}).then(result => {
-
-              let guild = async()=>{return await Guild.findOne({id: guild.id})} 
-              if (guild.welcomeMessage == newMessage) {
-                return message.channel.send("Successfully updated welcome message!")
-              } else {
-                return this.error(ERROR.TRY_AGAIN, {message, args})
-              }
-
-            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
-          } catch (e) {}
-          break
-        case 'setleavemessage':
-        
-          // TODO: Change the leave message in the database
-          //return message.reply("Working on this, don't use.")
-          break
-        case 'setjoinleavechannel': 
-          if (!message.mentions.channels.first()) return this.error(ERROR.INVALID_CHANNEL, { message, args })
-          let channel = message.guild.channels.get(message.mentions.channels.first().id)
-          if(!channel) return this.error(ERROR.INVALID_CHANNEL, { message, args })
-
-          let id = message.mentions.channels.first().id
-          
-          if (!id) return
-
-          guild.updateOne({joinLeaveChannel: id}).then(result => {
-
-          })
-
-          // TODO: Change the welcome channel in the database
-          //return message.reply("Working on this, don't use.")
-          break
-        case 'togglewelcome':
-          if (args[1].toLowerCase() == "off") {
-            guild.updateOne({enableWelcomeMessage: false}).then(result => {
-
-              return message.channel.send("Successfully disabled welcome messages") 
-
-            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
-          } 
-          if (args[1].toLowerCase() == "on") {
-            guild.updateOne({enableWelcomeMessage: true}).then(result => {
-
-              return message.channel.send("Successfully enabled welcome messages") 
-
-            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
-          }
-          break
-        case 'toggleleave':
-          if (args[1].toLowerCase() == "off") {
-            guild.updateOne({enableLeaveMessage: false}).then(result => {
-    
-              return message.channel.send("Successfully disabled leave messages") 
-    
-            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
-          }
-          if (args[1].toLowerCase() == "on") {
-            guild.updateOne({enableLeaveMessage: true}).then(result => {
-
-              return message.channel.send("Successfully enabled leave messages") 
-
-            }).catch(e => this.error(ERROR.TRY_AGAIN, {message, args}))
-          }
-          break
-        case 'setbanmessage':
-        
-          // TODO: Change the ban message in the database
-          //return message.reply("Working on this, don't use.")
-          break
+        return this.success('Setting Updated', `:ok_hand: Successfully updated \`${setting.name}\``, { message })
+      } catch (e) {
+        console.error(e)
+        return this.error(ERROR.TRY_AGAIN, { message })
       }
     }
   }
 
-  // TODO: Make pretty, and less performance heavy.
-  async formatGuildSettings(guild) {
-    
-    // Get all logger channels
-    let logChannel = this.bot.channels.get(guild.logChannel)
-    let joinLeaveChannel = this.bot.channels.get(guild.joinLeaveChannel)
-    let customLevelupChannel = this.bot.channels.get(guild.customLevelupChannel)
+  async overview ({ message, guild }) {
+    let fields = { text: [], channel: [], toggle: [] }
+    let [enabled, disabled] = ['<:Enabled:524627369386967042>', '<:Disabled:524627368757690398>']
 
-    // Check if channels exist
-    if (!logChannel) logChannel = "Not set"
-    if (!joinLeaveChannel) joinLeaveChannel = "Not set"
-    if (!customLevelupChannel) customLevelupChannel = "Not set"
-    
-    // Much variables, gets value later
-    let premiumStatus, enableBanMessage, enableLeaveMessage, enableLevelupMessages, enableLogfiles, enableWelcomeMessage
+    this.settings.forEach(setting => {
+      switch (setting.type) {
+        case 'text': fields.text.push(`${setting.prettyName} *[${setting.name}]*\n\`\`\`${guild[setting.dbField]}\`\`\``); break
+        case 'channel': fields.channel.push(`${setting.prettyName} *[${setting.name}]*: ${guild[setting.dbField] ? `<#${guild[setting.dbField]}>` : 'No channel set.'}`); break
+        case 'toggle': fields.toggle.push(`${guild[setting.dbField] ? enabled : disabled} ${setting.prettyName} *[${setting.name}]*`); break
+      }
+    })
 
-    // A heck ton of checks for the variables that are just made
-    if(guild.isPremium) {premiumStatus = "Premium enabled"} else {premiumStatus = "Premium disabled"}
-    if(guild.enableBanMessage) {enableBanMessage = "<:Enabled:524627369386967042>"} else {enableBanMessage = "<:Disabled:524627368757690398>"}
-    if(guild.enableLeaveMessage) {enableLeaveMessage = "<:Enabled:524627369386967042>"} else {enableLeaveMessage = "<:Disabled:524627368757690398>"}
-    if(guild.enableLevelupMessages) {enableLevelupMessages = "<:Enabled:524627369386967042>"} else {enableLevelupMessages = "<:Disabled:524627368757690398>"}
-    if(guild.enableLogfiles) {enableLogfiles = "<:Enabled:524627369386967042>"} else {enableLogfiles = "<:Disabled:524627368757690398>"}
-    if(guild.enableWelcomeMessage) {enableWelcomeMessage = "<:Enabled:524627369386967042>"} else {enableWelcomeMessage = "<:Disabled:524627368757690398>"}
+    console.log(fields)
 
-    // Return all the data in an object
-    return {
-
-      // String values
-      logChannel: logChannel,
-      joinLeaveChannel: joinLeaveChannel,
-      customLevelupChannel: customLevelupChannel,
-
-      // String values
-      welcomeMessage: guild.welcomeMessage,
-      leaveMessage: guild.leaveMessage,
-      banMessage: guild.banMessage,
-
-      // Boolean values
-      enableWelcomeMessage: enableLeaveMessage,
-      enableLeaveMessage: enableLeaveMessage,
-      enableBanMessage: enableBanMessage,
-      enableLogfiles: enableLogfiles,
-      enableLevelupMessages: enableLevelupMessages,
-
-      premiumStatus: premiumStatus,
-    }
+    return message.channel.send({ embed: {
+      color: 0x666666,
+      title: `⚙️ Guild Settings for ${message.guild.name}`,
+      description: 'Here you can see all the current settings for your server :D\n',
+      fields: [
+        { name: 'Channels', value: fields.channel.join('\n') },
+        { name: '\u200b', value: '\u200b' }, // Empty
+        { name: 'Messages', value: fields.text.join('\n') },
+        { name: '\u200b', value: '\u200b' }, // Empty
+        { name: 'Toggles', value: fields.toggle.join('\n') },
+        { name: '\u200b', value: `${guild.isPremium ? enabled : disabled} Premium` }
+      ],
+      timestamp: new Date()
+    } })
   }
 }
-// id: { type: String, required: true },
-// logChannel: { type: String },
-// autoRoles: { type: Array, default: []},
-// autoRolesEnabled: { type: Boolean, default: false },
-// mustHaveReason: { type: Boolean, default: false },
-// enableLogfiles: { type: Boolean, default: false },
-// enableLevelupMessages: { type: Boolean, default: true },
-// customLevelupChannel: { type: String, default: undefined },
-// joinLeaveChannel: { type: String, default: undefined},
-// welcomeMessage: { type: String, default: `Welcome {MEMBER} just joined!` },
-// enableWelcomeMessage: { type: Boolean, default: false },
-// leaveMessage: { type: String, default: `Bye {MEMBER} We're sad to see you go!` },
-// enableLeaveMessage: { type: Boolean, default: false },
-// banMessage: { type: String, default: `{MEMBER} has experienced the true power of the banhammer!` },
-// enableBanMessage: { type: Boolean, default: false },
-// isPremium: { type: Boolean, default: false },
-// PREMIUMembedColor: { type: String }
