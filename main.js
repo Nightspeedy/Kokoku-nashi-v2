@@ -25,14 +25,13 @@ module.exports = class Main {
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
-    this.handler = new Handler(this.bot)
+    this.handler = new Handler(this)
     this.setup()
 
-    this.bot.login(this.devToken)
+    this.bot.login(this.devToken || this.token)
   }
 
   async setup () {
     this.handler.setup()
-    this.handler.listen()
   }
 }
