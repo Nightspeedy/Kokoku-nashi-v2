@@ -1,30 +1,30 @@
+const Event = require('@lib/event')
 const { Guild } = require('@lib/models')
 
-const handle = async (member) => {
-  let guild = await Guild.findOne({ id: member.guild.id })
+module.exports = class extends Event {
+  constructor (bot) {
+    super({ event: 'guildMemberAdd' })
+    this.bot = bot
+  }
 
-  if (guild.enableWelcomeMessage && guild.joinLeaveChannel !== undefined) {
-    let message = guild.welcomeMessage
-    message = message.replace('{MEMBER}', `<@${member.user.id}>`)
+  async trigger (member) {
+    let guild = await Guild.findOne({ id: member.guild.id })
 
-    /* let embed = new RichEmbed()
-      .setTitle('Member joined!')
-      .addField('Name', member.user.name) */
+    if (guild.enableWelcomeMessage && guild.joinLeaveChannel !== undefined) {
+      let message = guild.welcomeMessage
+      message = message.replace('{MEMBER}', `<@${member.user.id}>`)
+
+      try {
+        this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { console.log(e) })
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
     try {
-      this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { console.log(e) })
+      member.setRoles(guild.autoRoles)
     } catch (e) {
-      console.error(e)
+      console.log(e)
     }
   }
-
-  try {
-    member.setRoles(guild.autoRoles)
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-module.exports = async (on) => {
-  on('guildMemberAdd', handle)
 }

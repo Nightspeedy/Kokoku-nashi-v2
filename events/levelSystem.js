@@ -1,14 +1,16 @@
+const { Event } = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
 
-let levelSystem = new class LevelSystem {
+module.exports = new class LevelSystem extends Event {
   constructor (bot) {
+    super({ event: 'message' })
     this.minExp = 100
     this.premiumMultiplier = 2
     this.bot = bot
     this.cooldown = new Set()
   }
 
-  async run (message) {
+  async trigger (message) {
     // Check if the user is already cooling down
     if (this.cooldown.has(message.author.id)) return
 
@@ -71,7 +73,3 @@ let levelSystem = new class LevelSystem {
     }, 60000)
   }
 }()
-
-module.exports = async (on) => {
-  on('message', (message) => levelSystem.run(message))
-}
