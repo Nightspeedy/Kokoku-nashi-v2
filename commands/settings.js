@@ -54,6 +54,7 @@ module.exports = class extends Command {
     return result
   }
 
+
   // The handler for {type:text}
   // Gets the 2nd argument, can be a word of
   // a string in "quotes". If length is within
