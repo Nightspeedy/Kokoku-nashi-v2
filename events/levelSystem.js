@@ -1,7 +1,7 @@
 const { Event } = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
 
-module.exports = new class LevelSystem extends Event {
+module.exports = class LevelSystem extends Event {
   constructor (bot) {
     super({ event: 'message' })
     this.minExp = 100
@@ -72,4 +72,4 @@ module.exports = new class LevelSystem extends Event {
       this.cooldown.delete(id)
     }, 60000)
   }
-}()
+}
