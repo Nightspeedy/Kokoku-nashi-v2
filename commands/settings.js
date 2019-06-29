@@ -133,6 +133,7 @@ module.exports = class extends Command {
         { name: '\u200b', value: `${guild.isPremium ? enabled : disabled} Premium` }
       ],
       timestamp: new Date()
-    } })
+      } 
+    })
   }
 }
