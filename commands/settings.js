@@ -8,7 +8,7 @@ module.exports = class extends Command {
     super({
       name: 'settings',
       aliases: ['config', 'configuration'],
-      description: 'Shows your guild\'s settings, or sets them.\n Command always begins with k!settings\n\nAvailable settings are:',
+      description: 'Shows your guild\'s settings, or sets them.\n Command always begins with k!settings\n\nCheck out guides for more information about available settings, use k!guides settings',
       args: '{setting} {setting argument}',
       type: TYPES.MOD_COMMAND,
       permissions: [PERMISSIONS.SETTINGS]
@@ -25,7 +25,6 @@ module.exports = class extends Command {
       channel: { usage: '{#channelMention}' },
       toggle: { usage: '{on/off}' }
     }
-
     // This array contains all the possible settings
     // Type: text {name, dbField, limit, premiumLimit}
     // Type: channel {name, dbField}
@@ -37,9 +36,9 @@ module.exports = class extends Command {
       { type: 'text', name: 'banmessage', prettyName: 'Ban Message', dbField: 'banMessage', limit: 100, premiumLimit: 1000 },
       { type: 'channel', name: 'joinleavechannel', prettyName: 'Join/Leave Channel', dbField: 'joinLeaveChannel' },
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
-      { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' }
+      { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
+      { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' }
     ]
-
     this.categories = [
 
     ]
@@ -70,7 +69,7 @@ module.exports = class extends Command {
   // the guild document if channel isnt undefined.
   async channel ({ message, guild, setting }) {
     let channel = message.mentions.channels.first()
-    if (!channel) return // error
+    if (!channel) return this.error(ERROR.INVALID_CHANNEL, { message, args })
     await this.update(guild, setting.dbField, channel.id)
   }
 
@@ -79,6 +78,7 @@ module.exports = class extends Command {
   // anything else = false
   async toggle ({ message, args, guild, setting }) {
     let value = args[1] === 'on'
+    if(!value && args[1] !== 'off') return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     await this.update(guild, setting.dbField, value)
   }
 
@@ -99,7 +99,7 @@ module.exports = class extends Command {
         // Ex. {type=text}, this[setting.type]() === this.text()
         this[setting.type]({ message, args, guild, setting })
 
-        return this.success('Setting Updated', `:ok_hand: Successfully updated \`${setting.name}\``, { message })
+        return this.success('Setting Updated', `<:Enabled:524627369386967042> Successfully updated \`${setting.name}\``, { message })
       } catch (e) {
         console.error(e)
         return this.error(ERROR.TRY_AGAIN, { message })
@@ -113,13 +113,11 @@ module.exports = class extends Command {
 
     this.settings.forEach(setting => {
       switch (setting.type) {
-        case 'text': fields.text.push(`${setting.prettyName} *[${setting.name}]*\n\`\`\`${guild[setting.dbField]}\`\`\``); break
+        case 'text': fields.text.push(`${setting.prettyName} *[${setting.name}]:*\n${guild[setting.dbField]}\n`); break
         case 'channel': fields.channel.push(`${setting.prettyName} *[${setting.name}]*: ${guild[setting.dbField] ? `<#${guild[setting.dbField]}>` : 'No channel set.'}`); break
         case 'toggle': fields.toggle.push(`${guild[setting.dbField] ? enabled : disabled} ${setting.prettyName} *[${setting.name}]*`); break
       }
     })
-
-    console.log(fields)
 
     return message.channel.send({ embed: {
       color: 0x666666,

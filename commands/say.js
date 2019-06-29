@@ -28,13 +28,13 @@ module.exports = class extends Command {
     }
 
     // TODO: Fix problem with arg 1 becomming arg 0. This is turning arg 0 into a string removing the object it's supposed to contain
-    if (args[0] != message.mentions.channels.first() || !string) {
+    if (!string) {
       string = args[0]
     }
 
-    if (string.toLowerCase().includes("@everyone" || "@here") && !message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"})
+    if (string.toLowerCase().includes("@everyone" || "@here") && !message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"}, {message, args})
 
-    if (!message.mentions.channels.first()) {
+    if (!message.mentions.channels.first() && !args[1]) {
       message.channel.send(string)
     } else {
       
