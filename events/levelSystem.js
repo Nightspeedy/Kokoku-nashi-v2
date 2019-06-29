@@ -1,4 +1,4 @@
-const { Event } = require('@lib/event')
+const Event = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
 
 module.exports = class LevelSystem extends Event {
