@@ -8,6 +8,8 @@ module.exports = class LevelSystem extends Event {
     this.premiumMultiplier = 2
     this.bot = bot
     this.cooldown = new Set()
+
+    this.trigger = this.trigger.bind(this)
   }
 
   async trigger (message) {
