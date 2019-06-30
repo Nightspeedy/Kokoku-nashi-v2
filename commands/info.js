@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['uptime', 'onlinetime', 'shardinfo', 'ping', 'pong'],
       description: 'Shows the shard\'s uptime!',
       type: TYPES.UTILITY,
-      args: ''
+      args: '[@mention]'
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

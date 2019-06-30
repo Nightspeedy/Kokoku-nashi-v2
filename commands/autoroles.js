@@ -47,6 +47,10 @@ module.exports = class extends Command {
         if (!roleToAdd) return this.error(ERROR.ROLE_NOT_FOUND, {message,args})
 
         let role = await AutoRoles.findOne({guild: guild.id, role: roleToAdd.id})
+
+        let totalRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
+        if (totalRoles.length >= 1 && !guild.isPremium) return this.error({message: 'To add more then 1 autorole, Please upgrade to Premium.'})
+
         try {
             if (!role) {
                 AutoRoles.create({guild: guild.id, role: roleToAdd.id})

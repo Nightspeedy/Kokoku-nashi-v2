@@ -38,7 +38,7 @@ module.exports = class extends Command {
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
       { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
       { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' },
-      { type: 'toggle', name: 'autoroles', prettyName: 'Enable/Disable Autoroles', dbField: 'enableAutoRoles' }
+      { type: 'toggle', name: 'autoroles', prettyName: 'Autoroles', dbField: 'autoRolesEnabled' }
 
     ]
     this.categories = [
