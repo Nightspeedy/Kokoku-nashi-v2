@@ -21,11 +21,15 @@ module.exports = class extends Event {
       }
     }
 
+    console.log(guild)
+    console.log(guild.autoRolesEnabled)
     if (guild.autoRolesEnabled) {
       try {
         let autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
-        if (!autoRoles.length > 0) return
-        member.setRoles(guild.autoRoles)
+        console.log(autoRoles)
+        if (autoRoles.length > 0) {
+          member.addRoles(autoRoles)
+        }
       } catch (e) {
         console.log(e)
       }

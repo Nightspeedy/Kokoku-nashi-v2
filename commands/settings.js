@@ -37,7 +37,9 @@ module.exports = class extends Command {
       { type: 'channel', name: 'joinleavechannel', prettyName: 'Join/Leave Channel', dbField: 'joinLeaveChannel' },
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
       { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
-      { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' }
+      { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' },
+      { type: 'toggle', name: 'autoroles', prettyName: 'Enable/Disable Autoroles', dbField: 'enableAutoRoles' }
+
     ]
     this.categories = [
 
