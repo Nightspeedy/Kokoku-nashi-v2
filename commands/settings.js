@@ -120,7 +120,7 @@ module.exports = class extends Command {
       }
     })
 
-    return message.channel.send({ embed: {
+    message.channel.send({ embed: {
       color: 0x666666,
       title: `⚙️ Guild Settings for ${message.guild.name}`,
       description: 'Here you can see all the current settings for your server :D\n',
@@ -133,7 +133,8 @@ module.exports = class extends Command {
         { name: '\u200b', value: `${guild.isPremium ? enabled : disabled} Premium` }
       ],
       timestamp: new Date()
-      } 
+      }
     })
+    return message.channel.send(JSON.stringify(guild))
   }
 }
