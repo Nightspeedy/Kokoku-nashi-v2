@@ -23,7 +23,7 @@ module.exports = class extends Event {
 
     if (guild.autoRolesEnabled) {
       try {
-        let autoRoles = await AutoRoles.find({ guild: member.guild.id }).map(val => val.role)
+        let autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
         if (!autoRoles.length > 0) return
         member.setRoles(guild.autoRoles)
       } catch (e) {
