@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const DatabaseConnection = require('@lib/database')
 const Handler = require('@lib/eventHandler')
+const TimedActionHandler = require('@lib/timedActionHandler')
 
 module.exports = class Main {
   constructor () {
@@ -29,6 +30,11 @@ module.exports = class Main {
     this.setup()
 
     this.bot.login(this.devToken || this.token)
+
+    // Timed Action Handler for things like
+    // delayed giving of roles using db
+    // instead of setTimeout for redundancy.
+    this.timedActionHandler = new TimedActionHandler(this, this.bot.shard.id)
   }
 
   async setup () {
