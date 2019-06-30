@@ -2,9 +2,9 @@ const Event = require('@lib/event')
 const { Guild, AutoRoles } = require('@lib/models')
 
 module.exports = class extends Event {
-  constructor (bot) {
+  constructor (main) {
     super({ event: 'guildMemberAdd' })
-    this.bot = bot
+    this.bot = main.bot
   }
 
   async trigger (member) {

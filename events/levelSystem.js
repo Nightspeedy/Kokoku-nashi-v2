@@ -2,11 +2,11 @@ const Event = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
 
 module.exports = class LevelSystem extends Event {
-  constructor (bot) {
+  constructor (main) {
     super({ event: 'message' })
     this.minExp = 100
     this.premiumMultiplier = 2
-    this.bot = bot
+    this.bot = main.bot
     this.cooldown = new Set()
 
     this.trigger = this.trigger.bind(this)
