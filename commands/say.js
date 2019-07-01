@@ -34,10 +34,13 @@ module.exports = class extends Command {
 
     if (string.toLowerCase().includes("@everyone" || "@here") && !message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"}, {message, args})
 
-    if (!message.mentions.channels.first() && !args[1]) {
+    let mentionChannel = message.mentions.channels.first()
+
+    if (mentionChannel && !args[1]) {
+      console.log("send to local channel")
       message.channel.send(string)
     } else {
-      
+      console.log("send to other channel")
       try {
         let channel = message.guild.channels.get(message.mentions.channels.first().id)
         if (!channel.permissionsFor(message.author.id).has("SEND_MESSAGES")) return message.channel.send("You don't have permission to send messages to this channel!")
