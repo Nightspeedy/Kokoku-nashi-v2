@@ -63,7 +63,7 @@ module.exports = class extends Command {
       .setTitle(`:information_source: Information about ${this.bot.user.username}`)
       .addField('Bot Owner', `${owner.username}#${owner.discriminator}`)
       .addField('Bot Developers', developers)
-      .addField('Bot Version', 'Version 2.0.2-Beta.1')
+      .addField('Bot Version', 'Version 2.0.2-Beta.2')
       .addField('Shard ID', shard)
       .addField('Shard Guilds', `In ${this.bot.guilds.length} guilds`)
       .addField('Total Guilds', `Working on this feature.`)
