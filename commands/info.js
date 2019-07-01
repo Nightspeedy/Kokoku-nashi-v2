@@ -4,6 +4,7 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 const { OWNERS } = require('@lib/consts')
+const version = require("../package.json").version
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -63,10 +64,10 @@ module.exports = class extends Command {
       .setTitle(`:information_source: Information about ${this.bot.user.username}`)
       .addField('Bot Owner', `${owner.username}#${owner.discriminator}`)
       .addField('Bot Developers', developers)
-      .addField('Bot Version', 'Version 2.0.2-Beta.2')
+      .addField('Bot Version', `Version ${version}`)
       .addField('Shard ID', shard)
-      .addField('Shard Guilds', `In ${this.bot.guilds.length} guilds`)
-      .addField('Total Guilds', `Working on this feature.`)
+      .addField('Shard Guilds', `In ${this.bot.guilds.size} Guilds`)
+      .addField('Total Guilds', `In ${this.bot.guilds.size} Guilds.`)
       .addField('API latency', Math.round(this.bot.ping)+ 'ms' )
       .addField('Shard latency', `${sent.createdTimestamp - message.createdTimestamp}ms`)
       .addField('Shard uptime', onlineTime)

@@ -20,9 +20,6 @@ module.exports = class extends Event {
         console.error(e)
       }
     }
-
-    console.log(guild)
-    console.log(guild.autoRolesEnabled)
     if (guild.autoRolesEnabled) {
       try {
         let autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
