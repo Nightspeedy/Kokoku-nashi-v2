@@ -13,9 +13,9 @@ module.exports = class extends Command {
       args: '',
     }) // Pass the appropriate command information to the base class.
 
-    this.wantToAdd = ['Fun commands', 'Event loggers, (send a logfile if something happens)', 'Music', 'Warning system', 'Punishment based on warnings', 'Muting system', "PREMIUM Custom embed colors"]
+    this.wantToAdd = ['Fun commands', 'Event loggers, (send a logfile if something happens)', 'Music', 'Warning system', 'Punishment based on warnings', 'Muting system']
     this.workingOn = ['Moderation', "An interactive configuration command"]
-    this.completed = ['Welcome/Leave messages', 'Global Profiles', 'Global levels', 'Profile titles/decriptions', 'Double global EXP/Coins for premium servers']
+    this.completed = ['Autoroles', 'Welcome/Leave messages', 'Global Profiles', 'Global levels', 'Profile titles/decriptions', 'Double global EXP/Coins for premium servers']
     this.bot = bot
   }
 
