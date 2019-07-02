@@ -55,7 +55,6 @@ module.exports = class extends Command {
       })
 
       embed.setDescription('Use k!help [command] for detailed command information. or [join the support server](https://discord.gg/rRSTX4w) \n\n\n **NOTE** We are working on rewriting the bot, some features might not work, or dont work as they should')
-        .addField('General commands', object.general)
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)

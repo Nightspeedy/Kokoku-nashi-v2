@@ -13,7 +13,7 @@ module.exports = class extends Command {
         description: "Set the server's auto roles",
         type: TYPES.MOD_COMMAND,
         args: '{add/remove/list} [role ID]',
-        permissions: [PERMISSIONS.MANAGE_AUTOROLES]
+        permissions: [PERMISSIONS.AUTOROLES]
         }) // Pass the appropriate command information to the base class.
 
         // Fetch the guild object
@@ -22,7 +22,7 @@ module.exports = class extends Command {
         this.bot = bot
     }
 
-    async run ({ message, args, guild }) {
+    async run ({ message, args, guild, color }) {
 
         switch (args[0].toLowerCase()) {
 
@@ -33,7 +33,25 @@ module.exports = class extends Command {
                 this.remove(message, guild, args)
                 break
             case 'list':
-                message.channel.send("We're working on this! If you see this message, we will release a smaller update on Monday july 1st")
+            
+                let totalRoles = (await AutoRoles.find({ guild: message.guild.id })).map(val => val.role)
+                let roles = 'Listing current autoroles: \n'
+                let embed = new RichEmbed()
+                .setTitle("Autoroles list")
+                .setColor(color)
+
+                if (totalRoles.length <= 0) {
+                    roles += "No autoroles are configured"
+                    embed.setDescription(roles)
+                    return message.channel.send(embed)
+                }
+
+                totalRoles.forEach(role => {
+                    roles += `\n<@&${role}> with ID: ${role}`
+                });
+                embed.setDescription(roles)
+
+                message.channel.send(embed)
                 
             default:
                 this.error(ERROR.INVALID_ARGUMENTS, {message,args})
@@ -48,7 +66,7 @@ module.exports = class extends Command {
 
         let role = await AutoRoles.findOne({guild: guild.id, role: roleToAdd.id})
 
-        let totalRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
+        let totalRoles = (await AutoRoles.find({ guild: message.guild.id })).map(val => val.role)
         if (totalRoles.length >= 1 && !guild.isPremium) return this.error({message: 'To add more then 1 autorole, Please upgrade to Premium.'})
 
         try {
