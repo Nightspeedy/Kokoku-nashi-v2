@@ -11,7 +11,7 @@ module.exports = class extends Command {
         super({
         name: 'autoroles',
         description: "Set the server's auto roles",
-        type: TYPES.UTILITY,
+        type: TYPES.MOD_COMMAND,
         args: '{add/remove/list} [role ID]',
         permissions: [PERMISSIONS.MANAGE_AUTOROLES]
         }) // Pass the appropriate command information to the base class.
