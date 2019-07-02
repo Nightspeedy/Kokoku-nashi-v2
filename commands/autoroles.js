@@ -52,7 +52,7 @@ module.exports = class extends Command {
                 embed.setDescription(roles)
 
                 message.channel.send(embed)
-                
+                break
             default:
                 this.error(ERROR.INVALID_ARGUMENTS, {message,args})
                 break
