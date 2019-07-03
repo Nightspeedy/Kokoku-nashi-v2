@@ -32,7 +32,9 @@ module.exports = class extends Command {
       string = args[0]
     }
 
-    if (string.toLowerCase().includes("@everyone" || "@here") && !message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"}, {message, args})
+    if (string.toLowerCase().includes("@everyone") || string.toLowerCase().includes("@here")) {
+      if(!message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"}, {message, args})
+    }
 
     let mentionChannel = message.mentions.channels.first()
 
