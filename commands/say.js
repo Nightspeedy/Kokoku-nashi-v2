@@ -38,7 +38,7 @@ module.exports = class extends Command {
 
     let mentionChannel = message.mentions.channels.first()
 
-    if (mentionChannel && !args[1]) {
+    if (!mentionChannel && !args[1] || mentionChannel && !args[1]) {
       console.log("send to local channel")
       message.channel.send(string)
     } else {
