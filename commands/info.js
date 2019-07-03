@@ -4,6 +4,7 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 const { OWNERS } = require('@lib/consts')
+const { Member } = require('@lib/models')
 const version = require("../package.json").version
 
 module.exports = class extends Command {
@@ -50,6 +51,7 @@ module.exports = class extends Command {
     let onlineTime = `${time[0]} ${str[0]}, ${time[1]} ${str[1]}, ${time[2]} ${str[2]}, ${time[3]} ${str[3]}`
     let shard = '#' + this.bot.shard.id
     let owner = { username: 'unknown', discriminator: '0000' }
+    let totalUsers = await Member.find({})
     try { owner = this.bot.users.get('365452203982323712') } catch (e) {}
     let developers = ''
     for (let i = 0; i < OWNERS.length; i++) {
@@ -68,6 +70,7 @@ module.exports = class extends Command {
       .addField('Shard ID', shard)
       .addField('Shard Guilds', `In ${this.bot.guilds.size} Guilds`)
       .addField('Total Guilds', `In ${this.bot.guilds.size} Guilds.`)
+      .addField('Users', `Total users ${totalUsers.length}`)
       .addField('API latency', Math.round(this.bot.ping)+ 'ms' )
       .addField('Shard latency', `${sent.createdTimestamp - message.createdTimestamp}ms`)
       .addField('Shard uptime', onlineTime)
