@@ -21,11 +21,31 @@ module.exports = class extends Command {
   async run ({ message, color, args }) {
 
     // Gift by mention
+    let user = message.mentions.members.first()
+    let member = await Member.findOne({id: message.author.id})
+    if (!user && !args[0]) {
+      if (member.repLastGiven + 86100000 > Date.now()) {
+
+        let hours, minutes, seconds
+
+        let totalSeconds = (member.repLastGiven + 86100000) - Date.now()
+
+        totalSeconds = totalSeconds / 1000
+
+        hours = Math.floor(totalSeconds / 3600)
+        totalSeconds %= 3600
+        minutes = Math.floor(totalSeconds / 60)
+        seconds = Math.floor(totalSeconds % 60)
+
+        return message.channel.send(`**Cooldown active.** You can use this command again in: ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`)
+      } else {
+        message.channel.send("<:Enabled:524627369386967042> You can now give reputation.")
+      }
+    }
     if (!message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
     if (message.mentions.members.first().user.bot) return this.error({message: 'Bots dont have profiles!'}, {message, args})//message.channel.send("**Error!** Target user is a bot!");
     if (message.author.id == message.mentions.members.first().user.id) return this.error({message: 'You cannot give yourself reputation!'}, {message, args})//message.channel.send("**Error!** You cannot rep yourself!");
 
-    let member = await Member.findOne({id: message.author.id})
     let memberMention = await Member.findOne({id: message.mentions.members.first().id})
 
     if (!memberMention) return this.error(ERROR.UNKNOWN_MEMBER, {message, args})

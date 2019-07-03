@@ -37,6 +37,11 @@ module.exports = class extends Command {
             }
 
         } else {
+
+            let newDescription = new String(args[0])
+
+            if (newDescription.length > 256) return this.error({message: 'Your description may not be longer then 256 characters!'}, {message,args})
+
             await member.updateOne({description: args[0]}).catch(e => {
                 return this.error(ERROR.OTHER, {message, args})
             })

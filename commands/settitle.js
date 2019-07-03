@@ -22,6 +22,7 @@ module.exports = class extends Command {
 
   async run ({ message, args, color, member }) {
 
+    // Check if a user has not provided a 2nd argument
     if (args[0] && !args[1]) {
 
         if (args[0] == "reset") {
@@ -37,6 +38,11 @@ module.exports = class extends Command {
             }
 
         } else {
+
+            let newTitle = new String(args[0])
+
+            if (newTitle.length > 32) return this.error({message: 'Your description may not be longer then 32 characters!'}, {message,args})
+
             await member.updateOne({title: args[0]}).catch(e => {
                 return this.error(ERROR.OTHER, {message, args})
             })
@@ -48,6 +54,7 @@ module.exports = class extends Command {
             }
         }
     } else {
+        // If a user provides a 2nd argument return this error
         return this.error(ERROR.INVALID_ARGUMENTS, {message,args})
     }
 
