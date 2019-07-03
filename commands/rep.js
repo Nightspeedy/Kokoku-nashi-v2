@@ -43,8 +43,8 @@ module.exports = class extends Command {
       }
     }
     if (!message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
-    if (message.mentions.members.first().user.bot) return this.error({message: 'Bots dont have profiles!'}, {message, args})//message.channel.send("**Error!** Target user is a bot!");
-    if (message.author.id == message.mentions.members.first().user.id) return this.error({message: 'You cannot give yourself reputation!'}, {message, args})//message.channel.send("**Error!** You cannot rep yourself!");
+    if (message.mentions.members.first().user.bot) return this.error({message: 'Bots dont have profiles!'}, {message, args})
+    if (message.author.id == message.mentions.members.first().user.id) return this.error({message: 'You cannot give yourself reputation!'}, {message, args})
 
     let memberMention = await Member.findOne({id: message.mentions.members.first().id})
 
