@@ -8,8 +8,8 @@ const { Permission } = require('@lib/models') // eslint-disable-line
 module.exports = class extends Command {
   constructor (bot) {
     super({
-      name: 'permission',
-      aliases: ['perm'],
+      name: 'permissions',
+      aliases: ['perms'],
       description: 'Manage permissions, give a specific role access to a specific command.',
       type: TYPES.GUILD_OWNER,
       args: '{set, list} {role name/id} {permission} {true/false}',
