@@ -31,7 +31,7 @@ module.exports = class extends Command {
     let embed = new RichEmbed()
     .setTitle("Guild membercount")
     .setColor(color)
-    .setDescription(`Total members in guild: ${totalUsers} \n\n${botCount} Bot's\n${memberCount} Humans`)
+    .setDescription(`Total members in guild: ${totalUsers} \n\n${botCount} Bots\n${memberCount} Humans`)
     message.channel.send(embed)
 
   }
