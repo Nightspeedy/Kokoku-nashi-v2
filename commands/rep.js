@@ -39,7 +39,7 @@ module.exports = class extends Command {
 
         return message.channel.send(`**Cooldown active.** You can use this command again in: ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`)
       } else {
-        message.channel.send("<:Enabled:524627369386967042> You can now give reputation.")
+        return this.success("<:Enabled:524627369386967042>", "You can now give reputation points!", {message, args})
       }
     }
     if (!message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
