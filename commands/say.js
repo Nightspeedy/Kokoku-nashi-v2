@@ -27,7 +27,6 @@ module.exports = class extends Command {
       if (!message.guild.channels.get(channelMention.id)) return this.error(ERROR.INVALID_CHANNEL, { message, args })
     }
 
-    // TODO: Fix problem with arg 1 becomming arg 0. This is turning arg 0 into a string removing the object it's supposed to contain
     if (!string) {
       string = args[0]
     }
