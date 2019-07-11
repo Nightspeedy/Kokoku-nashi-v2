@@ -34,7 +34,7 @@ module.exports = class extends Command {
         if (guild.isPremium) {
           embed.addField('Status updated!', 'Premium enabled!')
         } else {
-          return message.channel.send('Premium status was not updated!')
+          return message.channel.send('Premium status was not updated!').catch(e => {})
         }
         break
       case 'false':
@@ -43,11 +43,11 @@ module.exports = class extends Command {
         if (guild.isPremium == false) {
           embed.addField('Status updated!', 'Premium disabled!')
         } else {
-          message.channel.send('Premium status was not updated!')
+          message.channel.send('Premium status was not updated!').catch(e => {})
         }
         break
     }
 
-    message.channel.send(embed)
+    message.channel.send(embed).catch(e => {})
   }
 }

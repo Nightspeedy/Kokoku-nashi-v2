@@ -43,7 +43,7 @@ module.exports = class extends Command {
                 if (totalRoles.length <= 0) {
                     roles += "No autoroles are configured"
                     embed.setDescription(roles)
-                    return message.channel.send(embed)
+                    return message.channel.send(embed).catch(e => {})
                 }
 
                 totalRoles.forEach(role => {
@@ -51,7 +51,7 @@ module.exports = class extends Command {
                 });
                 embed.setDescription(roles)
 
-                message.channel.send(embed)
+                message.channel.send(embed).catch(e => {})
                 break
             default:
                 this.error(ERROR.INVALID_ARGUMENTS, {message,args})

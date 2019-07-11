@@ -27,10 +27,10 @@ module.exports = class extends Command {
         .setDescription(`Here you go, |[Click me](${message.author.displayAvatarURL})|`)
         .setImage(message.author.displayAvatarURL)
 
-      message.channel.send(embed)
+      message.channel.send(embed).catch(e => {})
     }
     if (args[0]) {
-      if (!message.mentions.members.first()) return message.channel.send('**Error!** Please mention a valid user!')
+      if (!message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
       // if (message.mentions.members.first().user.bot) return message.channel.send("**Error!** Target user is a bot!");
 
       embed.setTitle(message.mentions.members.first().user.tag)
@@ -38,7 +38,7 @@ module.exports = class extends Command {
         .setDescription(`Here you go, |[Click me](${message.mentions.members.first().user.displayAvatarURL})|`)
         .setImage(message.mentions.members.first().user.displayAvatarURL)
 
-      message.channel.send(embed)
+      message.channel.send(embed).catch(e => {})
     }
   }
 }

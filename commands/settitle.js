@@ -32,9 +32,9 @@ module.exports = class extends Command {
             })
             member = await Member.findOne({id: message.author.id})
             if (member.title == 'Nobody knows my title :O') {
-                message.channel.send("Successfully updated profile information!")
+                message.channel.send("Successfully updated profile information!").catch(e => {})
             } else {
-                message.channel.send("Profile information was not updated!")
+                message.channel.send("Profile information was not updated!").catch(e => {})
             }
 
         } else {
@@ -48,9 +48,9 @@ module.exports = class extends Command {
             })
             member = await Member.findOne({id: message.author.id})
             if (member.title == args[0]) {
-                message.channel.send("Successfully updated profile information!")
+                message.channel.send("Successfully updated profile information!").catch(e => {})
             } else {
-                message.channel.send("Profile information was not updated!")
+                message.channel.send("Profile information was not updated!").catch(e => {})
             }
         }
     } else {

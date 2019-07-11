@@ -49,7 +49,7 @@ module.exports = class extends Command {
     .addField("Features we're working on", workingOn)
     .addField("Features we've completed", completed)
 
-    message.channel.send(embed)
+    message.channel.send(embed).catch(e => {})
 
   }
 }

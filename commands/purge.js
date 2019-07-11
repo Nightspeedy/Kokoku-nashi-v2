@@ -33,18 +33,18 @@ module.exports = class extends Command {
         await this.purgeLoop(number, message, true)
       } else {
         message.channel.bulkDelete(number).then(message.channel.send('Deleted messages').catch(err => {
-          if (err) message.channel.send("**ERROR!** I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?")
+          if (err) return this.error({message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?"}, {message,args})
         }))
       }
     } else {
-      return message.channel.send('Please tell me how many messages you want me to purge!')
+      return message.channel.send('Please tell me how many messages you want me to purge!').catch(e => {})
     }
   }
   purgeLoop (number, message, loop) {
     if (!loop) return
-    if (number > 100) message.channel.send('Deleting messages, this might take a while!')
+    if (number > 100) message.channel.send('Deleting messages, this might take a while!').catch(e => {})
 
-    if (number < 1) return message.channel.send('Successfully deleted messages!').then(message.delete(), 10000)
+    if (number < 1) return message.channel.send('Successfully deleted messages!').then(message.delete(10000)).catch(e => {})
     setTimeout(async () => {
       if (number > 100) {
         const fetched = await message.channel.fetchMessages({ limit: 100 })
@@ -53,8 +53,8 @@ module.exports = class extends Command {
           await message.channel.bulkDelete(100)
         } catch (e) {
           console.error(e)
-          message.channel.send("**ERROR!** I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?")
           loop = false
+          return this.error({message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?"}, {message,args})
         }
         number -= 100
       } else {
@@ -64,8 +64,8 @@ module.exports = class extends Command {
           await message.channel.bulkDelete(100)
         } catch (e) {
           console.error(e)
-          message.channel.send("**ERROR!** I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?")
           loop = false
+          return this.error({message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?"}, {message,args})
         }
         number = 0
       }

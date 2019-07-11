@@ -32,13 +32,13 @@ module.exports = class extends Command {
         embed.setTitle(`${message.author.username} slapped ${message.mentions.members.first().user.username}`)
         await embed.setImage(gifs.slap[gif])
 
-        message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        message.channel.send(embed).catch(e => {})
     } else {
 		        
         embed.setTitle("You slapped yourself... does that hurt?")
         await embed.setImage(gifs.slap[gif])
 
-        message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        message.channel.send(embed).catch(e => {})
 	}
   }
 }

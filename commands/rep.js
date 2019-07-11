@@ -37,7 +37,7 @@ module.exports = class extends Command {
         minutes = Math.floor(totalSeconds / 60)
         seconds = Math.floor(totalSeconds % 60)
 
-        return message.channel.send(`**Cooldown active.** You can use this command again in: ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`)
+        return message.channel.send(`**Cooldown active.** You can use this command again in: ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`).catch(e => {})
       } else {
         return this.success("<:Enabled:524627369386967042>", "You can now give reputation points!", {message, args})
       }
@@ -78,7 +78,7 @@ module.exports = class extends Command {
         .setTitle(message.author.username)
         .setColor(color)
         .addField("You repped someone! ", message.author.username + " added reputation to " + message.mentions.members.first().user.username)
-        message.channel.send(embed).catch(err => {});
+        message.channel.send(embed).catch(e => {})
 
       } catch(e) {
         console.log(e)

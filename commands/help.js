@@ -38,7 +38,7 @@ module.exports = class extends Command {
     if (args[0]) {
       let command = args[0]
 
-      if (!this.bot.cmdhandler.commands.get(command)) return message.channel.send(`**ERROR!** Command '${command}' is unknown!`)
+      if (!this.bot.cmdhandler.commands.get(command)) return this.error({message: `Command '${command}' is unknown!`}, {message,args})
 
       let cmddesc = this.bot.cmdhandler.commands.get(command).description
       let cmdargs = this.bot.cmdhandler.commands.get(command).args
@@ -63,6 +63,6 @@ module.exports = class extends Command {
         .addField('Bot owner commands', object.botOwner)
         .setFooter('Total commands: ' + i)
     }
-    message.channel.send(embed)
+    message.channel.send(embed).catch(e => {})
   }
 }

@@ -76,6 +76,6 @@ module.exports = class extends Command {
       .addField('Shard uptime', onlineTime)
 
       sent.edit(embed);
-    });
+    }).catch(e => {})
   }
 }

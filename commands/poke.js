@@ -29,7 +29,7 @@ module.exports = class extends Command {
         embed.setTitle("You poked yourself! Silly :3")
         await embed.setImage(gifs.poke[gif])
 
-        message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
 
         if (args[0] != message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
@@ -37,7 +37,7 @@ module.exports = class extends Command {
         
         embed.setTitle(`${message.author.username} poked ${message.mentions.members.first().user.username}!`)
         await embed.setImage(gifs.poke[gif])
-        message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        message.channel.send(embed).catch(e => {})
     }
 
   }

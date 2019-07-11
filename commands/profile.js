@@ -36,14 +36,14 @@ module.exports = class extends Command {
       .addField("Reputation", member.reputation)
       .addField("Credits", member.credits);
 
-      message.channel.send(embed);
+      message.channel.send(embed).catch(e => {})
 
     } else if (args[0]) {
 
       let mentionMember = await Member.findOne({id: message.mentions.members.first().id})
 
-      if (!mentionMember) return message.channel.send(this.error(ERROR.UNKNOWN_MEMBER, { message, args }))
-      //if (message.mentions.members.first().user.bot) return message.channel.send("**Error!** Target user is a bot!");
+      if (!mentionMember) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
+      if (message.mentions.members.first().user.bot) return this.error({message: "Bots dont have profiles!"}, {message, args});
 
       let nxtLvl = mentionMember.level * 200;
 
@@ -57,7 +57,7 @@ module.exports = class extends Command {
       .addField("Reputation", mentionMember.reputation)
       .addField("Credits", mentionMember.credits);
 
-      message.channel.send(embed);
+      message.channel.send(embed).catch(e => {})
 
     }
   }

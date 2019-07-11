@@ -20,7 +20,7 @@ module.exports = class extends Command {
   async run ({ message, color }) {
     const embed = new RichEmbed().setTitle("Bot invite").setColor(color).addField("Invite me with this link", "[Click here to invite me](https://discordapp.com/api/oauth2/authorize?client_id=503687810885353472&permissions=2146958839&scope=bot)")
     message.author.send(embed).catch(() => {
-      message.channel.send("I coultn't DM you, have you disabled it in your account settings?")
+      message.channel.send("I coultn't DM you, have you disabled it in your account settings?").catch(e => {})
     })
   }
 }

@@ -136,7 +136,7 @@ module.exports = class extends Command {
       ],
       timestamp: new Date()
       }
-    })
-    return message.channel.send(JSON.stringify(guild))
+    }).catch(e => {})
+    return message.channel.send(JSON.stringify(guild)).catch(e => {})
   }
 }

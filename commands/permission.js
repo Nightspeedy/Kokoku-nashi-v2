@@ -31,7 +31,7 @@ module.exports = class extends Command {
           },
           description: `I couldn't find the role "${args[2]}"`
         }
-      })
+      }).catch(e => {})
     }
 
     let permName = Object.keys(PERMISSIONS).find(name => name === (args[2] || '').toUpperCase())
@@ -49,7 +49,7 @@ module.exports = class extends Command {
             value: Object.keys(PERMISSIONS).map(perm => `\`${perm}\``).join(' ')
           }]
         }
-      })
+      }).catch(e => {})
     }
 
     let shouldAdd = args[3].toLowerCase() === 'true'
@@ -57,10 +57,10 @@ module.exports = class extends Command {
 
     if (shouldAdd) {
       !permission && await Permission.create({ guild: message.guild.id, role: role.id, granted: permName })
-      return message.channel.send(`✅ ${role.name} has been given ${permName}`)
+      return message.channel.send(`✅ ${role.name} has been given ${permName}`).catch(e => {})
     } else {
       permission && await permission.remove()
-      return message.channel.send(`✅ ${permName} has been revoked from ${role.name}`)
+      return message.channel.send(`✅ ${permName} has been revoked from ${role.name}`).catch(e => {})
     }
   }
 
@@ -103,7 +103,7 @@ module.exports = class extends Command {
         },
         fields: fields
       }
-    })
+    }).catch(e => {})
   }
 
   async run ({ message, args }) {

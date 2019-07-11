@@ -35,7 +35,7 @@ module.exports = class extends Command {
       memberToBan.ban(reason).catch(e => {
         return this.error(ERROR.NO_PERMISSION, { message, args })
       })
-      message.channel.send('Successfully banned user!')
+      message.channel.send('Successfully banned user!').catch(e => {})
 
     } catch (e) {
       console.error(e)

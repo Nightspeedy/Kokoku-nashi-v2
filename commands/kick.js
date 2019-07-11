@@ -36,7 +36,7 @@ module.exports = class extends Command {
       memberToKick.kick(reason).catch(e => {
         return this.error(ERROR.NO_PERMISSION, { message, args })
       })
-      message.channel.send('Successfully kicked user!')
+      message.channel.send('Successfully kicked user!').catch(e => {})
     } catch (e) {
       console.error(e)
     }

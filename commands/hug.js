@@ -19,21 +19,21 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    let gif = Math.floor(Math.random() * gifs.hug.length);
+    let gif = Math.floor(Math.random() * gifs.hug.length)
 
     let embed = new RichEmbed()
     .setColor(color)
-    .setDescription(`image not loading? click [here](${gifs.hug[gif]})`);
+    .setDescription(`image not loading? click [here](${gifs.hug[gif]})`)
 
     if (!args[0]) {
         embed.setTitle("Ahw... have a hug :3")
         await embed.setImage(gifs.hug[gif])
-        return message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        return message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
         if (args[0] != message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
         embed.setTitle(`${message.author.username} hugged ${message.mentions.members.first().user.username}!`)
         await embed.setImage(gifs.hug[gif])
-        return message.channel.send(embed).catch(err => {if(err) console.log(err)});
+        return message.channel.send(embed).catch(e => {})
     }
   }
 }
