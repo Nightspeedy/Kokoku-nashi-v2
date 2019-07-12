@@ -28,7 +28,7 @@ module.exports = class extends Command {
             case 'settings':
 
               this.embed.setTitle("(Guide) Changing settings")
-              .setDescription("Have you struggled with settings yet? No idea how to set them up? To get started, read our permissions guide first, as it will tell you how to get access to the k!settings command you will need for this guide!\n\nSo, firstly, the highlighted texts in the screenshot below are the setting names you need to use.\n\nThere are 3 different types of settings\n1: Channels\n2: Messages\n3: Toggles\n\nChannels will need you to mention a channel, for example if you want to set a welcome message channel:\n`k!settings joinleavechannel #welcome`\n\nThen there's messages:\n`k!settings welcomemessage \"Your new message in quotes, {MEMBER} will be replaced with a @mention\"`\n\nAnd finally, there are toggles:\n`k!settings autoroles on/off`")
+              .setDescription("Have you struggled with settings yet? No idea how to set them up? To get started, read our permissions guide first, as it will tell you how to get access to the k!settings command you will need for this guide!\n\nSo, firstly, the highlighted texts in the screenshot below are the setting names you need to use.\n\nThere are 3 different types of settings\n1: Channels\n2: Messages\n3: Toggles\n\nChannels will need you to mention a channel, for example if you want to set a welcome message channel:\n`k!settings joinleavechannel #welcome`\n\nThen there's messages:\n`k!settings welcomemessage \"Your new message in quotes.\" See k!guides welcome for options`\n\nAnd finally, there are toggles:\n`k!settings autoroles on/off`")
               await this.embed.setImage("https://cdn.discordapp.com/attachments/519032774972407828/598815521441447946/unknown.png")
               message.channel.send(this.embed).catch(e => {})
             break
@@ -41,6 +41,7 @@ module.exports = class extends Command {
             case 'welcome':
               this.embed.setTitle("(Guide) Welcomming options")
               .setDescription(`So, you've got a welcome message set up. but don't know how to make the bot mention a new person, or let them know what server they joined. Here's how!\n\nFor starters, There are several different keywords, which will be replaced by different things:\n\`{MEMBER}\`This will be replaced with a mention, like this:\nWelcome <@${message.author.id}> to the server!\n\n\`{MEMBER.USERNAME}\` Will be replaced with the member's username:\nWelcome ${message.author.username} to the server!\n\n\`{MEMBER.TAG}\` will be replaced with your discriminator, or:\nWelcome ${message.author.discriminator}\n\nAnd finally we have \`{GUILD.NAME}\` which will be replaced with the server's name like this:\nWelcome <@${message.author.id}> to ${message.guild.name}`)
+              .setImage("https://cdn.discordapp.com/attachments/519032774972407828/599174292890058762/unknown.png")
               message.channel.send(this.embed).catch(e => {})
               break
         }
