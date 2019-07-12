@@ -12,7 +12,11 @@ module.exports = class extends Event {
 
     if (guild.enableWelcomeMessage && guild.joinLeaveChannel !== undefined) {
       let message = guild.welcomeMessage
-      message = message.replace('{MEMBER}', `<@${member.user.id}>`)
+
+      if (message.includes('{MEMBER}')) message = message.replace('{MEMBER}', `<@${member.user.id}>`)
+      if (message.includes('{MEMBER.USERNAME}')) message = message.replace('{MEMBER.USERNAME}', `${member.user.username}`)
+      if (message.includes('{MEMBER.TAG}')) message = message.replace('{MEMBER.TAG}', `${member.user.discriminator}`)
+      if (message.includes('{GUILD.NAME}')) message = message.replace('{GUILD.NAME}', `${member.guild.name}`)
 
       try {
         this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { console.log(e) })
