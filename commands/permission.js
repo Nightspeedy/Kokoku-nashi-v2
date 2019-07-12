@@ -29,7 +29,7 @@ module.exports = class extends Command {
             name: 'Permissions',
             icon_url: 'https://cdn.discordapp.com/embed/avatars/1.png'
           },
-          description: `I couldn't find the role "${args[2]}"`
+          description: `I couldn't find the role "${args[1]}"`
         }
       }).catch(e => {})
     }
