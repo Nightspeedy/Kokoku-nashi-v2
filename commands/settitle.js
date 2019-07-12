@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['set-title', 'title'],
       description: "Set your profile title",
       type: TYPES.SOCIAL,
-      args: '["New title"]',
+      args: '["New title in quotations"]',
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
