@@ -7,7 +7,7 @@ const ProfileTemplate = fs.readFileSync(path.resolve('views/profile/index.html')
 
 const app = express()
 
-app.use('/profile', express.static('profile'))
+app.use('/profile', express.static('views/profile'))
 
 app.get('/profile/card', (req, res) => {
   console.time(`[Profile Card] Generated in`)
