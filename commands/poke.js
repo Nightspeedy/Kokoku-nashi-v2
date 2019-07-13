@@ -32,10 +32,10 @@ module.exports = class extends Command {
         message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
 
-        if (args[0] != message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
+        if (args[0] != message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
 
         
-        embed.setTitle(`${message.author.username} poked ${message.mentions.members.first().user.username}!`)
+        embed.setTitle(`${message.author.username} poked ${message.mentions.users.first().username}!`)
         await embed.setImage(gifs.poke[gif])
         message.channel.send(embed).catch(e => {})
     }

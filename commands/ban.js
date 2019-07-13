@@ -20,11 +20,11 @@ module.exports = class extends Command {
 
   async run ({ message, args, guild }) {
 
-    let memberToBan = message.mentions.members.first()
+    let memberToBan = message.mentions.members.first() || await message.guild.members.fetch(args[0])
     let reason = args[1]
 
     if (!memberToBan) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
-    if (!reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (guild.mustHaveReason && !reason) return this.error({message: 'You must provide a reason with this action!'}, { message, args })
 
     // TODO: Check guild DB to see if a reason needs to be forced.
 

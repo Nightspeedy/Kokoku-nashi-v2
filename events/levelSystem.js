@@ -13,8 +13,7 @@ module.exports = class LevelSystem extends Event {
   }
 
   async trigger (message) {
-
-    if (message.channel.type == "dm") return
+    if (!message.guild) return
     // Check if the user is already cooling down
     if (this.cooldown.has(message.author.id)) return
 

@@ -1,0 +1,179 @@
+body {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 400px;
+  height: 600px;
+  overflow: hidden;
+  font-family: "SF Pro Display","SF Pro Icons","Apple WebExp Icons Custom","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.hero {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.background, .tint {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.background {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.tint {
+  background: rgba(255,255,255,1.0);
+}
+
+.hero .avatar {
+  position: relative;
+  z-index: 10;
+  height: 190px;
+  width: 190px;
+  transform: translateY(-152px)
+}
+
+.hero .avatar img {
+  position: absolute;
+  height: 190px;
+  width: 190px;
+  border-radius: 100%;
+}
+
+.hero .avatar .blurShadow {
+  filter: blur(20px) saturate(200%);
+  transform: translateY(16px);
+  opacity: 0.4;
+}
+
+.description {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  border: solid 1px #eee;  
+  bottom: 16px;
+  left: 16px;
+  height: 240px;
+  width: calc(100% - 32px);
+  z-index: 20;
+  background: rgba(255,255,255,1);
+}
+
+.description .level {
+  width: calc(100% - 2px);
+  position: absolute;
+  top: -24px;
+  left: 1px;
+}
+
+.description .level .progress {
+  position: relative;
+  height: 6px;
+  border: solid 1px #eee;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.description .level .progress .progressfill {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 6px;
+  border-radius: 6px;
+  background: rgb(151, 201, 216)
+}
+
+.description .level p {
+  position: absolute;
+  top: -24px;
+  left: 2px;
+  margin: 0px;
+  font-size: 22px;
+}
+
+.description .level .levelTitle {
+  top: -32px;
+  text-align: center;
+  width: 100%;
+}
+
+.description .level .xp {
+  font-size: 18px;
+}
+
+.description .level .xpright {
+  right: 2px;
+  text-align: right;
+}
+
+.description .header {
+  display: flex;
+  align-items: center;
+}
+
+.description .header p {
+  text-align: left;
+  margin: 24px 20px;
+  margin-bottom: 10px;
+  font-size: 34px;
+  flex-grow: 1;
+  font-weight: 700;
+}
+
+.description .header .status {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  margin-top: 15px;
+}
+
+.description .header .status img {
+  flex-grow: 1;
+  height: 26px;
+  width: 26px;
+}
+
+.description .bio {
+  margin: 0px 20px;
+}
+
+.description .bio p {
+  margin: 0px;
+  font-weight: normal;
+}
+
+.description .bio .title {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.description .bio .desc {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.description .tags {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  display: flex;
+}
+
+.description .tags .tag {
+  flex-grow: 1;
+  margin: 8px;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
