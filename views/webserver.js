@@ -3,7 +3,7 @@ const eassry = require('eassry')
 const fs = require('fs')
 const path = require('path')
 
-const ProfileTemplate = fs.readFileSync(path.resolve('profile/index.html'), 'utf8')
+const ProfileTemplate = fs.readFileSync(path.resolve('views/profile/index.html'), 'utf8')
 
 const app = express()
 
