@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 const ProfileTemplate = fs.readFileSync(path.resolve('views/profile/index.html'), 'utf8')
-.
+
 const app = express()
 
 app.use('/profile', express.static('profile'))
