@@ -1,9 +1,13 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
-const { RichEmbed } = require('discord.js')
-const { Member } = require('@lib/models')
+const { Attachment } = require('discord.js')
+const { Member, Background } = require('@lib/models')
+
+const Pageres = require('pageres')
+
+const twemoji = require('twemoji')
+let pageres = new Pageres()
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -12,53 +16,72 @@ module.exports = class extends Command {
       aliases: ['account'],
       description: 'Shows your, or someone\'s profile!',
       type: TYPES.SOCIAL,
-      args: '[@mention]',
+      args: '[@mention]'
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
 
     this.bot = bot
+    
+    // is this used??
+    this.currentShot = -1
+  }
+
+  async shot (profile, author) {
+    let background = profile.selectedBackground ? await Background.findOne({ name: profile.selectedBackground }) : {}
+    let emoji = await new Promise(resolve => twemoji.parse(
+      profile.emoji,
+      { callback: function (icon, options) { resolve(icon + '.png') } }))
+
+    let queries = {
+      avatar: author.avatarURL,
+      level: profile.level,
+      currentXP: profile.exp,
+      nextXP: profile.level * 200,
+      name: author.username,
+      emojiAlt: profile.emoji,
+      emojiLink: emoji,
+      title: profile.title,
+      description: profile.description,
+      reps: profile.reputation,
+      credits: profile.credits,
+      backgroundURL: background.url || '',
+      filters: background.filters || 'none',
+      css: background.css || ''
+    }
+    let queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
+
+    let shot = Buffer.from((await pageres
+      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'])
+      .run())[0])
+    return shot
   }
 
   async run ({ message, args, member, color }) {
+    let buffer
+    let username = message.author.username
 
-    if (!args[0]) {
- 
-      let nxtLvl = member.level * 200;
+    if (message.mentions.users.first() && !(await Member.findOne({id: message.mentions.users.first()})) ) Member.create({id: message.mentions.users.first().id})
 
-      const embed = new RichEmbed()
-      .setTitle(message.author.username + "'s Profile")
-      .setThumbnail(message.author.displayAvatarURL)
-      .setColor(color)
-      .addField(member.title, member.description)
-      .addField("Level", member.level)
-      .addField("Next level progress", member.exp + "/" + nxtLvl + " Exp")
-      .addField("Reputation", member.reputation)
-      .addField("Credits", member.credits);
-
-      message.channel.send(embed).catch(e => {})
-
-    } else if (args[0]) {
-
-      let mentionMember = await Member.findOne({id: message.mentions.users.first().id})
-
-      if (!mentionMember) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
-      if (message.mentions.users.first().bot) return this.error({message: "Bots dont have profiles!"}, {message, args});
-
-      let nxtLvl = mentionMember.level * 200;
-
-      const embed = new RichEmbed()
-      .setTitle(message.mentions.users.first().username + "'s Profile")
-      .setThumbnail(message.mentions.users.first().displayAvatarURL)
-      .setColor(color)
-      .addField(mentionMember.title, mentionMember.description)
-      .addField("Level", mentionMember.level)
-      .addField("Next level progress", mentionMember.exp + "/" + nxtLvl + " Exp")
-      .addField("Reputation", mentionMember.reputation)
-      .addField("Credits", mentionMember.credits);
-
-      message.channel.send(embed).catch(e => {})
-
+    let cardMsg = await message.channel.send(`Generating profile...`)
+    if (message.mentions.users.first()) {
+      let mentionMember = await Member.findOne({ id: message.mentions.users.first().id })
+      if (!mentionMember) return message.channel.send(this.error(ERROR.UNKNOWN_MEMBER, { message, args }))
+      buffer = await this.shot(mentionMember, message.mentions.users.first())
+      username = message.mentions.users.first().username
+    } else {
+      buffer = await this.shot(member, message.author)
     }
+    let image = new Attachment(buffer, 'profile.png')
+    cardMsg.delete()
+    await message.channel.send(`:sparkles: **Profile card for ${username}** :sparkles:`, {
+      files: [image]
+    })
+
+    pageres.items = []
+    pageres.urls = []
+    pageres._source = []
+    pageres.sizes = ['400x600']
+    pageres.stats = { urls: 0, sizes: 1, screenshots: 0 }
   }
 }
