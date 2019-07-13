@@ -30,8 +30,8 @@ module.exports = class extends Command {
         await embed.setImage(gifs.hug[gif])
         return message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
-        if (args[0] != message.mentions.members.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
-        embed.setTitle(`${message.author.username} hugged ${message.mentions.members.first().user.username}!`)
+        if (args[0] != message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
+        embed.setTitle(`${message.author.username} hugged ${message.mentions.users.first().name}!`)
         await embed.setImage(gifs.hug[gif])
         return message.channel.send(embed).catch(e => {})
     }

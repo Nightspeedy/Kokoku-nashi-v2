@@ -40,16 +40,16 @@ module.exports = class extends Command {
 
     } else if (args[0]) {
 
-      let mentionMember = await Member.findOne({id: message.mentions.members.first().id})
+      let mentionMember = await Member.findOne({id: message.mentions.users.first().id})
 
       if (!mentionMember) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
-      if (message.mentions.members.first().user.bot) return this.error({message: "Bots dont have profiles!"}, {message, args});
+      if (message.mentions.users.first().bot) return this.error({message: "Bots dont have profiles!"}, {message, args});
 
       let nxtLvl = mentionMember.level * 200;
 
       const embed = new RichEmbed()
-      .setTitle(message.mentions.members.first().user.username + "'s Profile")
-      .setThumbnail(message.mentions.members.first().user.displayAvatarURL)
+      .setTitle(message.mentions.users.first().username + "'s Profile")
+      .setThumbnail(message.mentions.users.first().displayAvatarURL)
       .setColor(color)
       .addField(mentionMember.title, mentionMember.description)
       .addField("Level", mentionMember.level)

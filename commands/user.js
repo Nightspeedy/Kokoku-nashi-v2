@@ -21,7 +21,7 @@ module.exports = class extends Command {
     async run ({ message, args, guild, color }) {
 
         // Error checking
-        let member = message.mentions.members.first()
+        let member = message.mentions.users.first()
         if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
 
         let user = await Member.findOne({id: member.id})
