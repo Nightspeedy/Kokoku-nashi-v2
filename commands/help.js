@@ -54,7 +54,7 @@ module.exports = class extends Command {
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
-      embed.setDescription('Use k!help [command] for detailed command information. or [join the support server](https://discord.gg/rRSTX4w) \n\n\n **NOTE** We are working on rewriting the bot, some features might not work, or dont work as they should')
+      embed.setDescription('Use k!help [command] for detailed command information. or [join the official Discord server](https://discord.gg/rRSTX4w) \n\n\n **IMPORTANT** \n We currently have an active giveaway in our official server to celebrate our 1000th user! (Prize: Discord  Nitro 1 month)')
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)
