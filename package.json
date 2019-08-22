@@ -14,7 +14,7 @@
     "express": "^4.17.1",
     "fs": "0.0.1-security",
     "module-alias": "^2.2.0",
-    "mongoose": "^5.5.9",
+    "mongoose": "^5.6.10",
     "pageres": "^5.1.0",
     "twemoji": "^12.1.2"
   },
