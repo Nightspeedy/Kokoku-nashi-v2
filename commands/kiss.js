@@ -2,7 +2,7 @@ const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const { RichEmbed } = require('discord.js')
-const gifs = require('@lib/socialGifs.json')
+const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -17,16 +17,17 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    let gif = Math.floor(Math.random() * gifs.kiss.length);
+    let gif = await Gifs.aggregate([ { $match: { gifType: 'kiss' } }, { $sample: { size: 1 } } ])
+    gif = gif[0].url
 
     let embed = new RichEmbed()
     .setColor(color)
-    .setDescription(`image not loading? click [here](${gifs.kiss[gif]})`)
+    .setDescription(`image not loading? click [here](${gif})`)
 
     if (!args[0]) {
         
         embed.setTitle(`I kissed you! :kissing_heart:`)
-        await embed.setImage(gifs.kiss[gif])
+        await embed.setImage(gif)
 
         message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
@@ -35,7 +36,7 @@ module.exports = class extends Command {
 
         
         embed.setTitle(`${message.author.username} kissed ${message.mentions.users.first().username}! :blush:`)
-        await embed.setImage(gifs.kiss[gif])
+        await embed.setImage(gif)
         message.channel.send(embed).catch(e => {})
     }
   }
