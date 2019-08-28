@@ -24,26 +24,9 @@ module.exports = class extends Command {
     .setTitle('Roadmap')
     .setColor(color)
 
-    let wantToAdd = await Strings.findOne({key: 'wantToAdd'})// ['Fun commands', 'Event loggers, (send a logfile if something happens)', 'Music', 'Warning system', 'Punishment based on warnings', 'Muting system']
-    let workingOn = await Strings.findOne({key: 'workingOn'})// ['Moderation', "An interactive configuration command"]
-    let completed = await Strings.findOne({key: 'completed'})// ['Autoroles', 'Welcome/Leave messages', 'Global Profiles', 'Global levels', 'Profile titles/decriptions', 'Double global EXP/Coins for premium servers']
-    
-
-    // for (let i = 0; i < this.wantToAdd.length; i++) {
-
-    //     wantToAdd += "- " + this.wantToAdd[i] + "\n"
-
-    // }
-    // for (let i = 0; i < this.workingOn.length; i++) {
-
-    //     workingOn += "- " + this.workingOn[i] + "\n"
-
-    // }
-    // for (let i = 0; i < this.completed.length; i++) {
-
-    //     completed += "- " + this.completed[i] + "\n"
-
-    // }
+    let wantToAdd = await Strings.findOne({key: 'wantToAdd'})
+    let workingOn = await Strings.findOne({key: 'workingOn'})
+    let completed = await Strings.findOne({key: 'completed'})
 
     embed.addField("Features we want to add (updated as we think of more)", wantToAdd.value)
     .addField("Features we're working on", workingOn.value)
