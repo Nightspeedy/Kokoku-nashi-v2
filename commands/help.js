@@ -3,6 +3,7 @@ const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
+const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -29,6 +30,9 @@ module.exports = class extends Command {
       'games': '-'
     }
 
+    // Fetch the message
+    let msg = await Strings.findOne({key: "helpEmbed"})
+
     let embed = new RichEmbed()
       .setColor(color)
 
@@ -54,7 +58,7 @@ module.exports = class extends Command {
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
-      embed.setDescription('Use k!help [command] for detailed command information. or [join the official Discord server](https://discord.gg/rRSTX4w) \n\n\n **IMPORTANT** \n We currently have an active giveaway in our official server to celebrate our 1000th user! (Prize: Discord  Nitro 1 month)')
+      embed.setDescription(`Use k!help [command] for detailed command information. or [join the official Discord server](https://discord.gg/rRSTX4w) \n\n ${msg.value} \n`)
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)
