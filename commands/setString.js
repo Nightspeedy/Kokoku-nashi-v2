@@ -7,7 +7,7 @@ const { Strings } = require('@lib/models')
 module.exports = class extends Command {
     constructor (bot) {
         super({
-            name: 'setString',
+            name: 'setstring',
             description: 'Change a string value',
             type: TYPES.BOT_OWNER,
             args: '{key} {value}'
