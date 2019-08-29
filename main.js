@@ -21,6 +21,8 @@ module.exports = class Main {
     this.prefix = this.config.prefix
     this.devPrefix = this.config.devPrefix
 
+    this.bot.config = this.config
+
     // Setting up database
     this.DB = new DatabaseConnection(this.bot, this.config.db)
 

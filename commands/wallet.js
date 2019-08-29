@@ -11,7 +11,7 @@ module.exports = class extends Command {
     super({
       name: 'wallet',
       description: 'Check your, or someone elses wallet.',
-      type: TYPES.BOT_OWNER,
+      type: TYPES.UTILITY,
       args: '[@mention]'
     }) // Pass the appropriate command information to the base class.
 
@@ -22,14 +22,14 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild, color }) {
-    let member = message.mentions.users.first() || message.author
+    const member = message.mentions.users.first() || message.author
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
-    let wallet = await this.orbt.wallet(member.id)
+    const wallet = await this.orbt.wallet(member.id)
     if (!wallet) return this.error(ERROR.TRY_AGAIN, { message })
 
-    let qr = Buffer.from((await QRCode.toDataURL(wallet.publicKey)).split(',')[1], 'base64')
-    let image = new Attachment(qr, 'wallet.png')
+    const qr = Buffer.from((await QRCode.toDataURL(wallet.publicKey)).split(',')[1], 'base64')
+    const image = new Attachment(qr, 'wallet.png')
 
     message.channel.send({ embed: {
       color: 0x3A6AE9,
