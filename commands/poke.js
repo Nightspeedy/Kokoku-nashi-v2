@@ -2,7 +2,7 @@ const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const { RichEmbed } = require('discord.js')
-const gifs = require('@lib/socialGifs.json')
+const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -18,16 +18,17 @@ module.exports = class extends Command {
 
   async run ({ message, args, color }) {
    
-    let gif = Math.floor(Math.random() * gifs.poke.length);
+    let gif = await Gifs.aggregate([ { $match: { gifType: 'poke' } }, { $sample: { size: 1 } } ])
+    gif = gif[0].url
 
     let embed = new RichEmbed()
     .setColor(color)
-    .setDescription(`image not loading? click [here](${gifs.poke[gif]})`);
+    .setDescription(`image not loading? click [here](${gif})`);
 
     if (!args) {
         
         embed.setTitle("You poked yourself! Silly :3")
-        await embed.setImage(gifs.poke[gif])
+        await embed.setImage(gif)
 
         message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
@@ -36,7 +37,7 @@ module.exports = class extends Command {
 
         
         embed.setTitle(`${message.author.username} poked ${message.mentions.users.first().username}!`)
-        await embed.setImage(gifs.poke[gif])
+        await embed.setImage(gif)
         message.channel.send(embed).catch(e => {})
     }
 

@@ -4,6 +4,7 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 const gifs = require('@lib/socialGifs.json')
+const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -19,20 +20,23 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    let gif = Math.floor(Math.random() * gifs.hug.length)
+    //let gif = Math.floor(Math.random() * gifs.hug.length)
+
+    let gif = await Gifs.aggregate([ { $match: { gifType: 'hug' } }, { $sample: { size: 1 } } ])
+    gif = gif[0].url
 
     let embed = new RichEmbed()
     .setColor(color)
-    .setDescription(`image not loading? click [here](${gifs.hug[gif]})`)
+    .setDescription(`image not loading? click [here](${gif})`)
 
     if (!args[0]) {
         embed.setTitle("Ahw... have a hug :3")
-        await embed.setImage(gifs.hug[gif])
+        await embed.setImage(gif)
         return message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
         if (args[0] != message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
         embed.setTitle(`${message.author.username} hugged ${message.mentions.users.first().username}!`)
-        await embed.setImage(gifs.hug[gif])
+        await embed.setImage(gif)
         return message.channel.send(embed).catch(e => {})
     }
   }

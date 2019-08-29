@@ -24,10 +24,11 @@ module.exports = class extends Event {
         console.error(e)
       }
     }
+
+    // Check for autoroles, and give em if there are any
     if (guild.autoRolesEnabled) {
       try {
         let autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
-        console.log(autoRoles)
         if (autoRoles.length > 0) {
           member.addRoles(autoRoles)
         }

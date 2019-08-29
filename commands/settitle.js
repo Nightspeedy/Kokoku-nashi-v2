@@ -27,11 +27,11 @@ module.exports = class extends Command {
 
         if (args[0] == "reset") {
 
-            await member.updateOne({title: "Nobody knows my title :O"}).catch(e => {
+            await member.updateOne({title: "Very title"}).catch(e => {
                 return this.error(ERROR.OTHER, {message, args})
             })
             member = await Member.findOne({id: message.author.id})
-            if (member.title == 'Nobody knows my title :O') {
+            if (member.title == 'Very title') {
                 message.channel.send("Successfully updated profile information!").catch(e => {})
             } else {
                 message.channel.send("Profile information was not updated!").catch(e => {})

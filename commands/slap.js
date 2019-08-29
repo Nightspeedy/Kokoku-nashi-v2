@@ -2,7 +2,8 @@ const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const { RichEmbed } = require('discord.js')
-const gifs = require('@lib/socialGifs.json')
+const { Gifs } = require('@lib/models')
+
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -18,11 +19,12 @@ module.exports = class extends Command {
 
   async run ({ message, args, color }) {
 
-    let gif = Math.floor(Math.random() * gifs.slap.length);
+    let gif = await Gifs.aggregate([ { $match: { gifType: 'slap' } }, { $sample: { size: 1 } } ])
+    gif = gif[0].url
 
     let embed = new RichEmbed()
     .setColor(color)
-    .setDescription(`image not loading? click [here](${gifs.slap[gif]})`);
+    .setDescription(`image not loading? click [here](${gif})`);
 
 	if (args[0]) {
 
@@ -30,13 +32,13 @@ module.exports = class extends Command {
 
         
         embed.setTitle(`${message.author.username} slapped ${message.mentions.users.first().username}`)
-        await embed.setImage(gifs.slap[gif])
+        await embed.setImage(gif)
 
         message.channel.send(embed).catch(e => {})
     } else {
 		        
         embed.setTitle("You slapped yourself... does that hurt?")
-        await embed.setImage(gifs.slap[gif])
+        await embed.setImage(gif)
 
         message.channel.send(embed).catch(e => {})
 	}
