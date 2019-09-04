@@ -28,6 +28,7 @@ module.exports = class extends Command {
     if (!keyValuePair) {
       console.log('Created')
       await Strings.create({ key: args[0], value: args[1] })
+      message.channel.send("Created a new KVP");
     } else {
       try {
         console.log('Updated')
