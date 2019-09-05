@@ -32,9 +32,9 @@ module.exports = class extends Command {
     const amount = parseFloat(args[1])
     if (isNaN(amount) || amount <= 0) return this.error(ERROR.INVALID_ARGUMENTS, { message })
 
-    const minAmount = await Strings.find({ key: 'minimumTransaction' }) || { value: 0 }
+    const minAmount = await Strings.findOne({ key: 'minimumTransaction' }) || { value: 0 }
 
-    if (amount < parseFloat(minAmount.value)) return this.error({ message: `The minimum transaction is ${minAmount} KKN.` }, { message })
+    if (amount < parseFloat(minAmount.value)) return this.error({ message: `The minimum transaction is ${minAmount.amount} KKN.` }, { message })
 
     const confirmation = await message.channel.send({
       embed: {
