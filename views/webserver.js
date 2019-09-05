@@ -13,9 +13,9 @@ app.get('/profile/card', (req, res) => {
   console.time('[Profile Card] Generated in')
   const query = JSON.parse(Buffer.from(decodeURIComponent(req.query.data), 'base64').toString('utf8'))
 
-  query.title.replace(/[&<>]/g, '')
-  query.description.replace(/[&<>]/g, '')
-  query.name.replace(/[&<>]/g, '')
+  query.title = query.title.replace(/[&<>]/g, '')
+  query.description = query.description.replace(/[&<>]/g, '')
+  query.name = query.name.replace(/[&<>]/g, '')
 
   query.levelProgress = Math.round((query.currentXP / query.nextXP) * 100)
 
