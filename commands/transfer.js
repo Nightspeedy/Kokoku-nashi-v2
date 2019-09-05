@@ -34,7 +34,7 @@ module.exports = class extends Command {
 
     const minAmount = await Strings.findOne({ key: 'minimumTransaction' }) || { value: 0 }
 
-    if (amount < parseFloat(minAmount.value)) return this.error({ message: `The minimum transaction is ${minAmount.amount} KKN.` }, { message })
+    if (amount < parseFloat(minAmount.value)) return this.error({ message: `The minimum transaction is ${minAmount.value} KKN.` }, { message })
 
     const confirmation = await message.channel.send({
       embed: {
