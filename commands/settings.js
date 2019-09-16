@@ -35,6 +35,7 @@ module.exports = class extends Command {
       { type: 'text', name: 'leavemessage', prettyName: 'Leave Message', dbField: 'leaveMessage', limit: 100, premiumLimit: 1000 },
       { type: 'text', name: 'banmessage', prettyName: 'Ban Message', dbField: 'banMessage', limit: 100, premiumLimit: 1000 },
       { type: 'channel', name: 'joinleavechannel', prettyName: 'Join/Leave Channel', dbField: 'joinLeaveChannel' },
+      { type: 'channel', name: 'logchannel', prettyName: 'Log Channel', dbField: 'logChannel' },
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
       { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
       { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' },
@@ -50,19 +51,18 @@ module.exports = class extends Command {
 
   // Updates a single field in a provided document.
   async update (document, field, value) {
-    let update = {}
+    const update = {}
     update[field] = value
-    let result = await document.updateOne(update)
+    const result = await document.updateOne(update)
     return result
   }
-
 
   // The handler for {type:text}
   // Gets the 2nd argument, can be a word of
   // a string in "quotes". If length is within
   // limits, update the guild document.
   async text ({ args, guild, setting }) {
-    let value = args[1]
+    const value = args[1]
     if (value.length > setting[guild.isPremium ? 'premiumLimit' : 'limit']) return // error
     await this.update(guild, setting.dbField, value)
   }
@@ -71,7 +71,7 @@ module.exports = class extends Command {
   // Gets the first mentioned channel and updates
   // the guild document if channel isnt undefined.
   async channel ({ message, guild, setting }) {
-    let channel = message.mentions.channels.first()
+    const channel = message.mentions.channels.first()
     if (!channel) return this.error(ERROR.INVALID_CHANNEL, { message, args })
     await this.update(guild, setting.dbField, channel.id)
   }
@@ -80,8 +80,8 @@ module.exports = class extends Command {
   // on = true
   // anything else = false
   async toggle ({ message, args, guild, setting }) {
-    let value = args[1] === 'on'
-    if(!value && args[1] !== 'off') return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    const value = args[1] === 'on'
+    if (!value && args[1] !== 'off') return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     await this.update(guild, setting.dbField, value)
   }
 
@@ -90,7 +90,7 @@ module.exports = class extends Command {
       return this.overview({ message, guild })
     } else {
       // Get the setting from this.settings
-      let setting = this.settings.find(setting => setting.name === args[0].toLowerCase())
+      const setting = this.settings.find(setting => setting.name === args[0].toLowerCase())
       if (!setting) return this.error({ message: 'Couldn\'t find that setting.' }, { message })
 
       try {
@@ -111,8 +111,8 @@ module.exports = class extends Command {
   }
 
   async overview ({ message, guild }) {
-    let fields = { text: [], channel: [], toggle: [] }
-    let [enabled, disabled] = ['<:Enabled:524627369386967042>', '<:Disabled:524627368757690398>']
+    const fields = { text: [], channel: [], toggle: [] }
+    const [enabled, disabled] = ['<:Enabled:524627369386967042>', '<:Disabled:524627368757690398>']
 
     this.settings.forEach(setting => {
       switch (setting.type) {
@@ -122,21 +122,22 @@ module.exports = class extends Command {
       }
     })
 
-    message.channel.send({ embed: {
-      color: 0x666666,
-      title: `⚙️ Guild Settings for ${message.guild.name}`,
-      description: 'Here you can see all the current settings for your server :D\n',
-      fields: [
-        { name: 'Channels', value: fields.channel.join('\n') },
-        { name: '\u200b', value: '\u200b' }, // Empty
-        { name: 'Messages', value: fields.text.join('\n') },
-        { name: '\u200b', value: '\u200b' }, // Empty
-        { name: 'Toggles', value: fields.toggle.join('\n') },
-        { name: '\u200b', value: `${guild.isPremium ? enabled : disabled} Premium` }
-      ],
-      timestamp: new Date()
+    return message.channel.send({
+      embed: {
+        color: 0x666666,
+        title: `⚙️ Guild Settings for ${message.guild.name}`,
+        description: 'Here you can see all the current settings for your server :D\n',
+        fields: [
+          { name: 'Channels', value: fields.channel.join('\n') },
+          { name: '\u200b', value: '\u200b' }, // Empty
+          { name: 'Messages', value: fields.text.join('\n') },
+          { name: '\u200b', value: '\u200b' }, // Empty
+          { name: 'Toggles', value: fields.toggle.join('\n') },
+          { name: '\u200b', value: `${guild.isPremium ? enabled : disabled} Premium` }
+        ],
+        timestamp: new Date()
       }
     }).catch(e => {})
-    return message.channel.send(JSON.stringify(guild)).catch(e => {})
+    // message.channel.send(JSON.stringify(guild)).catch(e => {})
   }
 }

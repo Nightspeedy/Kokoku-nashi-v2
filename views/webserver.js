@@ -10,18 +10,22 @@ const app = express()
 app.use('/profile', express.static('views/profile'))
 
 app.get('/profile/card', (req, res) => {
-  console.time(`[Profile Card] Generated in`)
+  console.time('[Profile Card] Generated in')
   const query = JSON.parse(Buffer.from(decodeURIComponent(req.query.data), 'base64').toString('utf8'))
+
+  query.title = query.title.replace(/[&<>]/g, '')
+  query.description = query.description.replace(/[&<>]/g, '')
+  query.name = query.name.replace(/[&<>]/g, '')
 
   query.levelProgress = Math.round((query.currentXP / query.nextXP) * 100)
 
   console.log(`[Profile Card] Generating for "${query.name}"`)
-  console.log(`[Profile Card] Data: `, query)
+  console.log('[Profile Card] Data: ', query)
   try { res.send(eassry(ProfileTemplate, query)) } catch (e) {
-    console.time(`[Profile Card]`, e)
+    console.time('[Profile Card]', e)
     return res.send('Something went wrong')
   }
-  console.timeEnd(`[Profile Card] Generated in`)
+  console.timeEnd('[Profile Card] Generated in')
 })
 
 app.listen(8080)

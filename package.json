@@ -9,6 +9,8 @@
   "author": "Nightspeedy",
   "license": "All rights reserved",
   "dependencies": {
+    "deep-object-diff": "^1.1.0",
+    "diff": "^4.0.1",
     "discord.js": "^11.5.1",
     "eassry": "^1.0.0",
     "express": "^4.17.1",
