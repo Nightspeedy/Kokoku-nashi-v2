@@ -32,8 +32,9 @@ module.exports = class extends Command {
       await embed.setImage(gif)
       return message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
-      if (args[0] !== message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
-      embed.setTitle(`${message.author.username} hugged ${message.mentions.users.first().username}!`)
+      let member = await this.parseMention(String(args[0]))
+      if (typeof member != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
+      embed.setTitle(`${message.author.username} hugged ${member.username}!`)
       await embed.setImage(gif)
       return message.channel.send(embed).catch(e => {})
     }
