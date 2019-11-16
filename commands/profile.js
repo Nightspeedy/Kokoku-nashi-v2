@@ -22,6 +22,8 @@ module.exports = class extends Command {
     this.fetch.member = true
 
     this.bot = bot
+
+    console.log(this.bot)
     
     // is this used??
     // no lol
@@ -34,6 +36,9 @@ module.exports = class extends Command {
       profile.emoji,
       { callback: function (icon, options) { resolve(icon + '.png') } }))
 
+    const wallet = await this.bot.ORBT.wallet(author.id)
+    if (!wallet) wallet = { value: 0 }
+
     let queries = {
       avatar: author.avatarURL,
       level: profile.level,
@@ -45,7 +50,7 @@ module.exports = class extends Command {
       title: profile.title,
       description: profile.description,
       reps: profile.reputation,
-      credits: profile.credits,
+      credits: wallet.value.toFixed(0),
       backgroundURL: background.url || '',
       filters: background.filters || 'none',
       css: background.css || ''
