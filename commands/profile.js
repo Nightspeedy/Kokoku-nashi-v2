@@ -24,6 +24,7 @@ module.exports = class extends Command {
     this.bot = bot
     
     // is this used??
+    // no lol
     this.currentShot = -1
   }
 
@@ -52,7 +53,7 @@ module.exports = class extends Command {
     let queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
 
     let shot = Buffer.from((await pageres
-      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'])
+      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'], { delay: 0.2 })
       .run())[0])
     return shot
   }

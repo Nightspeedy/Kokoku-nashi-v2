@@ -4,13 +4,14 @@ const fs = require('fs')
 const path = require('path')
 
 const ProfileTemplate = fs.readFileSync(path.resolve('views/profile/index.html'), 'utf8')
+const LevelUpTemplate = fs.readFileSync(path.resolve('views/level-up/index.html'), 'utf8')
 
 const app = express()
 
 app.use('/profile', express.static('views/profile'))
+app.use('/level-up', express.static('views/level-up'))
 
 app.get('/profile/card', (req, res) => {
-  console.time('[Profile Card] Generated in')
   const query = JSON.parse(Buffer.from(decodeURIComponent(req.query.data), 'base64').toString('utf8'))
 
   query.title = query.title.replace(/[&<>]/g, '')
@@ -22,10 +23,20 @@ app.get('/profile/card', (req, res) => {
   console.log(`[Profile Card] Generating for "${query.name}"`)
   console.log('[Profile Card] Data: ', query)
   try { res.send(eassry(ProfileTemplate, query)) } catch (e) {
-    console.time('[Profile Card]', e)
+    console.log('[Profile Card]', e)
     return res.send('Something went wrong')
   }
-  console.timeEnd('[Profile Card] Generated in')
+})
+
+app.get('/level-up/card', (req, res) => {
+  const query = JSON.parse(Buffer.from(decodeURIComponent(req.query.data), 'base64').toString('utf8'))
+
+  console.log(`[Level Up] Generating for "${query.name}"`)
+  console.log('[Level Up] Data: ', query)
+  try { res.send(eassry(LevelUpTemplate, query)) } catch (e) {
+    console.log('[Level Up]', e)
+    return res.send('Something went wrong')
+  }
 })
 
 app.listen(8080)
