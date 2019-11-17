@@ -80,9 +80,9 @@ module.exports = class LevelSystem extends Event {
       
       // Send the generated image.
       let image = new Attachment(shot, 'levelup.png')
-      await message.channel.send(`:sparkles: **${message.author.username} leveled up!** :sparkles:`, {
-        files: [image]
-      })
+      //await message.channel.send(`:sparkles: **${message.author.username} leveled up!** :sparkles:`, {
+      //  files: [image]
+      //})
 
       // Reset pageres, Dumb hack to prevent memory leaks
       pageres.items = []
