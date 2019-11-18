@@ -8,7 +8,6 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'invite',
-      aliases: ['inv'],
       description: 'Send the bot invite URL via DM',
       type: TYPES.UTILITY,
       args: '',
