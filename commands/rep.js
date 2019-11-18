@@ -21,9 +21,9 @@ module.exports = class extends Command {
   async run ({ message, color, args }) {
     return message.reply("Broken, We're working towards fixing this command!")
     // Gift by mention
-    let user = this.parseMention(args[0])
-    if (typeof user != 'object') return this.error(ERROR.MEMBER_NOT_FOUND, {message})
-    console.log(user.name)
+    let user = this.mention(args[0], message)
+    if (typeof user !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, {message})
+
     // console.log(user.user.name)
     let member = await Member.findOne({id: message.author.id})
     if (!user && !args[0]) {
@@ -74,13 +74,13 @@ module.exports = class extends Command {
         let reputation = memberMention.reputation
 
         reputation += 1;
-        //await member.updateOne({repLastGiven: Date.now()})
+        await member.updateOne({repLastGiven: Date.now()})
         await memberMention.updateOne({reputation: reputation});
 
         const embed = new RichEmbed()
         .setTitle(message.author.username)
         .setColor(color)
-        .addField("You repped someone! ", message.author.username + " added reputation to " + member.username)
+        .addField("You repped someone! ", message.author.username + " added reputation to " + user.user.username)
         message.channel.send(embed).catch(e => {})
 
       } catch(e) {
