@@ -19,9 +19,12 @@ module.exports = class extends Command {
   }
 
   async run ({ message, color, args }) {
-
+    return message.reply("Broken, We're working towards fixing this command!")
     // Gift by mention
-    let user = message.mentions.users.first()
+    let user = this.parseMention(args[0])
+    if (typeof user != 'object') return this.error(ERROR.MEMBER_NOT_FOUND, {message})
+    console.log(user.name)
+    // console.log(user.user.name)
     let member = await Member.findOne({id: message.author.id})
     if (!user && !args[0]) {
       if (member.repLastGiven + 86100000 > Date.now()) {
@@ -42,11 +45,12 @@ module.exports = class extends Command {
         return this.success("<:Enabled:524627369386967042>", "You can now give reputation points!", {message, args})
       }
     }
-    if (!message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
-    if (message.mentions.users.first().bot) return this.error({message: 'Bots dont have profiles!'}, {message, args})
-    if (message.author.id == message.mentions.users.first().id) return this.error({message: 'You cannot give yourself reputation!'}, {message, args})
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, {message,args})
+    if (user.bot) return this.error({message: 'Bots dont have profiles!'}, {message, args})
+    if (message.author.id == user.id) return this.error({message: 'You cannot give yourself reputation!'}, {message, args})
 
-    let memberMention = await Member.findOne({id: message.mentions.users.first().id})
+    let memberMention = await Member.findOne({id: user.id})
+    console.log(memberMention)
 
     if (!memberMention) return this.error(ERROR.UNKNOWN_MEMBER, {message, args})
 
@@ -70,14 +74,13 @@ module.exports = class extends Command {
         let reputation = memberMention.reputation
 
         reputation += 1;
-        console.log(member.repLastGiven)
-        await member.updateOne({repLastGiven: Date.now()})
+        //await member.updateOne({repLastGiven: Date.now()})
         await memberMention.updateOne({reputation: reputation});
 
         const embed = new RichEmbed()
         .setTitle(message.author.username)
         .setColor(color)
-        .addField("You repped someone! ", message.author.username + " added reputation to " + message.mentions.users.first().username)
+        .addField("You repped someone! ", message.author.username + " added reputation to " + member.username)
         message.channel.send(embed).catch(e => {})
 
       } catch(e) {

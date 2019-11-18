@@ -30,13 +30,14 @@ module.exports = class extends Command {
       message.channel.send(embed).catch(e => {})
     }
     if (args[0]) {
-      if (!message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
-      // if (message.mentions.users.first().bot) return message.channel.send("**Error!** Target user is a bot!");
+      
+      let member = await this.parseMention(args[0])
+      if (typeof member != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
 
-      embed.setTitle(message.mentions.users.first().tag)
+      embed.setTitle(member.tag)
         .setColor(color)
-        .setDescription(`Here you go, |[Click me](${message.mentions.users.first().displayAvatarURL})|`)
-        .setImage(message.mentions.users.first().displayAvatarURL)
+        .setDescription(`Here you go, |[Click me](${member.displayAvatarURL})|`)
+        .setImage(member.displayAvatarURL)
 
       message.channel.send(embed).catch(e => {})
     }

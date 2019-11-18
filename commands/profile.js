@@ -62,19 +62,24 @@ module.exports = class extends Command {
       .run())[0])
     return shot
   }
-
+  
   async run ({ message, args, member, color }) {
-    let buffer
+    let buffer, mention
     let username = message.author.username
 
-    if (message.mentions.users.first() && !(await Member.findOne({id: message.mentions.users.first()})) ) Member.create({id: message.mentions.users.first().id})
+    if (args[0]) {
+      mention = await this.parseMention(String(args[0]))
+      if (typeof mention != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
+    }
+
+    if (mention && !(await Member.findOne({id: mention.id})) ) Member.create({id: mention.id})
 
     let cardMsg = await message.channel.send(`Generating profile...`)
-    if (message.mentions.users.first()) {
-      let mentionMember = await Member.findOne({ id: message.mentions.users.first().id })
+    if (mention != undefined) {
+      let mentionMember = await Member.findOne({ id: mention.id })
       if (!mentionMember) return message.channel.send(this.error(ERROR.UNKNOWN_MEMBER, { message, args }))
-      buffer = await this.shot(mentionMember, message.mentions.users.first())
-      username = message.mentions.users.first().username
+      buffer = await this.shot(mentionMember, mention)
+      username = mention.username
     } else {
       buffer = await this.shot(member, message.author)
     }
