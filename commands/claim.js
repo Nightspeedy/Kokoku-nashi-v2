@@ -35,7 +35,7 @@ module.exports = class extends Command {
 
     const transaction = await this.orbt.transfer({ privateKey: this.wallet.private, publicKey: this.wallet.public, id: 'bot' }, member.id, { frac: 100000 })
 
-    const embeds = this.orbt.embeds(transaction.fromWallet.value / 100000, member.username)
+    const embeds = this.orbt.embeds(transaction.fromWallet.value / 100000, message.author.username)
 
     const statusMsg = await message.channel.send({ embed: embeds.queued })
 

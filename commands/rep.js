@@ -19,7 +19,7 @@ module.exports = class extends Command {
   }
 
   async run ({ message, color, args }) {
-
+    return message.reply("Broken, We're working towards fixing this command!")
     // Gift by mention
     let user = this.mention(args[0], message)
     if (typeof user !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, {message})
