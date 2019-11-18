@@ -22,8 +22,11 @@ module.exports = class extends Command {
     this.fetch.member = true
 
     this.bot = bot
+
+    console.log(this.bot)
     
     // is this used??
+    // no lol
     this.currentShot = -1
   }
 
@@ -32,6 +35,9 @@ module.exports = class extends Command {
     let emoji = await new Promise(resolve => twemoji.parse(
       profile.emoji,
       { callback: function (icon, options) { resolve(icon + '.png') } }))
+
+    const wallet = await this.bot.ORBT.wallet(author.id)
+    if (!wallet) wallet = { value: 0 }
 
     let queries = {
       avatar: author.avatarURL,
@@ -44,7 +50,7 @@ module.exports = class extends Command {
       title: profile.title,
       description: profile.description,
       reps: profile.reputation,
-      credits: profile.credits,
+      credits: wallet.value.toFixed(0),
       backgroundURL: background.url || '',
       filters: background.filters || 'none',
       css: background.css || ''
@@ -52,7 +58,7 @@ module.exports = class extends Command {
     let queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
 
     let shot = Buffer.from((await pageres
-      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'])
+      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'], { delay: 0.2 })
       .run())[0])
     return shot
   }

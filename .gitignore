@@ -1,3 +1,5 @@
 config.json
 node_modules
+node_modules.nosync
 KV2.code-workspace
+.DS_Store
