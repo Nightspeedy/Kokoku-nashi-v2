@@ -48,7 +48,6 @@ module.exports = class extends Command {
     setTimeout(async () => {
       if (number > 100) {
         const fetched = await message.channel.fetchMessages({ limit: 100 })
-        console.log(fetched)
         try {
           await message.channel.bulkDelete(100)
         } catch (e) {
@@ -59,7 +58,6 @@ module.exports = class extends Command {
         number -= 100
       } else {
         const fetched = await message.channel.fetchMessages({ limit: number })
-        console.log(fetched)
         try {
           await message.channel.bulkDelete(100)
         } catch (e) {

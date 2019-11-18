@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
   async run ({ message, args, guild }) {
 
-    let memberToBan = message.mentions.members.first() || await message.guild.members.fetch(args[0])
+    let memberToBan = this.mention(args[0], message)
     let reason = args[1]
 
     if (!memberToBan) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })

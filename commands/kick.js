@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
     if (!message.guild.me.hasPermission("KICK_MEMBERS")) return this.error(ERROR.BOT_NO_PERMISSION, {message, args})
 
-    let memberToKick = message.mentions.members.first() || await message.guild.members.fetch(args[0])
+    let memberToKick = this.mention(args[0], message)
     let reason = args[1]
 
     if (!memberToKick) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
