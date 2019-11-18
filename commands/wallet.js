@@ -1,9 +1,9 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
+// const PERMISSIONS = require('@lib/permissions')
 const { Attachment } = require('discord.js')
-const { Member } = require('@lib/models')
+// const { Member } = require('@lib/models')
 var QRCode = require('qrcode')
 
 module.exports = class extends Command {
@@ -16,13 +16,12 @@ module.exports = class extends Command {
     }) // Pass the appropriate command information to the base class.
 
     this.orbt = bot.ORBT
-    console.log(this.orbt)
 
     this.fetch.guild = true
   }
 
   async run ({ message, args, guild, color }) {
-    const member = message.mentions.users.first() || message.author
+    const member = this.mention(args[0], message) || message.author
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
     const wallet = await this.orbt.wallet(member.id)
@@ -31,13 +30,15 @@ module.exports = class extends Command {
     const qr = Buffer.from((await QRCode.toDataURL(wallet.publicKey)).split(',')[1], 'base64')
     const image = new Attachment(qr, 'wallet.png')
 
-    message.channel.send({ embed: {
-      color: 0x3A6AE9,
-      title: `${member.username}'s Wallet`,
-      description: `💵 ${wallet.value.toFixed(0)} Kokoin`,
-      thumbnail: { url: 'attachment://wallet.png' },
-      timestamp: new Date()
-    },
-    files: [image] })
+    message.channel.send({
+      embed: {
+        color: 0x3A6AE9,
+        title: `${member.username}'s Wallet`,
+        description: `💵 ${wallet.value.toFixed(0)} Kokoin`,
+        thumbnail: { url: 'attachment://wallet.png' },
+        timestamp: new Date()
+      },
+      files: [image]
+    })
   }
 }

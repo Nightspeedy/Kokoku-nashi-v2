@@ -23,18 +23,14 @@ module.exports = class extends Command {
 
     let keyValuePair = await Strings.findOne({ key: args[0] })
     const keys = await Strings.find({ })
-    console.log(keys)
 
     if (!keyValuePair) {
-      console.log('Created')
       await Strings.create({ key: args[0], value: args[1] })
       message.channel.send("Created a new KVP");
     } else {
       try {
-        console.log('Updated')
         await keyValuePair.update({ value: args[1] })
         keyValuePair = await Strings.findOne({ key: args[0] })
-        console.log(keyValuePair)
         this.success('Success!', 'Updated KeyValue pair successfully!', { message })
       } catch (e) {
         console.log(e)

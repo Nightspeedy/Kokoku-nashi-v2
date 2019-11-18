@@ -25,7 +25,6 @@ module.exports = class extends Command {
   async run ({ message, args, color, member }) {
     if (args[0]) {
       let emoji = (isEmoji.exec(args[0]) || [])[0]
-      console.log('emoji', emoji)
       if (!emoji) return this.error({ message: 'That doesn\'t seem like a valid emoji. Try something else!' }, { message })
       await member.updateOne({ emoji })
       return this.success('Emoji Set!', `You've set your emoji to ${emoji}!`, { message })

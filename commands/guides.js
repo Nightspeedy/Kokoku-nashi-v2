@@ -2,7 +2,6 @@ const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 const { RichEmbed } = require('discord.js')
-const gifs = require('@lib/socialGifs.json')
 
 module.exports = class extends Command {
   constructor (bot) {

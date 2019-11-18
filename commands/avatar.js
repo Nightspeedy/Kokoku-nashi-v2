@@ -31,7 +31,7 @@ module.exports = class extends Command {
     }
     if (args[0]) {
       
-      let member = await this.parseMention(args[0])
+      let member = await this.mention(args[0], message)
       if (typeof member != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
 
       embed.setTitle(member.tag)

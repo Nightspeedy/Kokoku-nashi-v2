@@ -51,8 +51,8 @@ module.exports = class extends Command {
         let channel = message.guild.channels.get(message.mentions.channels.first().id)
         if (!channel.permissionsFor(message.author.id).has("SEND_MESSAGES")) return this.error({message: "You don't have permission to send messages to this channel!"}, {message, args})
         channel.send(string).catch(e => {})
-      } catch (err) {
-        console.log(err)
+      } catch (e) {
+        console.log(e)
         return this.error({message: 'You can only send messages to a channel in this server!'}, {message, args})
       }
     }

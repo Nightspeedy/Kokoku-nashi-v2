@@ -1,10 +1,10 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
-const { Attachment } = require('discord.js')
+// const PERMISSIONS = require('@lib/permissions')
+// const { Attachment } = require('discord.js')
 const { Strings } = require('@lib/models')
-var QRCode = require('qrcode')
+// var QRCode = require('qrcode')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -12,19 +12,19 @@ module.exports = class extends Command {
       name: 'transfer',
       description: 'Check your, or someone elses wallet.',
       type: TYPES.UTILITY,
-      args: '{amount} {@mention}'
+      args: '{amount} {@mention}',
+      bot
     }) // Pass the appropriate command information to the base class.
 
-    this.client = bot
+    this.bot = bot
     this.orbt = bot.ORBT
-    console.log(this.orbt)
 
     this.fetch.guild = true
   }
 
   async run ({ message, args, guild, color }) {
     const me = message.member
-    const member = message.mentions.users.first()
+    const member = this.mention(args[0], message)
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
     if (me.id === member.id) return this.error(ERROR.INVALID_ARGUMENTS, { message })
@@ -44,13 +44,12 @@ module.exports = class extends Command {
       }
     })
 
-    await confirmation.react(this.client.emojis.get('601850856832368640'))
-    await confirmation.react(this.client.emojis.get('601850856718991370'))
+    await confirmation.react('601850856832368640')
+    await confirmation.react('601850856718991370')
 
     const filter = (reaction, user) => {
       return ['no', 'yes'].includes(reaction.emoji.name) && user.id === message.author.id
     }
-
     const embeds = this.orbt.embeds(amount, member.username)
 
     try {

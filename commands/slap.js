@@ -27,11 +27,11 @@ module.exports = class extends Command {
     .setDescription(`image not loading? click [here](${gif})`);
 
 	if (args[0]) {
-
-        if (args[0] != message.mentions.users.first()) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
+        let member = this.mention(args[0], message)
+        if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, {message, args})
 
         
-        embed.setTitle(`${message.author.username} slapped ${message.mentions.users.first().username}`)
+        embed.setTitle(`${message.author.username} slapped ${member.username}`)
         await embed.setImage(gif)
 
         message.channel.send(embed).catch(e => {})

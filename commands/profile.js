@@ -13,7 +13,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'profile',
-      aliases: ['account'],
+      aliases: ['account', 'me'],
       description: 'Shows your, or someone\'s profile!',
       type: TYPES.SOCIAL,
       args: '[@mention]'
@@ -22,8 +22,6 @@ module.exports = class extends Command {
     this.fetch.member = true
 
     this.bot = bot
-
-    console.log(this.bot)
     
     // is this used??
     // no lol
@@ -68,7 +66,7 @@ module.exports = class extends Command {
     let username = message.author.username
 
     if (args[0]) {
-      mention = await this.parseMention(String(args[0]))
+      mention = await this.mention(args[0], message)
       if (typeof mention != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
     }
 

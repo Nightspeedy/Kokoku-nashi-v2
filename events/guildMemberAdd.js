@@ -19,7 +19,9 @@ module.exports = class extends Event {
       if (message.includes('{GUILD.NAME}')) message = message.replace('{GUILD.NAME}', `${member.guild.name}`)
 
       try {
-        this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { console.log(e) })
+        this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { 
+          console.log(e)
+        })
       } catch (e) {
         console.error(e)
       }
