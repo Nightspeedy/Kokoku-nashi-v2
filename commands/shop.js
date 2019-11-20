@@ -22,10 +22,10 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
 
-    return message.channel.send("This feature is being worked on!")
-
     if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the official Kōkoku Nashi server!"}, message)
     
+    return message.channel.send("This feature is being worked on!")
+
     if (args[0] === 'buy') {
         const botKeys = this.bot.config.wallet
         const userWallet = await this.bot.ORBT.wallet(message.author.id)
