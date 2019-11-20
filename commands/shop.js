@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
 
-    if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the official Kōkoku Nashi server!"}, message)
+    if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the official Kōkoku Nashi server!"}, { message })
     
     return message.channel.send("This feature is being worked on!")
 
