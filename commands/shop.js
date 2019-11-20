@@ -21,6 +21,10 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
+
+    return message.channel.send("This feature is being worked on!")
+
+    if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the official Kōkoku Nashi server!"}, message)
     
     if (args[0] === 'buy') {
         const botKeys = this.bot.config.wallet
@@ -65,16 +69,16 @@ module.exports = class extends Command {
               try {
                 let game
                 try{
-                    await message.author.send("Thank you for your purchase! Your order is processing!")
-                    game = await Steamkeys.aggregate([ { $match: { type: 'game' } }, { $sample: { size: 1 } } ])
-                    if (!game[0]) {
-                        message.channel.send("Out of stock. Transaction was cancelled!")
-                        return confirmation.edit({ embed: embeds.canceled })
-                    }
+                  game = await Steamkeys.aggregate([ { $match: { type: 'game' } }, { $sample: { size: 1 } } ])
+                  if (!game[0]) {
+                    message.channel.send("Out of stock. Transaction was cancelled!")
+                    return confirmation.edit({ embed: embeds.canceled })
+                  }
+                  await message.author.send("Thank you for your purchase! Your order is processing!")
                 } catch(e) {
 
-                    message.channel.send("I could not DM you. Transaction was cancelled!")
-                    return confirmation.edit({ embed: embeds.canceled })
+                  message.channel.send("I could not DM you. Transaction was cancelled!")
+                  return confirmation.edit({ embed: embeds.canceled })
                 }
 
                 const transaction = await this.bot.ORBT.transfer(message.author.id, { privateKey: botKeys.private, publicKey: botKeys.public, id: 'Bot'}, amount)
@@ -100,6 +104,15 @@ module.exports = class extends Command {
           } catch (e) {
             await confirmation.edit({ embed: embeds.canceled })
           }
+    } else if (args[0] === 'list') {
+      let embed = new RichEmbed()
+      .setTitle("Item shop")
+      .setDescription('Here you can buy items with your Kokoin \n\nUsage of the buy command is as follows:\nk!shop buy steamkey\n\nUpon purchase, you will be asked to confirm your transaction. After your transaction has been verified. the goods will be transfered.')
+      .addField("1x Steam key", 'Item name: steamkey - Price: 5000 KKN')
+
+      message.channel.send(embed)
+    } else {
+
     }
   }
 
@@ -110,17 +123,17 @@ module.exports = class extends Command {
     console.log(message)
 
     switch(item) {
-        case 'steamkey':
-            console.log("Got here")
-            embed.setTitle('Thank you for your purchase!')
-            .setDescription('Your purchase: 1x Random Steam key')
-            .addField(`Game: ${game[0].name}`, `Steam key: ${game[0].key}`)
+      case 'steamkey':
+          console.log("Got here")
+          embed.setTitle('Thank you for your purchase!')
+          .setDescription('Your purchase: 1x Random Steam key')
+          .addField(`Game: ${game[0].name}`, `Steam key: ${game[0].key}`)
 
-            await Steamkeys.remove({key: game[0].key})
+          await Steamkeys.deleteOne({key: game[0].key})
 
-            message.author.send(embed)
-        break
+          message.author.send(embed)
+          message.channel.send("Your Steam key has been sent to your DM!")
+      break
     }
-
   }
 }

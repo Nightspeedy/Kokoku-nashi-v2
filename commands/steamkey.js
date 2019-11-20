@@ -12,8 +12,8 @@ module.exports = class extends Command {
     super({
       name: 'steamkey',
       description: 'Adds/Removes/Lists steam keys',
-      type: TYPES.UTILITY,
-      args: '',
+      type: TYPES.BOT_OWNER,
+      args: '{Game name} {Steam key}',
       bot
     }) // Pass the appropriate command information to the base class.
 

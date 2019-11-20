@@ -22,7 +22,7 @@ module.exports = class extends Command {
     // Gift by mention
 
     let member = await Member.findOne({id: message.author.id})
-    if (!user && !args[0]) {
+    if (member && !args[0]) {
       if (member.repLastGiven + 86100000 > Date.now()) {
 
         let hours, minutes, seconds
