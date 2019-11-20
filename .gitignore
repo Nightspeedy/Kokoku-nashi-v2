@@ -1,5 +1,9 @@
 config.json
 node_modules
+<<<<<<< HEAD
 node_modules.nosync
 KV2.code-workspace
 .DS_Store
+=======
+pm2.json
+>>>>>>> 4891fde79f8d7170740597d5ba1d87a400bad3a3
