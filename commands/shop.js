@@ -22,9 +22,9 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
 
-    if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the official Kōkoku Nashi server!"}, { message })
+    if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the [official Kōkoku Nashi server](https://discord.gg/rRSTX4w)!"}, { message })
     
-    return message.channel.send("This feature is being worked on!")
+    //return message.channel.send("This feature is being worked on!")
 
     if (args[0] === 'buy') {
         const botKeys = this.bot.config.wallet
@@ -34,7 +34,6 @@ module.exports = class extends Command {
         let amount
 
         SHOP_ITEMS.forEach(element => {
-            console.log(element)
 
             if (element.productName === args[1].toLowerCase()) {
 
@@ -85,9 +84,7 @@ module.exports = class extends Command {
                 await confirmation.edit({ embed: embeds.queued })
       
                 const listener = (data) => {
-                    console.log("Test 1")
                   if (data.indexOf(transaction.id) > -1) {
-                    console.log("Test2")
                     this.transferItem(item, message, game)
                     this.bot.ORBT.io.off('transactionsProcessed', listener)
                     confirmation.edit({ embed: embeds.completed })
@@ -119,13 +116,10 @@ module.exports = class extends Command {
   async transferItem(item, message, game){
     
     let embed = new RichEmbed()
-    console.log(item)
-    console.log(message)
 
     switch(item) {
       case 'steamkey':
-          console.log("Got here")
-          embed.setTitle('Thank you for your purchase!')
+          embed.setTitle('Your order was completed!')
           .setDescription('Your purchase: 1x Random Steam key')
           .addField(`Game: ${game[0].name}`, `Steam key: ${game[0].key}`)
 
