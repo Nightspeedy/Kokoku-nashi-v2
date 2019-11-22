@@ -27,33 +27,33 @@ module.exports = class extends Command {
     if(!args[0]) return
 
     switch(args[0]){
-        case 'add':
-            
-            if (!args[1] || !args[2]) return
+      case 'add':
+          
+        if (!args[1] || !args[2]) return
+        let preservedMsg = message
+        message.delete()
+        try {
+          let key = await Steamkeys.find({key: args[2]})
+          if(key[0]) return message.channel.send("That key already exists!") 
+          await Steamkeys.create({name: `${args[1]}`, key: `${args[2]}`})
+          preservedMsg.channel.send("Added key to database.")
+        } catch(e) {
+            preservedMsg.channel.send("Something went wrong...")
+          return console.log(e)
+        }
 
-            try {
-                let key = await Steamkeys.find({key: args[2]})
-                if(key[0]) return message.channel.send("That key already exists!") 
-                await Steamkeys.create({name: `${args[1]}`, key: `${args[2]}`})
-                message.channel.send("Added key to database")
-            } catch(e) {
-                message.channel.send("Something went wrong...")
-                return console.log(e)
-            }
+        return
 
-            return
-
-        case 'remove':
-            console.log("got here")
-            try {
-                if (!args[1]) return
-                await Steamkeys.deleteOne({key: args[1]})
-
-            } catch(e) {
-                console.log(e)
-            }
-        break
+      case 'remove':
+        console.log("got here")
+        try {
+        if (!args[1]) return
+          await Steamkeys.deleteOne({key: args[1]})
+          message.channel.send("Removed key from database.")
+        } catch(e) {
+        console.log(e)
+      }
+      break
     }
-
   }
 }
