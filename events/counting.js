@@ -13,6 +13,9 @@ module.exports = class extends Event {
     
     if (message.author.id === this.bot.user.id) return
     if (message.channel.name !== 'counting') return
+
+    let msg = ArgumentParser(message.content, this.bot)
+
     let counting = await Counting.findOne({id: message.guild.id})
     if (!counting) {
       await Counting.create({id: message.guild.id})
@@ -24,7 +27,7 @@ module.exports = class extends Event {
     let description = counting.countingDescription
 
     if (description.includes("{NUMBER}")) description = description.replace("{NUMBER}", `${counting.countingNumber + 2}`)
-    if (!message.content.startsWith(counting.countingNumber + 1)) {
+    if (msg[0] !== (counting.countingNumber + 1)) {
       message.delete()
       let wrong = counting.countingWrongNumber
       wrong = wrong.replace("{NUMBER}", `${counting.countingNumber + 1}`)
@@ -37,7 +40,6 @@ module.exports = class extends Event {
 
     message.channel.setTopic(description)
     
-    let msg = ArgumentParser(message.content, this.bot)
     await counting.updateOne({countingNumber: msg[0], countingLast: message.author.id})
 
   }
