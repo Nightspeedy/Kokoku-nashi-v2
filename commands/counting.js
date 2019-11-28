@@ -26,8 +26,6 @@ module.exports = class extends Command {
 
     if (!counting) return
 
-    let guild = await Guild.findOne({id: message.guild.id})
-
     switch (args[0].toLowerCase()) {
       case 'enable':
           if (counting.countingEnabled) return this.error({message: "Counting is already enabled!"}, {message})

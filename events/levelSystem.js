@@ -74,12 +74,12 @@ module.exports = class LevelSystem extends Event {
       let queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
       
       // Capture an image of the generated webpage
-      let shot = await Buffer.from((await pageres
+      /*let shot = await Buffer.from((await pageres
         .src(`http://localhost:8080/level-up/card?data=${queryString}`, ['224x284'], { delay: 0.2, scale: 0.5 })
-        .run())[0])
+        .run())[0])*/
       
       // Send the generated image.
-      let image = new Attachment(shot, 'levelup.png')
+      //let image = new Attachment(shot, 'levelup.png')
       //await message.channel.send(`:sparkles: **${message.author.username} leveled up!** :sparkles:`, {
       //  files: [image]
       //})

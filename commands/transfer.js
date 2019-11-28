@@ -59,16 +59,16 @@ module.exports = class extends Command {
       if (reaction._emoji.name === 'yes') {
         try {
           const transaction = await this.orbt.transfer(me.id, member.id, amount)
-          await confirmation.edit({ embed: embeds.queued })
+          confirmation.edit({ embed: embeds.queued })
+          
+          transaction.status.on('processing', () => {
+            confirmation.edit({ embed: embeds.processing })
+          })
 
-          const listener = (data) => {
-            if (data.indexOf(transaction.id) > -1) {
-              this.orbt.io.off('transactionsProcessed', listener)
-              confirmation.edit({ embed: embeds.completed })
-            }
-          }
+          transaction.status.on('success', () => {
+            confirmation.edit({ embed: embeds.completed })
+          })
 
-          this.orbt.io.on('transactionsProcessed', listener)
         } catch (e) {
           return confirmation.edit({ embed: embeds.canceled })
         }

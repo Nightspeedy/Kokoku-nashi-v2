@@ -39,13 +39,12 @@ module.exports = class extends Command {
 
     const statusMsg = await message.channel.send({ embed: embeds.queued })
 
-    const listener = (data) => {
-      if (data.indexOf(transaction.id) > -1) {
-        this.orbt.io.off('transactionsProcessed', listener)
-        statusMsg.edit({ embed: embeds.completed })
-      }
-    }
+    transaction.status.on('processing', () => {
+      statusMsg.edit({ embed: embeds.processing })
+    })
 
-    this.orbt.io.on('transactionsProcessed', listener)
+    transaction.status.on('success', () => {
+      statusMsg.edit({ embed: embeds.completed })
+    })
   }
 }

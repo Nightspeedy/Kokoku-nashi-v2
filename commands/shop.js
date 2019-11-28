@@ -82,16 +82,15 @@ module.exports = class extends Command {
 
                 const transaction = await this.bot.ORBT.transfer(message.author.id, { privateKey: botKeys.private, publicKey: botKeys.public, id: 'Bot'}, amount)
                 await confirmation.edit({ embed: embeds.queued })
-      
-                const listener = (data) => {
-                  if (data.indexOf(transaction.id) > -1) {
-                    this.transferItem(item, message, game)
-                    this.bot.ORBT.io.off('transactionsProcessed', listener)
-                    confirmation.edit({ embed: embeds.completed })
-                  }
-                }
-      
-                this.bot.ORBT.io.on('transactionsProcessed', listener)
+
+                transaction.status.on('processing', () => {
+                  confirmation.edit({ embed: embeds.processing })
+                })
+
+                transaction.status.on('success', () => {
+                  this.transferItem(item, message, game)
+                  confirmation.edit({ embed: embeds.completed })
+                })
               } catch (e) {
                 return confirmation.edit({ embed: embeds.canceled })
               }
