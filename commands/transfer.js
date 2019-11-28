@@ -60,7 +60,7 @@ module.exports = class extends Command {
         try {
           const transaction = await this.orbt.transfer(me.id, member.id, amount)
           confirmation.edit({ embed: embeds.queued })
-          
+
           transaction.status.on('processing', () => {
             confirmation.edit({ embed: embeds.processing })
           })
@@ -70,6 +70,7 @@ module.exports = class extends Command {
           })
 
         } catch (e) {
+          console.error('transaction failed', e)
           return confirmation.edit({ embed: embeds.canceled })
         }
       } else if (reaction._emoji.name === 'no') {
