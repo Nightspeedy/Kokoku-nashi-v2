@@ -11,7 +11,7 @@ module.exports = class extends Event {
 
   async trigger (message) {
     
-    if (message.author.id === this.bot.user.id) return
+    if (message.author.id === "503687810885353472" || message.author.id == "506087408865902634") return
     if (message.channel.name !== 'counting') return
 
     let msg = ArgumentParser(message.content, this.bot)
