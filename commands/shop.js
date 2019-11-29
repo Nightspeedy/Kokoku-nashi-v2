@@ -24,11 +24,10 @@ module.exports = class extends Command {
 
     if (message.guild.id !== "524624032012959745") return this.error({message: "This command can only be used in the [official Kōkoku Nashi server](https://discord.gg/rRSTX4w)!"}, { message })
     
-    //return message.channel.send("This feature is being worked on!")
+    if (!args[0]) args[0] = 'list'
 
     if (args[0] === 'buy') {
         const botKeys = this.bot.config.wallet
-        const userWallet = await this.bot.ORBT.wallet(message.author.id)
 
         let item = undefined
         let amount
