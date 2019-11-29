@@ -11,7 +11,7 @@ module.exports = class extends Command {
     super({
       name: 'daily',
       description: 'Claim your daily kokoin.',
-      alias: ['claim'],
+      alias: ['claim', 'dailies'],
       type: TYPES.UTILITY,
       args: ''
     }) // Pass the appropriate command information to the base class.
