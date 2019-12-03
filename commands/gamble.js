@@ -11,6 +11,7 @@ module.exports = class extends Command {
       description: 'Gamble your coins!',
       type: TYPES.GAMES,
       args: '{amount}',
+      cooldown: 120 // Cooldown in seconds
     }) // Pass the appropriate command information to the base class.
 
     this.gif = ["https://cdn.discordapp.com/attachments/519032774972407828/600203788313427971/koko1_25xL.gif", "https://cdn.discordapp.com/attachments/519032774972407828/600203788875333632/koko1_25xR.gif"]
@@ -37,14 +38,14 @@ module.exports = class extends Command {
     let msg, image, amount, from, to, username
     let embed = new RichEmbed()
     .setTitle("Gamble")
-    if (random <= 600) {
+    if (random <= 650) {
         image = "https://cdn.discordapp.com/attachments/519032774972407828/600203786925113365/koko0_5x.gif"
         msg = "And won x0.5 of what you gambled!"
         from = message.author.id
         to = {publicKey: botKeys.public, privateKey: botKeys.private, id: 'Bot'}
         amount = args[0]/2
         username = 'Bot'
-    } else if (random >600 && random <= 975 ) {
+    } else if (random >650 && random <= 975 ) {
       let randGif = Math.floor(Math.random() * 2)
       image = this.gif[randGif]
       msg = "And won 1.25x of what you gambled!"
