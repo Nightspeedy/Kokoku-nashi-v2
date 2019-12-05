@@ -11,7 +11,6 @@ module.exports = class extends Command {
       description: 'Gamble your coins!',
       type: TYPES.GAMES,
       args: '{amount}',
-      cooldown: 120 // Cooldown in seconds
     }) // Pass the appropriate command information to the base class.
 
     this.gif = ["https://cdn.discordapp.com/attachments/519032774972407828/600203788313427971/koko1_25xL.gif", "https://cdn.discordapp.com/attachments/519032774972407828/600203788875333632/koko1_25xR.gif"]
@@ -79,6 +78,7 @@ module.exports = class extends Command {
       this.set.remove(message.author.id)
     }, 120000)
   }
+  
   async sendTransaction (from, to, amount, username, sentMessage) {
 
     const embeds = this.bot.ORBT.embeds(amount, username)
