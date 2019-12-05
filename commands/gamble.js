@@ -17,21 +17,18 @@ module.exports = class extends Command {
 
     this.fetch.member = true
 
-    this.collection = new Set()
+
     this.bot = bot
   }
 
   async run ({ message, args, color }) {
 
-    if (this.collection.has(message.author.id)) return message.channel.send("Cooldown active, you can use this command again in 2 minutes")
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, {message})
     if (isNaN(args[0])) return this.error(ERROR.INVALID_ARGUMENTS, {message})
     let botKeys = this.bot.config.wallet
 
-    if (args[0] > 1000) return this.error({message: 'You can\'t bet more then 1000 KKN at once'}, {message})
+    if (args[0] > 5000) return this.error({message: 'You can\'t bet more then 5000 KKN at once'}, {message})
     if (args[0] < 100 ) return this.error({message: 'The minimum transaction is 100 KKN'}, {message})
-
-    this.collection.add(message.author.id)
 
     let random = Math.floor(Math.random() * 1000 +1)
     let msg, image, amount, from, to, username
@@ -74,9 +71,6 @@ module.exports = class extends Command {
         this.sendTransaction(from, to, amount, username, sentMessage)
       }, 5000)
     }, 10000)
-    setTimeout(() => {
-      this.set.remove(message.author.id)
-    }, 120000)
   }
   async sendTransaction (from, to, amount, username, sentMessage) {
 
