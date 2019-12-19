@@ -1,6 +1,6 @@
 {
   "name": "kokoku-nashi-v2.0",
-  "version": "2.0.8-Beta.1",
+  "version": "2.0.9",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,11 +16,13 @@
     "express": "^4.17.1",
     "module-alias": "^2.2.2",
     "mongoose": "^5.7.12",
+    "node-opus": "^0.3.3",
     "node-rsa": "^1.0.7",
     "pageres": "^5.2.0",
     "qrcode": "^1.4.4",
     "socket.io-client": "^2.3.0",
-    "twemoji": "^12.1.4"
+    "twemoji": "^12.1.4",
+    "ytdl-core": "^1.0.3"
   },
   "_moduleAliases": {
     "@lib": "./lib",
