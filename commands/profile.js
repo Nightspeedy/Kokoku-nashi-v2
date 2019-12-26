@@ -17,7 +17,6 @@ module.exports = class extends Command {
       description: 'Shows your, or someone\'s profile!',
       type: TYPES.SOCIAL,
       args: '[@mention]',
-      cooldown: 10
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
