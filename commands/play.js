@@ -34,16 +34,15 @@ module.exports = class extends Command {
       try {
         console.log("Test 1")
         var video = await ytdl.getInfo(args[0])
-
         let check = video.title
-        // this is a bit of a weird way of finding out whether or not video is null. if it is it should say "video.title is undefined" or smth
+        // this is a bit of a weird wonky way of finding out whether or not video is null, but it works.
       } catch(e) {
         return this.error({message: "Invalid  youtube link!"}, {message})
       }
     }
 
     if (!queue && args[0]) {
-    
+
       await Queue.create({
         id: message.guild.id,
         textChannel: message.channel.id,
@@ -53,6 +52,7 @@ module.exports = class extends Command {
           url: video.video_url
         }
       })
+
       queue = await Queue.findOne({id: message.guild.id})
       await queue.updateOne({isPlaying: true})
       this.play(voiceChannel, message, undefined)
@@ -60,13 +60,13 @@ module.exports = class extends Command {
     } else {
 
       let connection = message.guild.voiceConnection
+
       if (!connection) {
         await queue.updateOne({isPlaying: false})
         this.play(voiceChannel, message, undefined)
       }
 
       if(queue.isPlaying && args[0]) {
-
         let songs = queue.songs
         let song = {
           title: video.title,
@@ -88,7 +88,6 @@ module.exports = class extends Command {
   async play(voiceChannel, message, connection) {
 
     var queue = await Queue.findOne({id: message.guild.id})
-    console.log(`2nd queue log ${queue}`)
 
     if (!connection) try {
       connection = await voiceChannel.join()
@@ -97,8 +96,8 @@ module.exports = class extends Command {
     }
     
     let audio = await ytdl.getInfo(queue.currentSong.url)
-    console.log(audio.title, audio.video_url)
     message.channel.send(`Now playing **${audio.title}**`)
+    
     const dispatcher = connection.playStream(ytdl(queue.currentSong.url, { quality: 'highestaudio', filter: 'audioonly', highWaterMark: 1024 * 1024 * 16}))
       .on('end', async() => {
         message.channel.send("Song has ended")
