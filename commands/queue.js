@@ -9,7 +9,7 @@ module.exports = class extends Command {
       name: 'queue',
       description: "Check the song queue",
       type: TYPES.MUSIC,
-      args: '[YT_URL]',
+      args: '',
       aliases: ['songqueue', 'sq', 'que']
     }) // Pass the appropriate command information to the base class.
 

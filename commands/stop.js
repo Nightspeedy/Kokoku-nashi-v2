@@ -9,7 +9,7 @@ module.exports = class extends Command {
       name: 'stop',
       description: "Stops the audio playback",
       type: TYPES.MUSIC,
-      args: '[YT_URL]',
+      args: '',
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot

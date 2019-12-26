@@ -9,7 +9,7 @@ module.exports = class extends Command {
       name: 'skip',
       description: "Skip the current song.",
       type: TYPES.MUSIC,
-      args: '[YT_URL]'
+      args: ''
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 
