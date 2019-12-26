@@ -1,6 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ytdl = require('ytdl-core')
+const Youtube = require('simple-youtube-api')
 const { Queue } = require("@lib/models")
 
 module.exports = class extends Command {
@@ -14,59 +15,71 @@ module.exports = class extends Command {
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 
     this.bot = bot
+
   }
 
   async run ({ message, args, color }) {
 
-    // TODO: Make fool-proof
     const voiceChannel = message.member.voiceChannel
     if (!voiceChannel) return this.error({message: "Please join a voice channel before using this command!"}, {message})
     const permissions = voiceChannel.permissionsFor(this.bot.user)
+    // TODO: Make a check and see if the bot has permissions to speak and connect to the vc, does not currently work
     //if(!permissions.has("CONNECT") || !permissions.has("SPEAK")) return this.error({message: "The bot has no permission to join or speak in the voice channel you're currently connected to"}, message)
     
     // Check for a queue
     var queue = await Queue.findOne({id: message.guild.id})
     console.log(`1st queue log ${queue}`)
-
+    
     if (args[0]) {
       try {
-        await ytdl.getInfo(args[0])
+        console.log("Test 1")
+        var video = await ytdl.getInfo(args[0])
 
-        let a = await ytdl.getInfo(args[0])
-        let b = a.title
-
+        let check = video.title
+        // this is a bit of a weird way of finding out whether or not video is null. if it is it should say "video.title is undefined" or smth
       } catch(e) {
-        return this.error({message: 'Invalid youtube URL'}, {message})
-
+        return this.error({message: "Invalid  youtube link!"}, {message})
       }
     }
 
-    if (!queue) {
+    if (!queue && args[0]) {
     
       await Queue.create({
         id: message.guild.id,
         textChannel: message.channel.id,
         voiceChannel: voiceChannel,
-        currentSong: args[0]
+        currentSong: {
+          title: video.title,
+          url: video.video_url
+        }
       })
       queue = await Queue.findOne({id: message.guild.id})
       await queue.updateOne({isPlaying: true})
       this.play(voiceChannel, message, undefined)
 
     } else {
-      if(queue.isPlaying) {
-          
-        let audio = await ytdl.getInfo(args[0])
-        let songs = queue.songs
-        if (!audio) return this.error({message: 'Invalid youtube URL'}, {message})
 
-        songs.push(args[0])
+      let connection = message.guild.voiceConnection
+      if (!connection) {
+        await queue.updateOne({isPlaying: false})
+        this.play(voiceChannel, message, undefined)
+      }
+
+      if(queue.isPlaying && args[0]) {
+
+        let songs = queue.songs
+        let song = {
+          title: video.title,
+          url: video.video_url
+        }
+        songs.push(song)
         await queue.updateOne({songs: songs})
 
-        message.channel.send(`Added **${audio.title}** to the song queue.`)
+        message.channel.send(`Added **${video.title}** to the song queue.`)
 
       } else {
-        if (args[0] && !queue.isPlaying) await queue.updateOne({isPlaying: true, currentSong: args[0]})
+        
+        if (args[0] && !queue.isPlaying) await queue.updateOne({ isPlaying: true, currentSong: { title: video.title, url: video.video_url }})
         this.play(voiceChannel, message, undefined)
       }
     }
@@ -83,10 +96,10 @@ module.exports = class extends Command {
       return this.error(e.message, {message})
     }
     
-    let audio = await ytdl.getInfo(queue.currentSong)
+    let audio = await ytdl.getInfo(queue.currentSong.url)
     console.log(audio.title, audio.video_url)
     message.channel.send(`Now playing **${audio.title}**`)
-    const dispatcher = connection.playStream(ytdl(queue.currentSong, { quality: 'highestaudio', filter: 'audioonly', highWaterMark: 1024 * 1024 * 16}))
+    const dispatcher = connection.playStream(ytdl(queue.currentSong.url, { quality: 'highestaudio', filter: 'audioonly', highWaterMark: 1024 * 1024 * 16}))
       .on('end', async() => {
         message.channel.send("Song has ended")
         queue = await Queue.findOne({id: message.guild.id})

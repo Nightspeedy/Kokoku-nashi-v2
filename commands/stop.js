@@ -41,7 +41,7 @@ module.exports = class extends Command {
 
     if (reaction._emoji.name === 'yes') {
       try {
-        console.log(message.guild.voiceConnection)
+        message.guild.me.voiceChannel.leave()
         const queue = await Queue.findOne({id: message.guild.id})
         await queue.delete()
       } catch(e) {
