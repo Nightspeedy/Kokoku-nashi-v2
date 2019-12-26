@@ -27,11 +27,9 @@ module.exports = class extends Command {
     
     // Check for a queue
     var queue = await Queue.findOne({id: message.guild.id})
-    console.log(`1st queue log ${queue}`)
     
     if (args[0]) {
       try {
-        console.log("Test 1")
         var video = await ytdl.getInfo(args[0])
         let check = video.title
         // this is a bit of a weird wonky way of finding out whether or not video is null, but it works.
