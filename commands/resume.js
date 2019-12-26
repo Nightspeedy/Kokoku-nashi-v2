@@ -11,7 +11,6 @@ module.exports = class extends Command {
       type: TYPES.MUSIC,
       args: '[YT_URL]'
     }) // Pass the appropriate command information to the base class.
-    this.fetch.member = true // Fetch the Member object from DB on trigger.
 
     this.bot = bot
   }
