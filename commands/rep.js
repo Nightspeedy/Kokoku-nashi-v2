@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
   async run ({ message, color, args }) {
     // Gift by mention
-
+    console.log("test")
     let member = await Member.findOne({id: message.author.id})
     if (member && !args[0]) {
       if (member.repLastGiven + 86100000 > Date.now()) {
@@ -51,6 +51,7 @@ module.exports = class extends Command {
 
     if (!memberMention) return this.error(ERROR.UNKNOWN_MEMBER, {message, args})
 
+    // 
     if (member.repLastGiven + 86100000 > Date.now()) {
 
         let hours, minutes, seconds
@@ -77,7 +78,7 @@ module.exports = class extends Command {
         const embed = new RichEmbed()
         .setTitle(message.author.username)
         .setColor(color)
-        .addField("You repped someone! ", message.author.username + " added reputation to " + user.user.username)
+        .addField("You repped someone! ", message.author.username + " added reputation to " + user.username)
         message.channel.send(embed).catch(e => {})
 
       } catch(e) {

@@ -27,7 +27,8 @@ module.exports = class extends Command {
       'botOwner': '-',
       'utility': '-',
       'social': '-',
-      'games': '-'
+      'games': '-',
+      'music': '-'
     }
 
     // Fetch the message
@@ -62,6 +63,7 @@ module.exports = class extends Command {
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)
+        .addField('Music commands', object.music)
         .addField('Mod commands', object.modCommand)
         .addField('Server owner commands', object.guildOwner)
         .addField('Bot owner commands', object.botOwner)

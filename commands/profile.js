@@ -16,7 +16,7 @@ module.exports = class extends Command {
       aliases: ['account', 'me'],
       description: 'Shows your, or someone\'s profile!',
       type: TYPES.SOCIAL,
-      args: '[@mention]'
+      args: '[@mention]',
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
