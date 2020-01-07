@@ -2,13 +2,13 @@ const Event = require('@lib/event')
 const { Guild } = require('@lib/models')
 
 module.exports = class extends Event {
-  constructor (bot) {
+  constructor (main) {
     super({ event: 'guildMemberRemove' })
-    this.bot = bot
+    this.bot = main.bot
   }
 
   async trigger (member) {
-    let guild = await Guild.findOne({ id: member.guild.id })
+    const guild = await Guild.findOne({ id: member.guild.id })
 
     // Leave messages
     if (guild.enableLeaveMessage && guild.joinLeaveChannel !== undefined) {

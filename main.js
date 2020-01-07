@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const DatabaseConnection = require('@lib/database')
 const Handler = require('@lib/eventHandler')
+const ORBTConnection = require('@lib/orbt')
 const TimedActionHandler = require('@lib/timedActionHandler')
 
 module.exports = class Main {
@@ -21,20 +22,21 @@ module.exports = class Main {
     this.prefix = this.config.prefix
     this.devPrefix = this.config.devPrefix
 
+    this.bot.config = this.config
+
     // Setting up database
     this.DB = new DatabaseConnection(this.bot, this.config.db)
+
+    this.bot.ORBT = new ORBTConnection(this.bot)
 
     // Setting up command files
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
     this.handler = new Handler(this)
     this.setup()
 
-    this.bot.login(this.devToken || this.token)
-
-    // Timed Action Handler for things like
-    // delayed giving of roles using db
-    // instead of setTimeout for redundancy.
     this.timedActionHandler = new TimedActionHandler(this, this.bot.shard.id)
+
+    this.bot.login(this.devToken || this.token)
   }
 
   async setup () {

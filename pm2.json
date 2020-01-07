@@ -1,0 +1,20 @@
+{
+  "apps" : [{
+    "name" : "Kokoku Nashi",
+    "script" : "index.js",
+    "instances" : 1,
+    "watch" : true,
+    "env": {
+        "NODE_ENV": "production"
+    }
+  },
+  {
+    "name": "Kokoku Webserver",
+    "script": "views/webserver.js",
+    "instances": 1,
+    "watch": true,
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}

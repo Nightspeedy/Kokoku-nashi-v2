@@ -1,0 +1,57 @@
+html, body {
+    background-color: #fff;
+    margin: 0px;
+    overflow: hidden;
+}
+
+.card {
+    margin: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 200px;
+    height: 260px;
+    border-radius: 12px;
+    font-family: "SF Pro Display","SF Pro Icons","Apple WebExp Icons Custom","Helvetica Neue",Helvetica,Arial,sans-serif,"Apple Color Emoji";
+}
+  
+.avatar {
+    position: relative;
+    z-index: 10;
+    height: 150px;
+    width: 150px;
+    margin-top: 18px;
+}
+
+.avatar img {
+    position: absolute;
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+}
+
+.avatar .blurShadow {
+    filter: blur(12px) saturate(200%);
+    transform: translateY(8px);
+    opacity: 0.4;
+}
+
+.level {
+    width: 177px;
+    margin-bottom: 12px;
+}
+
+.level .levelTitle {
+    font-size: 34px;
+    margin: 0px 0px 3px 0px;
+    color: #737373;
+    text-align: center;
+}
+
+.level .progress {
+    height: 12px;
+    background: #F3C3CD;
+    width: 100%;
+    border-radius: 6px;
+}

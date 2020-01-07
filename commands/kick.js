@@ -19,24 +19,23 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild }) {
+    if (!message.guild.me.hasPermission('KICK_MEMBERS')) return this.error(ERROR.BOT_NO_PERMISSION, { message, args })
 
-    if (!message.guild.me.hasPermission("KICK_MEMBERS")) return this.error(ERROR.BOT_NO_PERMISSION, {message, args})
-
-    let memberToKick = message.mentions.members.first()
-    let reason = args[1]
+    const memberToKick = this.mention(args[0], message)
+    const reason = args[1]
 
     if (!memberToKick) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
-    if (!reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (guild.mustHaveReason && !reason) return this.error({ message: 'You must provide a reason with this action!' }, { message, args })
 
     // TODO: Check guild DB to see if a reason needs to be forced.
 
-    //if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     try {
       memberToKick.kick(reason).catch(e => {
         return this.error(ERROR.NO_PERMISSION, { message, args })
       })
-      message.channel.send('Successfully kicked user!')
+      message.channel.send('Successfully kicked user!').catch(e => {})
     } catch (e) {
       console.error(e)
     }

@@ -1,8 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
+const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -10,7 +9,7 @@ module.exports = class extends Command {
       name: 'help',
       description: "The help command, you're using this dummy!",
       type: TYPES.UTILITY,
-      args: '[Command]',
+      args: '[Command]'
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 
@@ -19,29 +18,33 @@ module.exports = class extends Command {
 
   async run ({ message, args, color }) {
     // Instead of having 20 variables, i put them in an object
-    let object = {
-      'general': '-',
-      'modCommand': '-',
-      'guildOwner': '-',
-      'botOwner': '-',
-      'utility': '-',
-      'social': '-',
-      'games': '-'
+    const object = {
+      general: '-',
+      modCommand: '-',
+      guildOwner: '-',
+      botOwner: '-',
+      utility: '-',
+      social: '-',
+      games: '-',
+      music: '-'
     }
 
-    let embed = new RichEmbed()
+    // Fetch the message
+    const msg = await Strings.findOne({ key: 'helpEmbed' })
+
+    const embed = new RichEmbed()
       .setColor(color)
 
     // Total commands, will get value later
     let i = 0
 
     if (args[0]) {
-      let command = args[0]
+      const command = args[0]
 
-      if (!this.bot.cmdhandler.commands.get(command)) return message.channel.send(`**ERROR!** Command '${command}' is unknown!`)
+      if (!this.bot.cmdhandler.commands.get(command)) return this.error({ message: `Command '${command}' is unknown!` }, { message, args })
 
-      let cmddesc = this.bot.cmdhandler.commands.get(command).description
-      let cmdargs = this.bot.cmdhandler.commands.get(command).args
+      const cmddesc = this.bot.cmdhandler.commands.get(command).description
+      const cmdargs = this.bot.cmdhandler.commands.get(command).args
 
       embed.setTitle('Command help: ' + args[0])
         .setColor(color)
@@ -54,16 +57,16 @@ module.exports = class extends Command {
         object[cmd.type] += ` \`${cmd.name}\``
       })
 
-      embed.setDescription('Use k!help [command] for detailed command information. or [join the support server](https://discord.gg/rRSTX4w) \n\n\n **NOTE** We are working on rewriting the bot, some features might not work, or dont work as they should')
-        .addField('General commands', object.general)
+      embed.setDescription(`Use k!help [command] for detailed command information. or [join the official Discord server](https://discord.gg/rRSTX4w) \n\n ${msg.value} \n`)
         .addField('Game commands', object.games)
         .addField('Social commands', object.social)
         .addField('Utility commands', object.utility)
+        .addField('Music commands', object.music)
         .addField('Mod commands', object.modCommand)
         .addField('Server owner commands', object.guildOwner)
         .addField('Bot owner commands', object.botOwner)
         .setFooter('Total commands: ' + i)
     }
-    message.channel.send(embed)
+    message.channel.send(embed).catch(e => {})
   }
 }

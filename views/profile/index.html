@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Koko Profile</title>
+  <link rel='stylesheet' href='/profile/style.css' />
+  <style>
+    .background {
+      filter: {{filters}};
+    }
+    {{css}}
+  </style>
+</head>
+<body>
+  <div class='hero'>
+    <div class='background' style='background: url({{backgroundURL}})'></div>
+    <div class='tint'></div>
+    <div class='avatar'>
+      <img class='blurShadow'src="{{avatar}}"/>
+      <img src="{{avatar}}"/>
+    </div>
+  </div>
+  <div class='description'>
+    <div class='level'>
+      <p class='levelTitle'>Level {{level}}</p>
+      <p class='xp'>{{currentXP}}</p>
+      <p class='xp xpright'>{{nextXP}}</p>
+      <div class='progress'><div class='progressfill' style="width: {{levelProgress}}%;"></div></div>
+    </div>
+    <div class='header'>
+      <p>{{name}}</p>
+      <div class='status'>
+          <img class="emoji" alt="{{emojiAlt}}" src="https://twemoji.maxcdn.com/v/12.1.2/72x72/{{emojiLink}}"/>
+      </div>
+    </div>
+    <div class='bio'>
+      <p class='title'>{{title}}</p>
+      <p class='desc'>{{description}}</p>
+    </div>
+    <div class='tags'>
+      <div class='tag'>✨ {{reps}} Reps</div>
+      <div class='tag'>💵 {{credits}} KKN</div>
+    </div>
+  </div>
+</body>
+</html>
