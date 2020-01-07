@@ -1,10 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
-const { Attachment } = require('discord.js')
 const { Member } = require('@lib/models')
-var QRCode = require('qrcode')
 
 module.exports = class extends Command {
   constructor (bot) {

@@ -2,7 +2,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
@@ -11,14 +10,14 @@ module.exports = class extends Command {
       name: 'avatar',
       description: "Get your avater, or someone else's",
       type: TYPES.UTILITY,
-      args: '[@user]',
+      args: '[@user]'
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
   }
 
   async run ({ message, args, color }) {
-    let embed = new RichEmbed()
+    const embed = new RichEmbed()
       .setColor(color)
 
     if (!args[0]) {
@@ -30,9 +29,8 @@ module.exports = class extends Command {
       message.channel.send(embed).catch(e => {})
     }
     if (args[0]) {
-      
-      let member = await this.mention(args[0], message)
-      if (typeof member != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
+      const member = await this.mention(args[0], message)
+      if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
       embed.setTitle(member.tag)
         .setColor(color)

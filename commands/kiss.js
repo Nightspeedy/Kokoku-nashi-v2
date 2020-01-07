@@ -10,33 +10,31 @@ module.exports = class extends Command {
       name: 'kiss',
       description: 'Gives your best friend a kiss.',
       type: TYPES.SOCIAL,
-      args: '[@mention]',
+      args: '[@mention]'
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
   }
 
   async run ({ message, args, color }) {
-    let gif = await Gifs.aggregate([ { $match: { gifType: 'kiss' } }, { $sample: { size: 1 } } ])
+    let gif = await Gifs.aggregate([{ $match: { gifType: 'kiss' } }, { $sample: { size: 1 } }])
     gif = gif[0].url
 
-    let embed = new RichEmbed()
-    .setColor(color)
-    .setDescription(`image not loading? click [here](${gif})`)
+    const embed = new RichEmbed()
+      .setColor(color)
+      .setDescription(`image not loading? click [here](${gif})`)
 
     if (!args[0]) {
-        
-        embed.setTitle(`I kissed you! :kissing_heart:`)
-        await embed.setImage(gif)
+      embed.setTitle('I kissed you! :kissing_heart:')
+      await embed.setImage(gif)
 
-        message.channel.send(embed).catch(e => {})
+      message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
-
-        let member = await this.mention(args[0], message)
-        if (typeof member != 'object') return this.error(ERROR.MEMBER_NOT_FOUND,{message})
-        embed.setTitle(`${message.author.username} kissed ${member.username}! :blush:`)
-        await embed.setImage(gif)
-        message.channel.send(embed).catch(e => {})
+      const member = await this.mention(args[0], message)
+      if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+      embed.setTitle(`${message.author.username} kissed ${member.username}! :blush:`)
+      await embed.setImage(gif)
+      message.channel.send(embed).catch(e => {})
     }
   }
 }

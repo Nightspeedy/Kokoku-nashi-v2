@@ -1,9 +1,8 @@
 const Event = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
-const { Attachment } = require('discord.js')
 
 const Pageres = require('pageres')
-let pageres = new Pageres()
+const pageres = new Pageres()
 
 module.exports = class LevelSystem extends Event {
   constructor (main) {
@@ -22,15 +21,15 @@ module.exports = class LevelSystem extends Event {
     if (this.cooldown.has(message.author.id)) return
 
     // Fetch the guild and member.
-    let guild = await Guild.findOne({ id: message.guild.id })
-    let member = await Member.findOne({ id: message.author.id })
+    const guild = await Guild.findOne({ id: message.guild.id })
+    const member = await Member.findOne({ id: message.author.id })
 
     if (!member || !guild) return
 
     // Check if member is banned from the bot
     if (member.isBanned) return
 
-    let reqExp = member.level * 200
+    const reqExp = member.level * 200
 
     // Add a random number of exp to user
     await this.randomExp(member, guild)
@@ -48,41 +47,41 @@ module.exports = class LevelSystem extends Event {
 
   async levelUp (member, message) {
     try {
-      let newLevel = member.level + 1
-      let newExp = 0
+      const newLevel = member.level + 1
+      const newExp = 0
 
-      let queries = {
-        avatar: message.author.avatarURL,
-        level: newLevel,
-        css: `html, body {
-          background: #2f3136;
-        }
-        .avatar .blurShadow {
-          filter: blur(10px) saturate(200%);
-          transform: translateY(6px);
-          opacity: 0.2;
-        }
-        .level .levelTitle {
-          color: #eee;
-        }
-        .level .progress {
-          background: #7289DA;
-        }`
-      }
+      // const queries = {
+      //   avatar: message.author.avatarURL,
+      //   level: newLevel,
+      //   css: `html, body {
+      //     background: #2f3136;
+      //   }
+      //   .avatar .blurShadow {
+      //     filter: blur(10px) saturate(200%);
+      //     transform: translateY(6px);
+      //     opacity: 0.2;
+      //   }
+      //   .level .levelTitle {
+      //     color: #eee;
+      //   }
+      //   .level .progress {
+      //     background: #7289DA;
+      //   }`
+      // }
 
       // Encode the object above for the webserver to parse
-      let queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
-      
+      // const queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
+
       // Capture an image of the generated webpage
-      /*let shot = await Buffer.from((await pageres
+      /* let shot = await Buffer.from((await pageres
         .src(`http://localhost:8080/level-up/card?data=${queryString}`, ['224x284'], { delay: 0.2, scale: 0.5 })
-        .run())[0])*/
-      
+        .run())[0]) */
+
       // Send the generated image.
-      //let image = new Attachment(shot, 'levelup.png')
-      //await message.channel.send(`:sparkles: **${message.author.username} leveled up!** :sparkles:`, {
+      // let image = new Attachment(shot, 'levelup.png')
+      // await message.channel.send(`:sparkles: **${message.author.username} leveled up!** :sparkles:`, {
       //  files: [image]
-      //})
+      // })
 
       // Reset pageres, Dumb hack to prevent memory leaks
       pageres.items = []
@@ -93,7 +92,7 @@ module.exports = class LevelSystem extends Event {
 
       // Set the new level.
       await member.updateOne({ id: member.id, level: newLevel, exp: newExp })
-    } catch(err) {
+    } catch (err) {
       console.error(err)
     }
   }
@@ -103,7 +102,7 @@ module.exports = class LevelSystem extends Event {
     let expMultiplier = 1
     if (guild.isPremium) expMultiplier = 2
     randomExp = randomExp * expMultiplier
-    let newExp = member.exp + randomExp
+    const newExp = member.exp + randomExp
     await member.updateOne({ exp: newExp })
   }
 

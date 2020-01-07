@@ -1,7 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
 // const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
@@ -10,7 +9,7 @@ module.exports = class extends Command {
       name: 'say',
       description: 'Make the bot say something',
       type: TYPES.UTILITY,
-      args: "{#channel} {'message in quotations'}",
+      args: "{#channel} {'message in quotations'}"
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
@@ -24,7 +23,7 @@ module.exports = class extends Command {
 
     // Check if the user mentioned a channel.
     if (args[1]) {
-      let channelMention = message.mentions.channels.first()
+      const channelMention = message.mentions.channels.first()
       if (!channelMention) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
       if (!message.guild.channels.get(channelMention.id)) return this.error(ERROR.INVALID_CHANNEL, { message, args })
     }
@@ -35,25 +34,25 @@ module.exports = class extends Command {
     }
 
     // Check if the string to send includes @everyone or @here and check the user's permissions
-    if (string.toLowerCase().includes("@everyone") || string.toLowerCase().includes("@here")) {
-      if(!message.member.hasPermission("MENTION_EVERYONE")) return this.error({message: "You don't have permission to mention everyone!"}, {message, args})
+    if (string.toLowerCase().includes('@everyone') || string.toLowerCase().includes('@here')) {
+      if (!message.member.hasPermission('MENTION_EVERYONE')) return this.error({ message: "You don't have permission to mention everyone!" }, { message, args })
     }
 
-    let mentionChannel = message.mentions.channels.first()
+    const mentionChannel = message.mentions.channels.first()
 
     // Send the message
-    if (!mentionChannel && !args[1] || mentionChannel && !args[1]) {
+    if (!mentionChannel) {
       // Send to current channel
       message.channel.send(string).catch(e => {})
     } else {
       // Send to mentioned channel, and check permissions.
       try {
-        let channel = message.guild.channels.get(message.mentions.channels.first().id)
-        if (!channel.permissionsFor(message.author.id).has("SEND_MESSAGES")) return this.error({message: "You don't have permission to send messages to this channel!"}, {message, args})
+        const channel = message.guild.channels.get(mentionChannel.id)
+        if (!channel.permissionsFor(message.author.id).has('SEND_MESSAGES')) return this.error({ message: "You don't have permission to send messages to this channel!" }, { message, args })
         channel.send(string).catch(e => {})
       } catch (e) {
         console.log(e)
-        return this.error({message: 'You can only send messages to a channel in this server!'}, {message, args})
+        return this.error({ message: 'You can only send messages to a channel in this server!' }, { message, args })
       }
     }
   }

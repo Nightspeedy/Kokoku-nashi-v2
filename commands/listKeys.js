@@ -1,7 +1,5 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-const { RichEmbed } = require('discord.js')
 const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
@@ -19,15 +17,13 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild, color }) {
-    
-    let collection = await Strings.find({ })
+    const collection = await Strings.find({ })
     let keys = ''
 
-    collection.map(index => keys += `key \`${index.key}\` with value: \`${index.value}\`\n\n`)
+    collection.map(index => { keys += `key \`${index.key}\` with value: \`${index.value}\`\n\n` })
 
-    if (keys.length >= 2000) return this.error({message: 'Message is too big to send!'}, {message, args})
+    if (keys.length >= 2000) return this.error({ message: 'Message is too big to send!' }, { message, args })
 
     message.channel.send(keys)
-
   }
 }
