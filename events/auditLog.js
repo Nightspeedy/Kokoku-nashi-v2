@@ -9,7 +9,7 @@ module.exports = class extends Event {
 
     LOG_EVENTS.forEach(event => {
       this.bot.on(event.event, async (...args) => {
-        const guild = await Guild.findOne({ id: (args[0].first().guild).id })
+        const guild = await Guild.findOne({ id: (args[0].guild).id })
         if (!guild.logChannel) return
 
         const body = event.message(...args)
