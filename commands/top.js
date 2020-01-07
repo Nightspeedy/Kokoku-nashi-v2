@@ -28,10 +28,8 @@ module.exports = class extends Command {
 
     const embed = new RichEmbed().setColor(color).setDescription(`Top 10 ${order} of users`);
 
-    for (var i = 0; i < collection.length; i++) {
-      const userData = collection[i];
+    for (const userData of collection) {
       const user = await this.bot.fetchUser(userData.id);
-      console.log(user)
 
       const fieldText = order == 'level' ?
        `Level: ${userData.level}\nExperience: ${userData.exp}` :
