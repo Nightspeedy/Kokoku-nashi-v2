@@ -4,3 +4,4 @@ node_modules.nosync
 KV2.code-workspace
 .DS_Store
 pm2.json
+**/__pycache__
