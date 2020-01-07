@@ -10,7 +10,7 @@ module.exports = class extends Command {
       type: TYPES.BOT_OWNER,
       args: '{add/remove/list} [Game name] [Steam key]',
       bot,
-      cooldown: 30
+      cooldownTime: 30 * 1000 // 30 seconds
     }) // Pass the appropriate command information to the base class.
 
     this.orbt = bot.ORBT
