@@ -2,9 +2,9 @@ const Event = require('@lib/event')
 const { Guild, Member } = require('@lib/models')
 
 module.exports = class extends Event {
-  constructor (bot) {
+  constructor (main) {
     super({ event: 'message' })
-    this.cmdhandler = bot.bot.cmdhandler
+    this.cmdhandler = main.bot.cmdhandler
   }
 
   async trigger (message) {

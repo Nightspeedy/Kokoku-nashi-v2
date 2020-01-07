@@ -1,7 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const PERMISSIONS = require('@lib/permissions')
-const ERROR = require('@lib/error')
+const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {

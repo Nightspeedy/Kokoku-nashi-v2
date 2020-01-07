@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const DatabaseConnection = require('@lib/database')
 const Handler = require('@lib/eventHandler')
 const ORBTConnection = require('@lib/orbt')
+const TimedActionHandler = require('@lib/timedActionHandler')
 
 module.exports = class Main {
   constructor () {
@@ -32,6 +33,8 @@ module.exports = class Main {
     console.log(`Shard #${this.bot.shard.id}: Attempting to set up commands`)
     this.handler = new Handler(this)
     this.setup()
+
+    this.timedActionHandler = new TimedActionHandler(this, this.bot.shard.id)
 
     this.bot.login(this.devToken || this.token)
   }

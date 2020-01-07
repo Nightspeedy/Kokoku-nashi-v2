@@ -9,7 +9,8 @@ module.exports = class extends Command {
       name: 'say',
       description: 'Make the bot say something',
       type: TYPES.UTILITY,
-      args: "{#channel} {'message in quotations'}"
+      args: "{#channel} {'message in quotations'}",
+      cooldownTime: 10 * 1000
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
