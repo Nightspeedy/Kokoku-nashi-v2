@@ -7,7 +7,6 @@
       * [Constructor](#command-constructor)
       * [Errors](#command-errors)
       * [Success](#command-success)
-      * [Arguments](#command-arguments)
       * [Run](#command-run)
 <!--te-->
 
@@ -43,7 +42,7 @@ type: TYPES.UTILITY,
 
 // The arguments (ordered) to use with this command.
 // In this case, a user mention followed by an optional string.
-args: [Discord.Member, Optional(String)],
+args: '@mention',
 
 // Which permissions are required for this command.
 // In this case, only the server owner can use it.
@@ -116,36 +115,4 @@ return this.success(
     // The current message being handled.
     { message }
 )
-```
----
-
-<a name="command-arguments">
-
-### Command Arguments
-
-</a>
-
-An array of classes which represent arguments are required to run the command.
-
-#### Usage
-
-```js
-args: [Discord.Member, Optional(String)]
-```
----
-
-<a name="command-run">
-
-### Command Run
-
-</a>
-
-The function that gets called when a command is executed.
-
-#### Usage
-```js
-async run ({ message, args, member, guild, color }) {
-    const response = `Hello there ${args[0].username}, ${args[1] || 'How are you?'}`
-    message.channel.send(response)
-}
 ```
