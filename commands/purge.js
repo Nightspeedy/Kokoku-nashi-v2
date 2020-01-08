@@ -40,13 +40,13 @@ module.exports = class extends Command {
         embed.setDescription('Some messages were not purged because they were older than 14 days.')
       }
 
-      await message.channel.send(embed).then(m => m.delete(5000))
+      message.channel.send(embed).then(m => m.delete(5000))
     } else {
       const embed = new RichEmbed()
         .setColor(color)
         .setTitle('Please specify how many messages you want to purge.')
 
-      return message.channel.send(embed)
+      message.channel.send(embed)
     }
   }
 }
