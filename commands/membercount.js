@@ -1,9 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
-const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -12,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['serversize'],
       description: 'Shows your server\'s membercount!',
       type: TYPES.UTILITY,
-      args: 'This command has no arguments',
+      args: 'This command has no arguments'
     }) // Pass the appropriate command information to the base class.
 
     this.fetch.member = true
@@ -21,19 +18,17 @@ module.exports = class extends Command {
   }
 
   async run ({ message, color }) {
+    const guild = await message.guild.fetchMembers()
+    const totalUsers = guild.members.size
+    const memberCount = guild.members.filter(member => !member.user.bot).size
 
-    let guild = await message.guild.fetchMembers()
-    let totalUsers = guild.members.size
-    let memberCount = guild.members.filter(member => !member.user.bot).size
+    const botCount = totalUsers - memberCount
 
-    let botCount = totalUsers - memberCount
-
-    let embed = new RichEmbed()
-    .setTitle("Guild membercount")
-    .setColor(color)
-    .setDescription(`Total members in guild: ${totalUsers} \n\n${botCount} Bots\n${memberCount} Humans`)
+    const embed = new RichEmbed()
+      .setTitle('Guild membercount')
+      .setColor(color)
+      .setDescription(`Total members in guild: ${totalUsers} \n\n${botCount} Bots\n${memberCount} Humans`)
     message.channel.send(embed).catch(e => {})
-
   }
 }
 

@@ -1,9 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-// const PERMISSIONS = require('@lib/permissions')
 const { Attachment } = require('discord.js')
-// const { Member } = require('@lib/models')
 var QRCode = require('qrcode')
 
 module.exports = class extends Command {
@@ -22,7 +20,6 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild, color }) {
-    
     const member = args[0] ? this.mention(args[0], message) : message.author
 
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
