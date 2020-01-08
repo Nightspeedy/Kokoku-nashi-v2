@@ -1,7 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const PERMISSIONS = require('@lib/permissions')
-const { RichEmbed, Permissions } = require('discord.js')
+const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -17,7 +17,7 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) { return error({ message: 'I couldn\'t delete messages, Do i have the MANAGE_MESSAGES permission?' }, { message }) }
+    if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) { return this.error({ message: 'I couldn\'t delete messages, Do i have the MANAGE_MESSAGES permission?' }, { message }) }
 
     if (args[0]) {
       if (isNaN(args[0])) { return this.error({ message: `I can't purge "${args[0]}".` }, { message }) }
@@ -29,14 +29,14 @@ module.exports = class extends Command {
         deleted += (await message.channel.bulkDelete(amount > 100 ? 100 : amount, true)).size
         amount -= 100
 
-        await new Promise((r) => setTimeout(r, 1000))
+        await new Promise((resolve) => setTimeout(resolve, 1000))
       }
 
       const embed = new RichEmbed()
         .setColor(color)
         .setTitle(`Successfully purged ${deleted} messages.`)
 
-      if (deleted != amount - 1) {
+      if (deleted !== amount - 1) {
         embed.setDescription('Some messages were not purged because they were older than 14 days.')
       }
 
