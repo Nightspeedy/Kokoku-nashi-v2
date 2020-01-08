@@ -1,7 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-// const { RichEmbed } = require('discord.js')
+const { RichEmbed, MessageMentions } = require('discord.js')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -9,7 +8,7 @@ module.exports = class extends Command {
       name: 'say',
       description: 'Make the bot say something',
       type: TYPES.UTILITY,
-      args: "{#channel} {'message in quotations'}",
+      args: '[#channel] {...message}',
       cooldownTime: 10 * 1000
     }) // Pass the appropriate command information to the base class.
 
@@ -17,44 +16,64 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
-    message.delete().catch(e => {})
+    let destination
 
-    // Set the string to send to args[1] and check if it exists later
-    let string = args[1]
-
-    // Check if the user mentioned a channel.
-    if (args[1]) {
-      const channelMention = message.mentions.channels.first()
-      if (!channelMention) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
-      if (!message.guild.channels.get(channelMention.id)) return this.error(ERROR.INVALID_CHANNEL, { message, args })
-    }
-
-    // If no string, string = args[0]
-    if (!string) {
-      string = args[0]
-    }
-
-    // Check if the string to send includes @everyone or @here and check the user's permissions
-    if (string.toLowerCase().includes('@everyone') || string.toLowerCase().includes('@here')) {
-      if (!message.member.hasPermission('MENTION_EVERYONE')) return this.error({ message: "You don't have permission to mention everyone!" }, { message, args })
-    }
-
-    const mentionChannel = message.mentions.channels.first()
-
-    // Send the message
-    if (!mentionChannel) {
-      // Send to current channel
-      message.channel.send(string).catch(e => {})
-    } else {
-      // Send to mentioned channel, and check permissions.
-      try {
-        const channel = message.guild.channels.get(mentionChannel.id)
-        if (!channel.permissionsFor(message.author.id).has('SEND_MESSAGES')) return this.error({ message: "You don't have permission to send messages to this channel!" }, { message, args })
-        channel.send(string).catch(e => {})
-      } catch (e) {
-        console.log(e)
-        return this.error({ message: 'You can only send messages to a channel in this server!' }, { message, args })
+    // Check if the first argument is a channel.
+    const matches = args[0].match(MessageMentions.CHANNELS_PATTERN)
+    if (matches && args.length > 1) {
+      destination = this.bot.channels.get(matches[0].substr(2, matches[0].length - 3)) // HACK
+      if (destination && destination.guild === message.guild && destination.permissionsFor(message.author).has('SEND_MESSAGES')) {
+        // Don't send destination channel name.
+        args = args.slice(1)
+      } else {
+        // Error if you can't send to the channel.
+        return this.error({ message: 'You can\'t send messages to this channel.' }, { message })
       }
+    } else {
+      // Otherwise, send to the channel where we called from.
+      destination = message.channel
     }
+    let content = args.join(' ')
+
+    // Clean mentions.
+    // Taken from Message.cleanContent()
+    content = content.replace(/@(everyone|here)/g, '@\u200b$1')
+      .replace(/<@!?[0-9]+>/g, input => {
+        const id = input.replace(/<|!|>|@/g, '')
+        if (message.channel.type === 'dm' || message.channel.type === 'group') {
+          return this.bot.users.has(id) ? `@${this.bot.users.get(id).username}` : input
+        }
+
+        const member = message.channel.guild.members.get(id)
+        if (member) {
+          if (member.nickname) return `@${member.nickname}`
+          return `@${member.user.username}`
+        } else {
+          const user = this.bot.users.get(id)
+          if (user) return `@${user.username}`
+          return input
+        }
+      })
+      .replace(/<#[0-9]+>/g, input => {
+        const channel = this.bot.channels.get(input.replace(/<|#|>/g, ''))
+        if (channel) return `#${channel.name}`
+        return input
+      })
+      .replace(/<@&[0-9]+>/g, input => {
+        if (message.channel.type === 'dm' || message.channel.type === 'group') return input
+        const role = message.guild.roles.get(input.replace(/<|@|>|&/g, ''))
+        if (role) return `@${role.name}`
+        return input
+      })
+    //
+
+    // Put the message in an embed.
+    const embed = new RichEmbed(content)
+      .setFooter(message.author.tag, message.author.displayAvatarURL)
+      .setTitle(content)
+      .setTimestamp(new Date())
+
+    message.delete()
+    await destination.send(embed)
   }
 }
