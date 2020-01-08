@@ -46,7 +46,7 @@ module.exports = class extends Command {
 
     ]
 
-    this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type]}` })
+    this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type].usage}` })
   }
 
   // Updates a single field in a provided document.
