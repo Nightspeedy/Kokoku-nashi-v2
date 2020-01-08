@@ -9,7 +9,7 @@ module.exports = class extends Command {
       name: 'purge',
       description: 'Purge a specific amount of messages (maximum 1000 messages)',
       type: TYPES.MOD_COMMAND,
-      args: '{Amount}',
+      args: '{amount}',
       permissions: [PERMISSIONS.PURGE]
     }) // Pass the appropriate command information to the base class.
 
@@ -17,58 +17,36 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    const embed = new RichEmbed()
-      .setColor(color)
+    if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) { return this.error({ message: 'I couldn\'t delete messages, Do i have the MANAGE_MESSAGES permission?' }, { message }) }
 
     if (args[0]) {
-      if (isNaN(args[0])) return ('I cant purge this...')
+      if (isNaN(args[0])) { return this.error({ message: `I can't purge "${args[0]}".` }, { message }) }
 
-      const number = args[0] + 1
+      let amount = Number(args[0]) + 1
+      let deleted = -1
 
-      embed.setTitle(message.author.tag)
+      while (amount > 0) {
+        deleted += (await message.channel.bulkDelete(amount > 100 ? 100 : amount, true)).size
+        amount -= 100
+
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+
+      const embed = new RichEmbed()
         .setColor(color)
+        .setTitle(`Successfully purged ${deleted} messages.`)
 
-      if (number > 100) {
-        await this.purgeLoop(number, message, true)
-      } else {
-        message.channel.bulkDelete(number).then(message.channel.send('Deleted messages').catch(err => {
-          if (err) return this.error({ message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?" }, { message, args })
-        }))
+      if (deleted !== amount - 1) {
+        embed.setDescription('Some messages were not purged because they were older than 14 days.')
       }
+
+      message.channel.send(embed).then(m => m.delete(5000))
     } else {
-      return message.channel.send('Please tell me how many messages you want me to purge!').catch(e => {})
+      const embed = new RichEmbed()
+        .setColor(color)
+        .setTitle('Please specify how many messages you want to purge.')
+
+      message.channel.send(embed)
     }
-  }
-
-  purgeLoop (number, message, loop) {
-    if (!loop) return
-    if (number > 100) message.channel.send('Deleting messages, this might take a while!').catch(e => {})
-
-    if (number < 1) return message.channel.send('Successfully deleted messages!').then(message.delete(10000)).catch(e => {})
-    setTimeout(async () => {
-      if (number > 100) {
-        await message.channel.fetchMessages({ limit: 100 })
-        try {
-          await message.channel.bulkDelete(100)
-        } catch (e) {
-          console.error(e)
-          loop = false
-          return this.error({ message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?" }, { message })
-        }
-        number -= 100
-      } else {
-        await message.channel.fetchMessages({ limit: number })
-        try {
-          await message.channel.bulkDelete(100)
-        } catch (e) {
-          console.error(e)
-          loop = false
-          return this.error({ message: "I coulnd't delete messages, Do i have the MANAGE_MESSAGES permission?" }, { message })
-        }
-        number = 0
-      }
-
-      this.purgeLoop(number, message, loop)
-    }, 10000)
   }
 }

@@ -25,7 +25,7 @@ Can be whatever but the standardized format is `action-user-optionalID`. Example
 ## Examples
 
 ### Command Cooldown
-If a command passes `cooldownTime` in it's super, it automatically applies a cooldown each run.
+If a command passes `cooldownTime` in its super, it automatically applies a cooldown each run.
 Below is a snippet to set a cooldown without passing a fixed value in super.
 ```js
 async run ({ message, args }) {
