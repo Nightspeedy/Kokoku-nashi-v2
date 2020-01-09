@@ -16,9 +16,9 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild, color }) {
-    let collection = await Strings.find({ })
-    let embed = new RichEmbed()
-      .setTitle("List of key-value pairs")
+    const collection = await Strings.find({ })
+    const embed = new RichEmbed()
+      .setTitle('List of key-value pairs')
       .setColor(color)
 
     collection.map(index => embed.addField(`**${index.key}**`, `\`\`\`${index.value}\`\`\``))
