@@ -9,6 +9,8 @@ if (process.env.NODE_ENV === 'production') {
   const dogstatsd = new StatsD()
   global.datadog = dogstatsd
 
+  console.log('Logging set up.')
+
   const metrics = require('./metrics.js')
   setInterval(metrics(Discord), 3e4) // Log metrics every 30 seconds.
 } else {
