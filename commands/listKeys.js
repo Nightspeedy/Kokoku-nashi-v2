@@ -1,6 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const { Strings } = require('@lib/models')
+const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -11,19 +12,17 @@ module.exports = class extends Command {
       args: 'no arguments'
     }) // Pass the appropriate command information to the base class.
 
-    this.fetch.guild = true
-
     this.bot = bot
   }
 
   async run ({ message, args, guild, color }) {
     const collection = await Strings.find({ })
-    let keys = ''
+    const embed = new RichEmbed()
+      .setTitle('List of key-value pairs')
+      .setColor(color)
 
-    collection.map(index => { keys += `key \`${index.key}\` with value: \`${index.value}\`\n\n` })
+    collection.map(index => embed.addField(`**${index.key}**`, `\`\`\`${index.value}\`\`\``))
 
-    if (keys.length >= 2000) return this.error({ message: 'Message is too big to send!' }, { message, args })
-
-    message.channel.send(keys)
+    message.channel.send(embed)
   }
 }
