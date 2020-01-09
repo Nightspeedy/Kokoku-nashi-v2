@@ -70,6 +70,8 @@ module.exports = class extends Command {
       if (typeof mention !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
     }
 
+    if (mention.bot) return this.error({ message: 'Bots don\'t have profiles!' }, { message })
+
     if (mention && !(await Member.findOne({ id: mention.id }))) Member.create({ id: mention.id })
 
     const cardMsg = await message.channel.send('Generating profile...')
