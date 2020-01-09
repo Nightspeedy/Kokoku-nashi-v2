@@ -10,7 +10,8 @@ module.exports = class extends Command {
       name: 'slap',
       description: 'Slap your best friend, or... slap that one guy you dont like.',
       type: TYPES.SOCIAL,
-      args: '[@mention]'
+      args: '[@mention]',
+      cooldownTime: 5
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
