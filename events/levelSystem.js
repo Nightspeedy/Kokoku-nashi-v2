@@ -24,6 +24,8 @@ module.exports = class LevelSystem extends Event {
     const guild = await Guild.findOne({ id: message.guild.id })
     const member = await Member.findOne({ id: message.author.id })
 
+    if (member && message.author.bot) await member.delete()
+
     if (!member || !guild) return
 
     // Check if member is banned from the bot
