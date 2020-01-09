@@ -46,7 +46,7 @@ module.exports = class extends Command {
 
     ]
 
-    this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type]}` })
+    this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type].usage}` })
   }
 
   // Updates a single field in a provided document.
@@ -72,7 +72,7 @@ module.exports = class extends Command {
   // the guild document if channel isnt undefined.
   async channel ({ message, guild, setting }) {
     const channel = message.mentions.channels.first()
-    if (!channel) return this.error(ERROR.INVALID_CHANNEL, { message, args })
+    if (!channel) return this.error(ERROR.INVALID_CHANNEL, { message })
     await this.update(guild, setting.dbField, channel.id)
   }
 
@@ -81,7 +81,7 @@ module.exports = class extends Command {
   // anything else = false
   async toggle ({ message, args, guild, setting }) {
     const value = args[1] === 'on'
-    if (!value && args[1] !== 'off') return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (!value && args[1] !== 'off') return this.error(ERROR.INVALID_ARGUMENTS, { message })
     await this.update(guild, setting.dbField, value)
   }
 

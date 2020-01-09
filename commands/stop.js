@@ -1,30 +1,29 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const { Queue } = require("@lib/models")
+const { Queue } = require('@lib/models')
 const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'stop',
-      description: "Stops the audio playback",
+      description: 'Stops the audio playback',
       type: TYPES.MUSIC,
-      args: '',
+      args: ''
     }) // Pass the appropriate command information to the base class.
 
     this.bot = bot
   }
 
   async run ({ message, args, color }) {
-
-    if (!message.member.voiceChannel) return this.error(ERROR.NOT_IN_VC, {message})
-    if (!message.guild.voiceConnection) return this.error(ERROR.BOT_NOT_IN_VC, {message})
+    if (!message.member.voiceChannel) return this.error(ERROR.NOT_IN_VC, { message })
+    if (!message.guild.voiceConnection) return this.error(ERROR.BOT_NOT_IN_VC, { message })
 
     const confirmation = await message.channel.send({
       embed: {
         title: 'Warning',
         color: 0x3A6AE9,
-        description: `Are you sure you want to stop the playback, and clear the song queue if one exists?`
+        description: 'Are you sure you want to stop the playback, and clear the song queue if one exists?'
       }
     })
 
@@ -41,16 +40,15 @@ module.exports = class extends Command {
     if (reaction._emoji.name === 'yes') {
       try {
         message.guild.me.voiceChannel.leave()
-        const queue = await Queue.findOne({id: message.guild.id})
+        const queue = await Queue.findOne({ id: message.guild.id })
         await queue.delete()
-      } catch(e) {
+      } catch (e) {
         console.log(e)
-        return this.error(e.message, {message})
+        return this.error(e.message, { message })
       }
-    
     } else if (reaction._emoji.name === 'no') {
       return confirmation.delete()
     }
-    return this.error({message: "You are not connected"}, message)
+    return this.error({ message: 'You are not connected' }, message)
   }
 }

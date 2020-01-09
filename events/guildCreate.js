@@ -8,7 +8,7 @@ module.exports = class extends Event {
   }
 
   async trigger (guild) {
-    let guildToAdd = await Guild.findOne({ id: guild.id })
+    const guildToAdd = await Guild.findOne({ id: guild.id })
     if (!guildToAdd) Guild.create({ id: guild.id })
   }
 }

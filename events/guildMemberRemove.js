@@ -8,7 +8,7 @@ module.exports = class extends Event {
   }
 
   async trigger (member) {
-    let guild = await Guild.findOne({ id: member.guild.id })
+    const guild = await Guild.findOne({ id: member.guild.id })
 
     // Leave messages
     if (guild.enableLeaveMessage && guild.joinLeaveChannel !== undefined) {

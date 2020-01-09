@@ -1,10 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-// const PERMISSIONS = require('@lib/permissions')
-// const { Attachment } = require('discord.js')
 const { Strings } = require('@lib/models')
-// var QRCode = require('qrcode')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -68,7 +65,6 @@ module.exports = class extends Command {
           transaction.status.on('success', () => {
             confirmation.edit({ embed: embeds.completed })
           })
-
         } catch (e) {
           console.error('transaction failed', e)
           return confirmation.edit({ embed: embeds.canceled })

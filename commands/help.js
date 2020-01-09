@@ -1,7 +1,5 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 const { Strings } = require('@lib/models')
 
@@ -11,7 +9,7 @@ module.exports = class extends Command {
       name: 'help',
       description: "The help command, you're using this dummy!",
       type: TYPES.UTILITY,
-      args: '[Command]',
+      args: '[Command]'
     }) // Pass the appropriate command information to the base class.
     this.fetch.member = true // Fetch the Member object from DB on trigger.
 
@@ -20,33 +18,33 @@ module.exports = class extends Command {
 
   async run ({ message, args, color }) {
     // Instead of having 20 variables, i put them in an object
-    let object = {
-      'general': '-',
-      'modCommand': '-',
-      'guildOwner': '-',
-      'botOwner': '-',
-      'utility': '-',
-      'social': '-',
-      'games': '-',
-      'music': '-'
+    const object = {
+      general: '-',
+      modCommand: '-',
+      guildOwner: '-',
+      botOwner: '-',
+      utility: '-',
+      social: '-',
+      games: '-',
+      music: '-'
     }
 
     // Fetch the message
-    let msg = await Strings.findOne({key: "helpEmbed"})
+    const msg = await Strings.findOne({ key: 'helpEmbed' })
 
-    let embed = new RichEmbed()
+    const embed = new RichEmbed()
       .setColor(color)
 
     // Total commands, will get value later
     let i = 0
 
     if (args[0]) {
-      let command = args[0]
+      const command = args[0]
 
-      if (!this.bot.cmdhandler.commands.get(command)) return this.error({message: `Command '${command}' is unknown!`}, {message,args})
+      if (!this.bot.cmdhandler.commands.get(command)) return this.error({ message: `Command '${command}' is unknown!` }, { message, args })
 
-      let cmddesc = this.bot.cmdhandler.commands.get(command).description
-      let cmdargs = this.bot.cmdhandler.commands.get(command).args
+      const cmddesc = this.bot.cmdhandler.commands.get(command).description
+      const cmdargs = this.bot.cmdhandler.commands.get(command).args
 
       embed.setTitle('Command help: ' + args[0])
         .setColor(color)

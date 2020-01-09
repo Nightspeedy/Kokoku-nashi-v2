@@ -1,7 +1,5 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const ERROR = require('@lib/errors')
-const { RichEmbed } = require('discord.js')
 const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
@@ -19,7 +17,6 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild, color }) {
-    
     let collection = await Strings.find({ })
     let embed = new RichEmbed()
       .setTitle("List of key-value pairs")
@@ -28,5 +25,6 @@ module.exports = class extends Command {
     collection.map(index => embed.addField(`**${index.key}**`, `\`\`\`${index.value}\`\`\``))
 
     message.channel.send(embed)
+
   }
 }

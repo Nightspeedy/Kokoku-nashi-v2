@@ -23,7 +23,7 @@ module.exports = class extends Command {
     if (!guild) return this.error(ERROR.OTHER, { message, args })
     if (!args[0] || args[1]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
-    let embed = new RichEmbed()
+    const embed = new RichEmbed()
       .setTitle('Premium')
       .setColor(color)
 
@@ -40,7 +40,7 @@ module.exports = class extends Command {
       case 'false':
         await guild.updateOne({ isPremium: false })
         guild = await Guild.findOne({ id: guild.id })
-        if (guild.isPremium == false) {
+        if (guild.isPremium === false) {
           embed.addField('Status updated!', 'Premium disabled!')
         } else {
           message.channel.send('Premium status was not updated!').catch(e => {})

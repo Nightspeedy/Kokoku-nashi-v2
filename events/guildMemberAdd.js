@@ -8,7 +8,7 @@ module.exports = class extends Event {
   }
 
   async trigger (member) {
-    let guild = await Guild.findOne({ id: member.guild.id })
+    const guild = await Guild.findOne({ id: member.guild.id })
 
     if (guild.enableWelcomeMessage && guild.joinLeaveChannel !== undefined) {
       let message = guild.welcomeMessage
@@ -19,7 +19,7 @@ module.exports = class extends Event {
       if (message.includes('{GUILD.NAME}')) message = message.replace('{GUILD.NAME}', `${member.guild.name}`)
 
       try {
-        this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => { 
+        this.bot.channels.get(guild.joinLeaveChannel).send(message).catch(e => {
           console.log(e)
         })
       } catch (e) {
@@ -30,7 +30,7 @@ module.exports = class extends Event {
     // Check for autoroles, and give em if there are any
     if (guild.autoRolesEnabled) {
       try {
-        let autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
+        const autoRoles = (await AutoRoles.find({ guild: member.guild.id })).map(val => val.role)
         if (autoRoles.length > 0) {
           member.addRoles(autoRoles)
         }
