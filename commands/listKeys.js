@@ -1,6 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const { Strings } = require('@lib/models')
+const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -10,8 +11,6 @@ module.exports = class extends Command {
       type: TYPES.BOT_OWNER,
       args: 'no arguments'
     }) // Pass the appropriate command information to the base class.
-
-    this.fetch.guild = true
 
     this.bot = bot
   }
