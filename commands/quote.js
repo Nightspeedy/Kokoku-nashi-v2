@@ -1,7 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const PERMISSIONS = require('@lib/permissions')
-const { RichEmbed, MessageMentions } = require('discord.js')
+const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -17,21 +16,30 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
-    if (MessageMentions.USERS_PATTERN.test(args[0])) {
-      var quoted = message.channel.lastMessage // TODO: User's last message in the channel
+    // This uses the last fetched message from the user.
+    if (args[0]) {
+      const mentioned = await this.mention(args[0])
+      var quoted = mentioned ? mentioned.lastMessage : await message.channel.fetchMessage(`${args[0]}`) || null
     } else {
-      console.log(args[0], typeof args[0])
-      var quoted = await message.channel.fetchMessage(`${args[0]}`)
+      return this.error({ message: 'Please specify a message or member to quote.' }, { message })
     }
 
     if (!quoted) {
       return this.error({ message: "Couldn't find the given message." }, { message })
     }
 
+    if (!message.channel.nsfw && quoted.channel.nsfw) {
+      return this.error({ message: 'Quoting messages from NSFW channels is not allowed in SFW channels.' }, { message })
+    }
+
     const embed = new RichEmbed()
       .setAuthor(quoted.author.tag, quoted.author.displayAvatarURL)
-      .setTitle(quoted.content)
-      .setTimestamp(quoted.timestamp)
+      .setTitle(quoted.cleanContent)
+      .setDescription(`[Link to message](${quoted.url})`)
+      .setTimestamp(quoted.createdTimestamp)
+    if (quoted.embeds) {
+      embed.setFooter('Message contained an embed.')
+    }
 
     await message.channel.send(embed)
   }
