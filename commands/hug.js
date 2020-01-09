@@ -18,8 +18,6 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    // let gif = Math.floor(Math.random() * gifs.hug.length)
-
     let gif = await Gifs.aggregate([{ $match: { gifType: 'hug' } }, { $sample: { size: 1 } }])
     gif = gif[0].url
 
@@ -33,7 +31,7 @@ module.exports = class extends Command {
     } else {
       const user = await this.mention(args[0], message)
       if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-      embed.setTitle(message.author == user ? 'Ahw... have a hug :3' : `${message.author.username} hugged ${user.username}!`)
+      embed.setTitle(message.author === user ? 'Ahw... have a hug :3' : `${message.author.username} hugged ${user.username}!`)
     }
     return message.channel.send(embed).catch(e => {})
   }
