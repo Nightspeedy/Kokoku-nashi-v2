@@ -24,6 +24,5 @@ module.exports = class extends Command {
     collection.map(index => embed.addField(`**${index.key}**`, `\`\`\`${index.value}\`\`\``))
 
     message.channel.send(embed)
-
   }
 }
