@@ -21,13 +21,12 @@ module.exports = class extends Command {
   async run ({ message, args, guild, color }) {
     
     let collection = await Strings.find({ })
-    let keys = ''
+    let embed = new RichEmbed()
+      .setTitle("List of key-value pairs")
+      .setColor(color)
 
-    collection.map(index => keys += `key \`${index.key}\` with value: \`${index.value}\`\n\n`)
+    collection.map(index => embed.addField(`**${index.key}**`, `\`\`\`${index.value}\`\`\``))
 
-    if (keys.length >= 2000) return this.error({message: 'Message is too big to send!'}, {message, args})
-
-    message.channel.send(keys)
-
+    message.channel.send(embed)
   }
 }
