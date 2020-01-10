@@ -6,7 +6,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'reminder',
-      aliases: ['reminder'],
+      aliases: ['remind'],
       description: 'Reminds you of something in several minutes.',
       type: TYPES.UTILITY,
       args: '{time in minutes} {...message to send}'
@@ -23,8 +23,8 @@ module.exports = class extends Command {
       return this.error(ERROR.INVALID_ARGUMENTS, { message })
     }
 
-    await this.bot.timedActionHandler.push('sendMessage', minutes * 1000, {
-      channel: message.channel.id,
+    await this.bot.timedActionHandler.push('sendDM', minutes * 60 * 1000, {
+      userID: message.author.id,
       content: {
         embed: {
           title: `${minutes} minutes ago you asked to be reminded of:`,
