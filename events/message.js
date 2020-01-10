@@ -9,6 +9,7 @@ module.exports = class extends Event {
 
   async trigger (message) {
     if (message.author.bot) return
+    global.datadog.increment('message.receieved')
     if (message.guild) {
       const guild = await Guild.findOne({ id: message.guild.id })
       if (!guild) Guild.create({ id: message.guild.id })
