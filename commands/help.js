@@ -1,7 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const { RichEmbed } = require('discord.js')
-const { Strings } = require('@lib/models')
+const { Strings, DisabledCommand } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -32,6 +32,9 @@ module.exports = class extends Command {
     // Fetch the message
     const msg = await Strings.findOne({ key: 'helpEmbed' })
 
+    // Get an array of all disabled commands
+    const disabled = (await DisabledCommand.find({ guild: message.guild.id })).map(d => d.command)
+
     const embed = new RichEmbed()
       .setColor(color)
 
@@ -54,7 +57,7 @@ module.exports = class extends Command {
       this.bot.cmdhandler.commands.forEach(cmd => {
         if (object[cmd.type].indexOf(`\`${cmd.name}\``) > -1) return
         i++
-        object[cmd.type] += ` \`${cmd.name}\``
+        object[cmd.type] += disabled.indexOf(cmd.name) > -1 ? ` *~~\`${cmd.name}\`~~*` : ` \`${cmd.name}\``
       })
 
       embed.setDescription(`Use k!help [command] for detailed command information. or [join the official Discord server](https://discord.gg/rRSTX4w) \n\n ${msg.value} \n`)
