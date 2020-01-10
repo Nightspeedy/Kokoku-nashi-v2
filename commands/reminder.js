@@ -23,7 +23,7 @@ module.exports = class extends Command {
       return this.error(ERROR.INVALID_ARGUMENTS, { message })
     }
 
-    this.bot.timedActionHandler.push('sendMessage', minutes * 1000, {
+    await this.bot.timedActionHandler.push('sendMessage', minutes * 1000, {
       channel: message.channel.id,
       content: {
         embed: {
