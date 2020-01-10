@@ -9,7 +9,7 @@ module.exports = class extends Command {
       name: 'ban',
       description: 'Bans a user from the server.',
       type: TYPES.MOD_COMMAND,
-      args: '{@mention} ["reason"] [days]',
+      args: '{@mention} ["reason"]',
       permissions: [PERMISSIONS.BAN]
     }) // Pass the appropriate command information to the base class.
 
