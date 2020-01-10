@@ -36,6 +36,8 @@ module.exports = class Main {
 
     this.timedActionHandler = new TimedActionHandler(this, this.bot.shard.id)
 
+    this.bot.timedActionHandler = this.timedActionHandler
+
     this.bot.login(this.devToken || this.token)
   }
 
