@@ -21,7 +21,7 @@ module.exports = class extends Command {
   async run ({ message, args, guild }) {
     const userToBan = this.mention(args[0], message) || await this.bot.fetchUser(args[0]) || undefined
     const reason = args[1]
-    const days = args[2]
+    // const days = args[2]
 
     if (!userToBan) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
     if (guild.mustHaveReason && !reason) return this.error({ message: 'You must provide a reason with this action!' }, { message, args })
