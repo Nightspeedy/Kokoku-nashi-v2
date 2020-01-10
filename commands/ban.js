@@ -31,7 +31,7 @@ module.exports = class extends Command {
     // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     try {
-      await message.guild.ban(userToBan, { reason: reason, days: days })
+      await message.guild.ban(userToBan, { reason: reason })
       await message.channel.send('Successfully banned user!')
     } catch (e) {
       this.error(ERROR.NO_PERMISSION, { message, args })
