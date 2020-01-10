@@ -6,7 +6,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'reminder',
-      aliases: ['reminder', 'rem'],
+      aliases: ['reminder'],
       description: 'Reminds you of something in several minutes.',
       type: TYPES.UTILITY,
       args: '{time in minutes} {...message to send}'
