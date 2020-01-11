@@ -43,7 +43,7 @@ module.exports = class extends Command {
   }
 
   // Add reputation points to a user
-  async action_addReputation ({ user, args, message }) {//eslint-disable-line
+  async action_addreputation ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToAdd = parseInt(args[2])
     if (isNaN(repToAdd)) return this.error(ERROR.NAN, { message, args })
@@ -58,7 +58,7 @@ module.exports = class extends Command {
   }
 
   // Remove reputation points from a user
-  async action_removeReputation ({ user, args, message }) {//eslint-disable-line
+  async action_removereputation ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToRemove = parseInt(args[2])
     if (isNaN(repToRemove)) return this.error(ERROR.NAN, { message, args })
@@ -74,7 +74,7 @@ module.exports = class extends Command {
   }
 
   // Add levels to a user
-  async action_addLevels ({ user, args, message }) {//eslint-disable-line
+  async action_addlevels ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToAdd = parseInt(args[2])
     if (isNaN(levelsToAdd)) return this.error(ERROR.NAN, { message, args })
@@ -89,7 +89,7 @@ module.exports = class extends Command {
   }
 
   // Remove levels from a user
-  async action_removeLevels ({ user, args, message }) {//eslint-disable-line
+  async action_removelevels ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToRemove = parseInt(args[2])
     if (isNaN(levelsToRemove)) return this.error(ERROR.NAN, { message, args })
@@ -105,7 +105,7 @@ module.exports = class extends Command {
   }
 
   // Set a a user's level
-  async action_setLevel ({ user, args, message }) {//eslint-disable-line
+  async action_setlevel ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (isNaN(args[2])) return this.error(ERROR.NAN, { message, args })
@@ -121,7 +121,7 @@ module.exports = class extends Command {
   }
 
   // Set a user's reputation points
-  async action_setReputation ({ user, args, message }) { //eslint-disable-line
+  async action_setreputation ({ user, args, message }) { //eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (isNaN(args[2])) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
@@ -135,7 +135,7 @@ module.exports = class extends Command {
       return this.error(ERROR.TRY_AGAIN, { message, args })
     }
   }
-  async action_togglePremium ({ user, args, message }) { //eslint-disable-line
+  async action_togglepremium ({ user, args, message }) { //eslint-disable-line
     if (user.isPremium) {
       try {
         user.updateOne({ isPremium: false })
