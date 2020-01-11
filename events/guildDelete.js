@@ -9,6 +9,6 @@ module.exports = class extends Event {
 
   async trigger (guild) {
     const guildToAdd = await Guild.findOne({ id: guild.id })
-    if (guildToAdd) await Guild.remove({ id: guild.id })
+    if (guildToAdd) await Guild.deleteOne({ id: guild.id })
   }
 }
