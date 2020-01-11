@@ -42,18 +42,6 @@ module.exports = class extends Command {
     }
   }
 
-  // Add credits to a user
-  async action_addCredits ({ message }) {//eslint-disable-line
-    // TODO: Replace later with cryptocoin stuff
-    return message.reply("Don't use this. cryptocoins are comming")
-  }
-
-  // Remove credits from a user
-  async action_removeCredits ({ message }) {//eslint-disable-line
-    // TODO: Replace later with cryptocoin stuff
-    return message.reply("Don't use this. cryptocoins are comming")
-  }
-
   // Add reputation points to a user
   async action_addReputation ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
