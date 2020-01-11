@@ -30,11 +30,17 @@ module.exports = class extends Command {
   }
 
   async action_actions ({ message }) {//eslint-disable-line
-    const commands = Object.keys(this).filter(key => key.startsWith('action_'))
+    const commands = Object
+      .keys(this)
+      .filter(key => key.startsWith('action_'))
+      .map(key => key.slice('action_'.length))
+      .map(key => key.toLowerCase())
+      .map(key => `\`${key}\``)
+      .join(' ')
     message.channel.send({
       embed: {
         title: 'Actions Available',
-        description: commands.map(cmd => `\`${cmd}\``).join(' ')
+        description: commands
       }
     })
   }
