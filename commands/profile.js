@@ -22,10 +22,6 @@ module.exports = class extends Command {
     this.fetch.member = true
 
     this.bot = bot
-
-    // is this used??
-    // no lol
-    this.currentShot = -1
   }
 
   async shot (profile, author) {
@@ -62,31 +58,31 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, member, color }) {
-    let buffer, mention
-    let username = message.author.username
+    let user = message.author
 
     if (args[0]) {
-      mention = await this.mention(args[0], message)
-      if (typeof mention !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+      user = await this.mention(args[0], message)
+      if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
     }
 
-    if (mention && !(await Member.findOne({ id: mention.id }))) Member.create({ id: mention.id })
+    if (user.bot) return this.error({ message: "Bots don't have profiles!" }, { message })
+
+    let dbMember = await Member.findOne({ id: user.id })
+    if (!dbMember) {
+      dbMember = Member.create({ id: user.id })
+    }
 
     const cardMsg = await message.channel.send('Generating profile...')
-    if (mention !== undefined) {
-      const mentionMember = await Member.findOne({ id: mention.id })
-      if (!mentionMember) return message.channel.send(this.error(ERROR.UNKNOWN_MEMBER, { message, args }))
-      buffer = await this.shot(mentionMember, mention)
-      username = mention.username
-    } else {
-      buffer = await this.shot(member, message.author)
-    }
+
+    const buffer = await this.shot(dbMember, user)
+
     const image = new Attachment(buffer, 'profile.png')
     cardMsg.delete()
-    await message.channel.send(`:sparkles: **Profile card for ${username}** :sparkles:`, {
+    await message.channel.send(`:sparkles: **Profile card for ${user.username}** :sparkles:`, {
       files: [image]
     })
 
+    // Reset pageres, Dumb hack to prevent memory leaks
     pageres.items = []
     pageres.urls = []
     pageres._source = []

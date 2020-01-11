@@ -12,7 +12,7 @@ Can be whatever but the standardized format is `action-user-optionalID`. Example
 
 | Argument | Type   | Usage                                 |
 |----------|--------|---------------------------------------|
-| time     | Number | Time in MS.                           |
+| time     | Number | Time in Seconds.                           |
 | key      | String | A unique identifier for the cooldown. |
 
 ## [async] Get
@@ -25,7 +25,8 @@ Can be whatever but the standardized format is `action-user-optionalID`. Example
 ## Examples
 
 ### Command Cooldown
-If a command passes `cooldownTime` in its super, it automatically applies a cooldown each run.
+If a command passes `cooldownTime` in its super, it applies said cooldown each run, By default,
+there will be a 5 second cooldown.
 Below is a snippet to set a cooldown without passing a fixed value in super.
 ```js
 async run ({ message, args }) {
