@@ -30,7 +30,7 @@ module.exports = class extends Command {
   // Reset a user profile
   async reset_Action (user, args, message) {//eslint-disable-line
     const userID = user.id
-    await user.remove()
+    await user.deleteOne()
     await Member.create({ id: userID })
     user = await Member.findOne({ id: userID })
     if (!user) {
@@ -56,7 +56,7 @@ module.exports = class extends Command {
   async addreputation_Action (user, args, message) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToAdd = parseInt(args[2])
-    if (isNaN(repToAdd)) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
+    if (isNaN(repToAdd)) return this.error(ERROR.NAN, { message, args })
     const newReputation = user.reputation + repToAdd
 
     try {
@@ -71,7 +71,7 @@ module.exports = class extends Command {
   async removereputation_Action (user, args, message) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToRemove = parseInt(args[2])
-    if (isNaN(repToRemove)) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
+    if (isNaN(repToRemove)) return this.error(ERROR.NAN, { message, args })
     let newReputation = user.reputation - repToRemove
 
     if (newReputation < 0) newReputation = 0
@@ -87,7 +87,7 @@ module.exports = class extends Command {
   async addlevels_Action (user, args, message) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToAdd = parseInt(args[2])
-    if (isNaN(levelsToAdd)) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
+    if (isNaN(levelsToAdd)) return this.error(ERROR.NAN, { message, args })
     const newLevel = user.level + levelsToAdd
 
     try {
@@ -102,7 +102,7 @@ module.exports = class extends Command {
   async removelevels_Action (user, args, message) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToRemove = parseInt(args[2])
-    if (isNaN(levelsToRemove)) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
+    if (isNaN(levelsToRemove)) return this.error(ERROR.NAN, { message, args })
     let newLevel = user.level - levelsToRemove
 
     if (newLevel < 0) newLevel = 0
@@ -118,11 +118,12 @@ module.exports = class extends Command {
   async setlevel_Action (user, args, message) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
-    if (isNaN(args[2])) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
+    if (isNaN(args[2])) return this.error(ERROR.NAN, { message, args })
     if (args[2] < 0) return this.error({ message: 'Cannot set a negative value' }, { message, args })
 
     try {
       await user.updateOne({ level: args[2] })
+      this.success('Set level', 'Successfully set user level!', { message, args })
     } catch (e) {
       console.log(e)
       if (e) return this.error(ERROR.TRY_AGAIN, { message, args })
@@ -138,9 +139,27 @@ module.exports = class extends Command {
 
     try {
       await user.updateOne({ reputation: args[2] })
+      this.success('Set reputation', 'Successfuly set user reputation!', { message, args })
     } catch (e) {
       console.log(e)
-      if (e) return this.error(ERROR.TRY_AGAIN, { message, args })
+      return this.error(ERROR.TRY_AGAIN, { message, args })
+    }
+  }
+  async togglepremium_Action (user, args, message) { //eslint-disable-line
+
+    if (user.isPremium) {
+      try {
+        user.updateOne({ isPremium: false })
+        this.success('Premium status', 'User is no longer premium', { message, args })
+      } catch (e) {
+        return this.error(ERROR.TRY_AGAIN, { message })
+      }
+    }
+    try {
+      user.updateOne({ isPremium: true })
+      return this.success('Premium status', 'User is now premium', { message, args })
+    } catch (e) {
+      return this.error(ERROR.TRY_AGAIN, { message })
     }
   }
 }
