@@ -26,7 +26,7 @@ module.exports = class extends Command {
     const action = args[1].toLowerCase()
 
     if (!this[`action_${action}`]) return this.error({ message: 'Invalid Action' }, { message })
-    this[`action_${action}`](user, args, message)
+    this[`action_${action}`]({ user, args, message })
   }
 
   async action_actions ({ message }) {//eslint-disable-line
