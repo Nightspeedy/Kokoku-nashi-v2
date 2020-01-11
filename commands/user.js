@@ -138,14 +138,14 @@ module.exports = class extends Command {
   async action_togglepremium ({ user, args, message }) { //eslint-disable-line
     if (user.isPremium) {
       try {
-        user.updateOne({ isPremium: false })
+        await user.updateOne({ isPremium: false })
         this.success('Premium status', 'User is no longer premium', { message, args })
       } catch (e) {
         return this.error(ERROR.TRY_AGAIN, { message })
       }
     }
     try {
-      user.updateOne({ isPremium: true })
+      await user.updateOne({ isPremium: true })
       return this.success('Premium status', 'User is now premium', { message, args })
     } catch (e) {
       return this.error(ERROR.TRY_AGAIN, { message })
