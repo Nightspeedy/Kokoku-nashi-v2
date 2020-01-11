@@ -1,7 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
-const { Member } = require('@lib/models')
+const { Member, Background } = require('@lib/models')
 
 module.exports = class extends Command {
   constructor (bot) {
@@ -147,6 +147,16 @@ module.exports = class extends Command {
     try {
       await user.updateOne({ isPremium: true })
       return this.success('Premium status', 'User is now premium', { message, args })
+    } catch (e) {
+      return this.error(ERROR.TRY_AGAIN, { message })
+    }
+  }
+  async action_setbackground ({ user, args, message }) { //eslint-disable-line
+    try {
+      const background = await Background.findOne({ name: args[2].toUpperCase() })
+      if (!background) return this.error({ message: 'Background not found.' }, { message })
+      await user.updateOne({ selectedBackground: args[2].toUpperCase() })
+      this.success('Background updated', `Changed users background to ${args[2].toUpperCase()}`, { message })
     } catch (e) {
       return this.error(ERROR.TRY_AGAIN, { message })
     }
