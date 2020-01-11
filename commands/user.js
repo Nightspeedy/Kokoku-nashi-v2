@@ -23,12 +23,24 @@ module.exports = class extends Command {
     const user = await Member.findOne({ id: member.id })
     if (!user) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
 
-    if (!this[`${args[1]}_Action`]) return this.error({ message: 'Invalid Action' }, { message })
-    this[`${args[1]}_Action`](user, args, message)
+    const action = args[1].toLowerCase()
+
+    if (!this[`action_${action}`]) return this.error({ message: 'Invalid Action' }, { message })
+    this[`action_${action}`](user, args, message)
+  }
+
+  async action_actions ({ message }) {//eslint-disable-line
+    const commands = Object.keys(this).filter(key => key.startsWith('action_'))
+    message.channel.send({
+      embed: {
+        title: 'Actions Available',
+        description: commands.map(cmd => `\`${cmd}\``).join(' ')
+      }
+    })
   }
 
   // Reset a user profile
-  async reset_Action (user, args, message) {//eslint-disable-line
+  async action_reset ({ user, message }) {//eslint-disable-line
     const userID = user.id
     await user.deleteOne()
     await Member.create({ id: userID })
@@ -41,19 +53,19 @@ module.exports = class extends Command {
   }
 
   // Add credits to a user
-  async addcredits_Action (user, args, message) {//eslint-disable-line
+  async action_addCredits ({ message }) {//eslint-disable-line
     // TODO: Replace later with cryptocoin stuff
     return message.reply("Don't use this. cryptocoins are comming")
   }
 
   // Remove credits from a user
-  async removecredits_Action (user, args, message) {//eslint-disable-line
+  async action_removeCredits ({ message }) {//eslint-disable-line
     // TODO: Replace later with cryptocoin stuff
     return message.reply("Don't use this. cryptocoins are comming")
   }
 
   // Add reputation points to a user
-  async addreputation_Action (user, args, message) {//eslint-disable-line
+  async action_addReputation ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToAdd = parseInt(args[2])
     if (isNaN(repToAdd)) return this.error(ERROR.NAN, { message, args })
@@ -68,7 +80,7 @@ module.exports = class extends Command {
   }
 
   // Remove reputation points from a user
-  async removereputation_Action (user, args, message) {//eslint-disable-line
+  async action_removeReputation ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const repToRemove = parseInt(args[2])
     if (isNaN(repToRemove)) return this.error(ERROR.NAN, { message, args })
@@ -84,7 +96,7 @@ module.exports = class extends Command {
   }
 
   // Add levels to a user
-  async addlevels_Action (user, args, message) {//eslint-disable-line
+  async action_addLevels ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToAdd = parseInt(args[2])
     if (isNaN(levelsToAdd)) return this.error(ERROR.NAN, { message, args })
@@ -99,7 +111,7 @@ module.exports = class extends Command {
   }
 
   // Remove levels from a user
-  async removelevels_Action (user, args, message) {//eslint-disable-line
+  async action_removeLevels ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const levelsToRemove = parseInt(args[2])
     if (isNaN(levelsToRemove)) return this.error(ERROR.NAN, { message, args })
@@ -115,7 +127,7 @@ module.exports = class extends Command {
   }
 
   // Set a a user's level
-  async setlevel_Action (user, args, message) {//eslint-disable-line
+  async action_setLevel ({ user, args, message }) {//eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (isNaN(args[2])) return this.error(ERROR.NAN, { message, args })
@@ -131,7 +143,7 @@ module.exports = class extends Command {
   }
 
   // Set a user's reputation points
-  async setreputation_Action (user, args, message) { //eslint-disable-line
+  async action_setReputation ({ user, args, message }) { //eslint-disable-line
     if (!args[2]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (isNaN(args[2])) return this.error({ message: 'Expected argument is not a number!' }, { message, args })
@@ -145,8 +157,7 @@ module.exports = class extends Command {
       return this.error(ERROR.TRY_AGAIN, { message, args })
     }
   }
-  async togglepremium_Action (user, args, message) { //eslint-disable-line
-
+  async action_togglePremium ({ user, args, message }) { //eslint-disable-line
     if (user.isPremium) {
       try {
         user.updateOne({ isPremium: false })
