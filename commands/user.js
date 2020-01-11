@@ -29,22 +29,6 @@ module.exports = class extends Command {
     this[`action_${action}`]({ user, args, message })
   }
 
-  async action_actions ({ message }) {//eslint-disable-line
-    const commands = Object
-      .keys(this)
-      .filter(key => key.startsWith('action_'))
-      .map(key => key.slice('action_'.length))
-      .map(key => key.toLowerCase())
-      .map(key => `\`${key}\``)
-      .join(' ')
-    message.channel.send({
-      embed: {
-        title: 'Actions Available',
-        description: commands
-      }
-    })
-  }
-
   // Reset a user profile
   async action_reset ({ user, message }) {//eslint-disable-line
     const userID = user.id
