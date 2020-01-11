@@ -37,7 +37,7 @@ module.exports = class extends Command {
       console.error(timedAction)
       this.error(ERROR.UNKNOWN_ERROR, { message, args })
     } else {
-      message.channel.send(`Successfully set a reminder for ${minutes} minute${minutes !== 1 ? 's' : ''} from now.`)
+      this.success('Reminder set', `Successfully set a reminder for ${minutes} minute${minutes !== 1 ? 's' : ''} from now.`, { message })
     }
   }
 }
