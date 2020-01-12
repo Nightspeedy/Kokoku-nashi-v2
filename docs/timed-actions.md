@@ -2,6 +2,7 @@
 
 ## Access
 On the `main` object as `main.timedActionHandler`
+On the `bot` object as `bot.timedActionHandler`
 
 ## [async] Push
 `.push(type, time, action)`
@@ -61,7 +62,7 @@ main.timedActionHandler.push('addRoles', 30 * 1000, {
 
 ### Send a message in 6 hours
 ```js
-main.timedActionHandler.push('addRoles', 6 * 60 * 60 * 1000, {
+main.timedActionHandler.push('sendMessage', 6 * 60 * 60 * 1000, {
     channel: message.channel.id,
     content: {
         embed: {
