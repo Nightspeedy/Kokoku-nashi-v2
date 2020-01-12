@@ -32,7 +32,7 @@ const queries = {
 
 function update () {
   const queryString = encodeURIComponent(arrayBufferToBase64(encoder.encode(JSON.stringify(queries))))
-  document.getElementById('preview').src = `http://localhost:8080/profile/card?data=${queryString}`
+  document.getElementById('preview').src = `http://services.kokoku.xyz/profile/card?data=${queryString}`
 }
 
 update()
