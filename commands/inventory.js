@@ -19,23 +19,34 @@ module.exports = class extends Command {
   async run ({ message, args, color }) {
     if (!args[0]) {
       const inventory = await Inventory.find({ id: message.author.id })
-      const string = inventory[0] ? this.makeString(inventory) : 'You have no items in your inventory'
 
-      const embed = new RichEmbed()
-        .setTitle(`${message.author.username}'s inventory`)
-        .setDescription(inventory[0] ? `Items in inventory:\n\n${string}` : 'You dont have any items')
-        .setColor(color)
-
-      message.channel.send(embed)
+      message.channel.send({
+        embed: {
+          title: `${message.author.username}'s inventory`,
+          description: inventory.length === 0 ? 'You don\'t have any items.' : undefined,
+          fields: this.makeFields(inventory)
+        }
+      })
     }
   }
 
-  makeString (inventory) {
-    let string
-    inventory.forEach(item => {
-      string += `${item.name} `
-    })
+  underscoreToName (undescored) {
+    return undescored
+      .split('_')
+      .map(split => split.charAt(0).toUpperCase() + split.slice(1).toLowerCase())
+      .join(' ')
+  }
 
-    return string
+  makeFields (inventory) {
+    const categories = {}
+    for (const item of inventory) {
+      if (!categories[item.category]) categories[item.category] = []
+      categories[item.category].push(item)
+    }
+
+    return Object.keys(categories).map(key => ({
+      name: this.underscoreToName(key),
+      value: categories[key].map(item => `\`${this.underscoreToName(item.name)}\``).join(' ')
+    }))
   }
 }

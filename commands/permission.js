@@ -65,7 +65,7 @@ module.exports = class extends Command {
         if (shouldAdd) {
           !permission && await Permission.create({ guild: message.guild.id, role: role.id, granted: permName })
         } else {
-          permission && await permission.remove()
+          permission && await permission.deleteOne()
         }
       }))
 
@@ -78,7 +78,7 @@ module.exports = class extends Command {
         !permission && await Permission.create({ guild: message.guild.id, role: role.id, granted: permName })
         return message.channel.send(`✅ ${role.name} has been given ${permName}`).catch(e => {})
       } else {
-        permission && await permission.remove()
+        permission && await permission.deleteOne()
         return message.channel.send(`✅ ${permName} has been revoked from ${role.name}`).catch(e => {})
       }
     }

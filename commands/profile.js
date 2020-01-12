@@ -24,8 +24,8 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async shot (profile, author) {
-    const background = profile.selectedBackground ? await Background.findOne({ name: profile.selectedBackground }) : {}
+  async shot (profile, author, bg) {
+    const background = (bg || profile.selectedBackground) ? await Background.findOne({ name: bg || profile.selectedBackground }) : {}
     const emoji = await new Promise(resolve => twemoji.parse(
       profile.emoji,
       { callback: function (icon, options) { resolve(icon + '.png') } }))
@@ -57,7 +57,7 @@ module.exports = class extends Command {
     return shot
   }
 
-  async run ({ message, args, member, color }) {
+  async run ({ message, args, background, customMessage, onGenerated }) {
     let user = message.author
 
     if (args[0]) {
@@ -74,13 +74,16 @@ module.exports = class extends Command {
 
     const cardMsg = await message.channel.send('Generating profile...')
 
-    const buffer = await this.shot(dbMember, user)
+    const buffer = await this.shot(dbMember, user, background)
 
     const image = new Attachment(buffer, 'profile.png')
     cardMsg.delete()
-    await message.channel.send(`:sparkles: **Profile card for ${user.username}** :sparkles:`, {
+
+    const sentMessage = await message.channel.send(customMessage || `:sparkles: **Profile card for ${user.username}** :sparkles:`, {
       files: [image]
     })
+
+    onGenerated && onGenerated(sentMessage.attachments.first().url)
 
     // Reset pageres, Dumb hack to prevent memory leaks
     pageres.items = []

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile Card Designer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/mode-css.js"></script>
+</head>
+<body>
+    <iframe src="" width="400" height="600" id="preview"></iframe>
+    <div id="editor">
+        <input id="bg" type="text" placeholder="Background Image URL"/>
+        <input id="filter" type="text" placeholder="Filters"/>
+        <div>
+            <button id='normal'>Normal</button>
+            <button id='dark'>Dark Theme</button>
+            <button id='light'>Light Theme</button>
+            <button id='blurred'>Blurred Image</button>
+        </div>
+        <div id="css-editor">body {}
+.tag {}
+.tint {}
+.description {}
+.desc {}
+.progress {}
+.progressfill {}</div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
