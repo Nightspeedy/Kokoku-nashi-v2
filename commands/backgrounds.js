@@ -19,6 +19,7 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
+    if (!args[0]) return this.action_list({ message, args })
     if (!this[`action_${args[0].toLowerCase()}`]) return this.error(ERROR.INVALID_ARGUMENTS, { message })
     this[`action_${args[0].toLowerCase()}`]({ message, args: args.slice(1) })
   }
@@ -95,7 +96,7 @@ module.exports = class extends Command {
     message.channel.send({
       embed: {
         title: 'Available Backgrounds',
-        description: 'Use `k!backgrounds view {background name}` to preview any background before purchasing it.',
+        description: 'Use `k!backgrounds view {background name}` to preview any background before purchasing it using `k!backgrounds buy`.',
         fields: Object.keys(categories).map(key => ({
           name: `:dollar: ${categories[key].cost} - ${this.underscoreToName(key)}`,
           value: categories[key].items.map(item => (
