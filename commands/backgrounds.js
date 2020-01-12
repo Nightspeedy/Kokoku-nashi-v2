@@ -53,7 +53,7 @@ module.exports = class extends Command {
   async action_view ({ message, args }) { //eslint-disable-line
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const background = await Background.findOne({ name: this.nameToUnderscore(args.join(' ')) })
-    if (!background) return this.error({ message: 'I couldn\'t find that background!' }, { message, args })
+    if (!background || background.hidden) return this.error({ message: 'I couldn\'t find that background!' }, { message, args })
     if (!background.preview) {
       await this.bot.cmdhandler.commands.get('profile').run({
         message: {
@@ -79,14 +79,13 @@ module.exports = class extends Command {
   }
 
   async action_list ({ message, args }) { //eslint-disable-line
-    const backgrounds = await Background.find({})
+    const backgrounds = await Background.find({ hidden: { $ne: true } })
     const owned = (await Inventory.find({ id: message.author.id, category: 'PROFILE_BACKGROUND' })).map(x => x.name)
-    const categories = (await BackgroundCategories.find({}))
+    const categories = (await BackgroundCategories.find())
       .reduce((obj, item) => {
         obj[item.key] = { ...item._doc, items: [] }
         return obj
       }, {})
-    console.log(categories)
     for (const bg of backgrounds) {
       if (bg.category === 'DEV') continue
       if (!categories[bg.category]) { categories[bg.category] = { cost: 250, items: [] } }
@@ -110,10 +109,10 @@ module.exports = class extends Command {
   }
 
   async action_buy ({ message, args }) { //eslint-disable-line
-    if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (!args[0]) return this.action_list({ message, args })
 
     const background = await Background.findOne({ name: this.nameToUnderscore(args.join(' ')) })
-    if (!background) return this.error({ message: 'I couldn\'t find that background!' }, { message, args })
+    if (!background || background.hidden) return this.error({ message: 'I couldn\'t find that background!' }, { message, args })
 
     const owns = await Inventory.findOne({ id: message.author.id, category: 'PROFILE_BACKGROUND', name: this.nameToUnderscore(args.join(' ')) })
     if (owns) return this.error({ message: 'You already own that background!' }, { message, args })
