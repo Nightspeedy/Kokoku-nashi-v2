@@ -57,7 +57,7 @@ module.exports = class extends Command {
     return shot
   }
 
-  async run ({ message, args, background, customMessage }) {
+  async run ({ message, args, background, customMessage, onGenerated }) {
     let user = message.author
 
     if (args[0]) {
@@ -78,9 +78,12 @@ module.exports = class extends Command {
 
     const image = new Attachment(buffer, 'profile.png')
     cardMsg.delete()
-    await message.channel.send(customMessage || `:sparkles: **Profile card for ${user.username}** :sparkles:`, {
+
+    const sentMessage = await message.channel.send(customMessage || `:sparkles: **Profile card for ${user.username}** :sparkles:`, {
       files: [image]
     })
+
+    onGenerated && onGenerated(sentMessage.attachments.first().url)
 
     // Reset pageres, Dumb hack to prevent memory leaks
     pageres.items = []
