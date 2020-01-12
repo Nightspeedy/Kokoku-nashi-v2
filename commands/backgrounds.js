@@ -37,6 +37,19 @@ module.exports = class extends Command {
       .join('_')
   }
 
+  async action_set ({ message, args }) { //eslint-disable-line
+    if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+
+    const background = await Background.findOne({ name: this.nameToUnderscore(args.join(' ')) })
+    if (!background) return this.error({ message: 'I couldn\'t find that background!' }, { message, args })
+
+    const owns = await Inventory.findOne({ id: message.author.id, category: 'PROFILE_BACKGROUND', name: this.nameToUnderscore(args.join(' ')) })
+    if (!owns) return this.error({ message: 'You don\'t own that background!' }, { message, args })
+
+    await Member.findOneAndUpdate({ id: message.author.id }, { selectedBackground: background.name })
+    this.success('Background Equipped', 'You\'ve successfully changed your background!', { message })
+  }
+
   async action_view ({ message, args }) { //eslint-disable-line
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const background = await Background.findOne({ name: this.nameToUnderscore(args.join(' ')) })
