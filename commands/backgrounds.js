@@ -23,8 +23,8 @@ module.exports = class extends Command {
     this[`action_${args[0].toLowerCase()}`]({ message, args: args.slice(1) })
   }
 
-  underscoreToName (undescored) {
-    return undescored
+  underscoreToName (underscored) {
+    return underscored
       .split('_')
       .map(split => split.charAt(0).toUpperCase() + split.slice(1).toLowerCase())
       .join(' ')
