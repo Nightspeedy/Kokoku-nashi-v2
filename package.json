@@ -1,6 +1,6 @@
 {
   "name": "kokoku-nashi-v2.0",
-  "version": "2.1.2-Beta.1",
+  "version": "3.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "simple-youtube-api": "^5.2.1",
     "socket.io-client": "^2.3.0",
     "twemoji": "^12.1.4",
-    "ytdl-core": "^1.0.3"
+    "ytdl-core": "^1.0.6"
   },
   "_moduleAliases": {
     "@lib": "./lib",
