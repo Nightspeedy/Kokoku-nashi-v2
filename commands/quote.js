@@ -19,13 +19,17 @@ module.exports = class extends Command {
     // This uses the last fetched message from the user.
     if (args[0]) {
       const mentioned = await this.mention(args[0])
-      var quoted = mentioned ? mentioned.lastMessage : await message.channel.fetchMessage(`${args[0]}`) || null
+      var quoted = mentioned ? mentioned.lastMessage : undefined
     } else {
       return this.error({ message: 'Please specify a message or member to quote.' }, { message })
     }
 
     if (!quoted) {
-      return this.error({ message: "Couldn't find the given message." }, { message })
+      try {
+        quoted = await message.channel.fetchMessage(args[0])
+      } catch {
+        return this.error({ message: "Couldn't find the given message.\nIf you used an ID, make sure it is from this channel." }, { message })
+      }
     }
 
     if (!message.channel.nsfw && quoted.channel.nsfw) {
