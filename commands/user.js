@@ -139,7 +139,7 @@ module.exports = class extends Command {
     if (user.isPremium) {
       try {
         await user.updateOne({ isPremium: false })
-        this.success('Premium status', 'User is no longer premium', { message, args })
+        return this.success('Premium status', 'User is no longer premium', { message, args })
       } catch (e) {
         return this.error(ERROR.TRY_AGAIN, { message })
       }
