@@ -27,6 +27,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Discord.bot.on('ready', () => {
-  global.datadog.increment('bot.restarts')
+  global.datadog.increment('bot.restart')
   console.log(`Shard #${Discord.bot.shard.id}: logged in!`)
 })
