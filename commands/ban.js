@@ -24,10 +24,6 @@ module.exports = class extends Command {
     if (!userToBan) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
     if (guild.mustHaveReason && !reason) return this.error({ message: 'You must provide a reason with this action!' }, { message, args })
 
-    // TODO: Check guild DB to see if a reason needs to be forced.
-
-    // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
-
     try {
       await message.guild.ban(userToBan, { reason: reason })
       return message.channel.send('Successfully banned user!')
