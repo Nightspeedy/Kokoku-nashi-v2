@@ -4,15 +4,13 @@ const ERROR = require('@lib/errors')
 const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'addgif',
       description: 'Add a gif image to the database',
       type: TYPES.BOT_OWNER,
       args: '{type} {image url}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {

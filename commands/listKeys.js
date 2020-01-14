@@ -4,15 +4,13 @@ const { Strings } = require('@lib/models')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'listkeys',
       description: 'List all the keys with their value',
       type: TYPES.BOT_OWNER,
       args: 'no arguments'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, color }) {

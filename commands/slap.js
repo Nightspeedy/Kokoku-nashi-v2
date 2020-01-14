@@ -5,16 +5,14 @@ const { RichEmbed } = require('discord.js')
 const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'slap',
       description: 'Slap your best friend, or... slap that one guy you dont like.',
       type: TYPES.SOCIAL,
       args: '[@mention]',
       cooldownTime: 5
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {

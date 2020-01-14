@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'quote',
       aliases: ['q'],
       description: 'Quote a specific message, or a user\'s last message.',
       type: TYPES.SOCIAL,
       args: '{message id | @user}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {
@@ -34,12 +32,9 @@ module.exports = class extends Command {
 
     const embed = new RichEmbed()
       .setAuthor(quoted.author.tag, quoted.author.displayAvatarURL)
-      .setTitle(quoted.cleanContent)
-      .setDescription(`[Link to message](${quoted.url})`)
+      .setDescription(quoted.cleanContent)
       .setTimestamp(quoted.createdTimestamp)
-    if (quoted.embeds) {
-      embed.setFooter('Message contained an embed.')
-    }
+      .setFooter(`\n[Link to message](${quoted.url})` + quoted.embeds ? 'Message contained an embed.' : '')
 
     await message.channel.send(embed)
   }

@@ -4,17 +4,13 @@ const ERROR = require('@lib/errors')
 const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'setstring',
       description: 'Change a string value',
       type: TYPES.BOT_OWNER,
       args: '{key} {value}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.guild = true
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {
@@ -31,7 +27,7 @@ module.exports = class extends Command {
         keyValuePair = await Strings.findOne({ key: args[0] })
         this.success('Success!', 'Updated KeyValue pair successfully!', { message })
       } catch (e) {
-        if (e) return this.error(ERROR.UNKNOWN_ERROR, { message, args })
+        this.error(ERROR.UNKNOWN_ERROR, { message, args })
       }
     }
   }

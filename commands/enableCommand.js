@@ -3,23 +3,21 @@ const TYPES = require('@lib/types')
 const { DisabledCommand } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'enable',
       description: 'Enable a command.',
       type: TYPES.GUILD_OWNER,
       args: '{command}',
       cooldownTime: 2
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {
     if (!message.guild) return this.error({ message: 'This only works in guilds.' }, { message })
 
     const command = this.bot.cmdhandler.commands.get(args[0])
-    if (!command) return this.error({ message: "You can't disable what doesn't exist!" }, { message })
+    if (!command) return this.error({ message: "You can't enable what doesn't exist!" }, { message })
     if (!(await DisabledCommand.findOne({ guild: message.guild.id, command: command.name }))) {
       return this.error({ message: 'This command is already enabled.' }, { message })
     }

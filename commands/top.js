@@ -4,15 +4,13 @@ const { RichEmbed } = require('discord.js')
 const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'top',
       description: 'List the top 10 users based on reputation or level.',
       type: TYPES.SOCIAL,
       args: '["level" or "reputation"]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {

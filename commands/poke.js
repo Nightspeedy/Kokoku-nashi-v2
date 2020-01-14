@@ -5,15 +5,13 @@ const { RichEmbed } = require('discord.js')
 const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'poke',
       description: 'Poke your friends!',
       type: TYPES.SOCIAL,
       args: '{@mention}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {
@@ -25,16 +23,14 @@ module.exports = class extends Command {
       .setDescription(`image not loading? click [here](${gif})`)
 
     if (!args) {
-      embed.setTitle('You poked yourself! Silly :3')
-      await embed.setImage(gif)
+      embed.setTitle('You poked yourself! Silly :3').setImage(gif)
 
-      message.channel.send(embed).catch(e => {})
-    } else if (args[0]) {
-      const member = await this.mention(args[0], message)
-      if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-      embed.setTitle(`${message.author.username} poked ${member.username}!`)
-      await embed.setImage(gif)
-      message.channel.send(embed).catch(e => {})
+      return message.channel.send(embed).catch(e => {})
     }
+
+    const user = await this.mention(args[0], message)
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+    embed.setTitle(`${message.author.username} poked ${user.username}!`).embed.setImage(gif)
+    message.channel.send(embed).catch(e => {})
   }
 }

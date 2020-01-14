@@ -7,18 +7,14 @@ const { RichEmbed } = require('discord.js')
 const { AutoRoles } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'autoroles',
       description: "Set the server's auto roles",
       type: TYPES.MOD_COMMAND,
       args: '{add/remove/list} [role ID]',
       permissions: [PERMISSIONS.AUTOROLES]
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.guild = true
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, guild }) {
@@ -42,7 +38,7 @@ module.exports = class extends Command {
     })
     embed.setDescription(roles)
 
-    message.channel.send(embed).catch(e => {})
+    await message.channel.send(embed).catch(e => {})
   }
 
   // Add a role

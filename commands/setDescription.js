@@ -5,18 +5,14 @@ const ERROR = require('@lib/errors')
 const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'setdescription',
       aliases: ['set-description', 'description'],
       description: 'Set your profile title',
       type: TYPES.SOCIAL,
       args: '["New description in quotations"]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.member = true
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, member }) {

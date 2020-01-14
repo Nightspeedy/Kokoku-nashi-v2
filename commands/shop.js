@@ -6,16 +6,13 @@ const { Steamkeys } = require('@lib/models')
 // const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'shop',
-      description: 'Buy something from the shop :)',
+      description: 'Buy something from the shop.',
       type: TYPES.UTILITY,
-      args: 'Boop',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: '{list/buy} [item to buy]'
+    })
   }
 
   async run ({ message, args }) {

@@ -4,16 +4,14 @@ const PERMISSIONS = require('@lib/permissions')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'resetmusic',
       description: 'Reset the music player, WARNING: This will delete EVERYTHING related to music commands (playlists/song queues/current songs) and will disconnect the bot from voice if connected. Use with caution!',
       type: TYPES.GUILD_OWNER,
       args: '',
       permissions: [PERMISSIONS.GUILD_OWNER]
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message }) {

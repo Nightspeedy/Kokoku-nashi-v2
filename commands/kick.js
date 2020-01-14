@@ -4,18 +4,15 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'kick',
       description: 'Kicks a user from the server.',
       type: TYPES.MOD_COMMAND,
       args: '{@mention} ["reason"]',
       permissions: [PERMISSIONS.KICK]
-    }) // Pass the appropriate command information to the base class.
-
+    })
     this.fetch.guild = true
-
-    this.bot = bot
   }
 
   async run ({ message, args, guild }) {

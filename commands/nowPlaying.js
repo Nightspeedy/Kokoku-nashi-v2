@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'currentsong',
       description: 'check the current song',
       type: TYPES.MUSIC,
-      args: '[YT_URL]',
+      args: '',
       aliases: ['np', 'cs', 'nowplaying', 'playing']
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message }) {
@@ -24,12 +22,8 @@ module.exports = class extends Command {
 
     // Check for a queue
     var queue = await Queue.findOne({ id: message.guild.id })
-    if (!queue) {
-      if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
-      return message.channel.send('No songs are currently playing')
-    }
-    if (!queue.isPlaying || !queue.currentSong) {
-      if (!queue.currentSong) await queue.delete()
+    if (!queue || !queue.isPlaying || !queue.currentSong) {
+      if (queue && !queue.currentSong) await queue.delete()
       if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
       return message.channel.send('No songs are currently playing')
     }

@@ -4,15 +4,13 @@ const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'pause',
       description: 'Pauses the playback',
       type: TYPES.MUSIC,
-      args: '[YT_URL]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: ''
+    })
   }
 
   async run ({ message }) {
@@ -26,7 +24,7 @@ module.exports = class extends Command {
     var queue = await Queue.findOne({ id: message.guild.id })
 
     if (!queue || !queue.isPlaying || !queue.currentSong) {
-      if (!queue.currentSong) await queue.delete()
+      if (queue && !queue.currentSong) await queue.delete()
       if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
       return message.channel.send('No songs are currently playing')
     }

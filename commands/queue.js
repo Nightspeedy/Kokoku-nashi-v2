@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'queue',
       description: 'Check the song queue',
       type: TYPES.MUSIC,
       args: '',
       aliases: ['songqueue', 'sq', 'que']
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message }) {

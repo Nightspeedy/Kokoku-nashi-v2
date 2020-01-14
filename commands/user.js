@@ -4,15 +4,13 @@ const ERROR = require('@lib/errors')
 const { Member, Background } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'user',
       description: 'Change user variables (levels/reputation/exp and much more)',
       type: TYPES.BOT_OWNER,
       args: '{@mention} {variable} [new value]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.guild = true
+    })
   }
 
   async run ({ message, args }) {

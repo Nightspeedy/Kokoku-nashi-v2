@@ -3,15 +3,13 @@ const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'botban',
       description: 'Bans a user from interacting with Kōkoku Nashi',
       type: TYPES.BOT_OWNER,
       args: '{@mention}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, member }) {

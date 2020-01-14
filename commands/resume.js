@@ -4,15 +4,13 @@ const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'resume',
       description: 'Resumes playing',
       type: TYPES.MUSIC,
-      args: '[YT_URL]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: ''
+    })
   }
 
   async run ({ message }) {

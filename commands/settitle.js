@@ -4,18 +4,14 @@ const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'settitle',
       aliases: ['set-title', 'title'],
       description: 'Set your profile title',
       type: TYPES.SOCIAL,
       args: '["New title in quotations"]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.member = true
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, member }) {

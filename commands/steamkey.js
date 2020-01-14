@@ -9,13 +9,9 @@ module.exports = class extends Command {
       description: 'Adds/Removes/Lists steam keys',
       type: TYPES.BOT_OWNER,
       args: '{add/remove/list} [Game name] [Steam key]',
-      bot,
-      cooldownTime: 30 * 1000 // 30 seconds
-    }) // Pass the appropriate command information to the base class.
-
+      cooldownTime: 30
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
   async run ({ message, args }) {

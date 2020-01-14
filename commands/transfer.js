@@ -4,19 +4,14 @@ const ERROR = require('@lib/errors')
 const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'transfer',
       description: 'Check your, or someone elses wallet.',
       type: TYPES.UTILITY,
-      args: '{amount} {@mention}',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: '{amount} {@mention}'
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
   async run ({ message, args }) {

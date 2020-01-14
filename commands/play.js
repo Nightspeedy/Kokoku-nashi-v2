@@ -4,18 +4,16 @@ const ytdl = require('ytdl-core')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'play',
       description: 'Play a song',
       type: TYPES.MUSIC,
       args: '[YT_URL]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  // TODO: Rewrite this entire command and improve it's stability and speed.
+  // TODO: Rewrite this entire command and improve its stability and speed.
 
   async run ({ message, args }) {
     const voiceChannel = message.member.voiceChannel

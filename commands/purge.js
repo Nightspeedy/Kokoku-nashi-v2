@@ -4,16 +4,14 @@ const PERMISSIONS = require('@lib/permissions')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'purge',
       description: 'Purge a specific amount of messages (maximum 1000 messages)',
       type: TYPES.MOD_COMMAND,
       args: '{amount}',
       permissions: [PERMISSIONS.PURGE]
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {

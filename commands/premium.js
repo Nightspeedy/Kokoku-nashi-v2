@@ -5,17 +5,14 @@ const { RichEmbed } = require('discord.js')
 const { Guild } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'premium',
       description: 'Set the server\'s premium status',
       type: TYPES.BOT_OWNER,
       args: '{true/false}'
-    }) // Pass the appropriate command information to the base class.
-
+    })
     this.fetch.guild = true
-
-    this.bot = bot
   }
 
   async run ({ message, args, guild, color }) {

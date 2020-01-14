@@ -6,16 +6,14 @@ const { Member } = require('@lib/models')
 const version = require('../package.json').version
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'info',
       aliases: ['uptime', 'onlinetime', 'shardinfo', 'ping', 'pong'],
-      description: 'Shows the shard\'s uptime!',
+      description: "Shows the shard's uptime!",
       type: TYPES.UTILITY,
       args: '[@mention]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, color }) {

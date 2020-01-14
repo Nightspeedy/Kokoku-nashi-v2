@@ -4,16 +4,13 @@ const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'skip',
       description: 'Skip the current song.',
       type: TYPES.MUSIC,
       args: ''
-    }) // Pass the appropriate command information to the base class.
-    this.fetch.member = true // Fetch the Member object from DB on trigger.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message }) {

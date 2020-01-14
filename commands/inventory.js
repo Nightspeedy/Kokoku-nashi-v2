@@ -4,16 +4,14 @@ const { RichEmbed } = require('discord.js')
 const { Inventory } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'inventory',
       aliases: ['inv'],
       description: 'Check your inventory, see what you have!',
       type: TYPES.UTILITY,
       args: '[guideName]'
-    }) // Pass the appropriate command information to the base class.
-    this.embed = new RichEmbed()
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {

@@ -5,18 +5,14 @@ const { Attachment } = require('discord.js')
 var QRCode = require('qrcode')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'wallet',
       description: 'Check your, or someone elses wallet.',
       type: TYPES.UTILITY,
-      args: '[@mention]',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
+      args: '[@mention]'
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
   async run ({ message, args }) {

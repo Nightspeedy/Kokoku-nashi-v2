@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'membercount',
       aliases: ['serversize'],
-      description: 'Shows your server\'s membercount!',
+      description: "Shows your server's membercount!",
       type: TYPES.UTILITY,
       args: 'This command has no arguments'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, color }) {
@@ -25,6 +23,6 @@ module.exports = class extends Command {
       .setTitle('Guild membercount')
       .setColor(color)
       .setDescription(`Total members in guild: ${guild.members.size} \n\n${botCount} Bots\n${memberCount} Humans`)
-    message.channel.send(embed).catch(e => {})
+    await message.channel.send(embed).catch(e => {})
   }
 }

@@ -4,16 +4,15 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'ban',
       description: 'Bans a user from the server.',
       type: TYPES.MOD_COMMAND,
       args: '{@mention} ["reason"]',
       permissions: [PERMISSIONS.BAN]
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
+    this.fetch.guild = true
   }
 
   async run ({ message, args, guild }) {
@@ -26,7 +25,7 @@ module.exports = class extends Command {
 
     try {
       await message.guild.ban(userToBan, { reason: reason })
-      return message.channel.send('Successfully banned user!')
+      await message.channel.send('Successfully banned user!')
     } catch (e) {
       this.error(ERROR.NO_PERMISSION, { message, args })
       console.error(e)
