@@ -23,7 +23,7 @@ module.exports = class extends Command {
       return this.error({ message: 'There is nothing to be reset!' }, { message })
     }
 
-    await queue.delete()
+    await queue.deleteOne()
     return message.channel.send('Successfuly reset music!')
   }
 }

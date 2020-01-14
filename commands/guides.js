@@ -11,11 +11,10 @@ module.exports = class extends Command {
       type: TYPES.UTILITY,
       args: '[guideName]'
     })
-    this.embed = new RichEmbed()
   }
 
   async run ({ message, args, color }) {
-    this.embed
+    new RichEmbed()
       .setColor(color)
     if (!args[0]) {
       this.success('List of available guides', 'settings\npermissions\nwelcome/leave', { message })

@@ -22,7 +22,7 @@ module.exports = class extends Command {
     this[`action_${args[0]}`]({ message, guild, args })
   }
 
-  async list ({ message }) {
+  async action_list ({ message }) { //eslint-disable-line
     const totalRoles = (await AutoRoles.find({ guild: message.guild.id })).map(val => val.role)
     let roles = 'Listing current autoroles: \n'
     const embed = new RichEmbed().setTitle('Autoroles list')
@@ -42,7 +42,7 @@ module.exports = class extends Command {
   }
 
   // Add a role
-  async add ({ message, guild, args }) {
+  async action_add ({ message, guild, args }) { //eslint-disable-line
     const roleToAdd = message.guild.roles.find(role => role[typeof (args[1]) === 'number' ? 'id' : 'name'] === args[1])
     if (!roleToAdd) return this.error(ERROR.ROLE_NOT_FOUND, { message, args })
     const role = await AutoRoles.findOne({ guild: guild.id, role: roleToAdd.id })
@@ -62,7 +62,7 @@ module.exports = class extends Command {
   }
 
   // Remove a role
-  async remove ({ message, guild, args }) {
+  async action_remove ({ message, guild, args }) { //eslint-disable-line
     const roleToRemove = message.guild.roles.find(role => role[typeof (args[1]) === 'number' ? 'id' : 'name'] === args[1])
     if (!roleToRemove) return this.error(ERROR.ROLE_NOT_FOUND, { message, args })
     const role = await AutoRoles.findOne({ guild: guild.id, role: roleToRemove.id })

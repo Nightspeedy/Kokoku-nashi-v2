@@ -30,7 +30,7 @@ module.exports = class extends Command {
 
     const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-    embed.setTitle(`${message.author.username} poked ${user.username}!`).embed.setImage(gif)
+    embed.setTitle(`${message.author.username} poked ${user.username}!`).setImage(gif)
     message.channel.send(embed).catch(e => {})
   }
 }

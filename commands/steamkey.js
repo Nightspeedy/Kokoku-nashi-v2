@@ -9,7 +9,7 @@ module.exports = class extends Command {
       description: 'Adds/Removes/Lists steam keys',
       type: TYPES.BOT_OWNER,
       args: '{add/remove/list} [Game name] [Steam key]',
-      cooldownTime: 30
+      cooldownTime: 0
     })
     this.orbt = bot.ORBT
   }
