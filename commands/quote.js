@@ -33,7 +33,7 @@ module.exports = class extends Command {
       .setAuthor(quoted.author.tag, quoted.author.displayAvatarURL)
       .setDescription(quoted.cleanContent)
       .setTimestamp(quoted.createdTimestamp)
-      .setFooter(`\n[Link to message](${quoted.url})` + quoted.embeds ? 'Message contained an embed.' : '')
+      .setFooter(`\n[Link to message](${quoted.url})` + quoted.embeds.length ? 'Message contained an embed.' : '')
 
     await message.channel.send(embed)
   }
