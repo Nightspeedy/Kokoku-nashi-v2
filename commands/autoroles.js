@@ -16,6 +16,8 @@ module.exports = class extends Command {
       permissions: [PERMISSIONS.AUTOROLES]
     }) // Pass the appropriate command information to the base class.
 
+    this.fetch.guild = true
+
     this.bot = bot
   }
 
