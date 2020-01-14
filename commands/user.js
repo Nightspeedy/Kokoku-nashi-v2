@@ -15,11 +15,11 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
     // Error checking
-    const member = this.mention(args[0], message)
-    if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
+    const user = this.mention(args[0], message)
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
 
-    const user = await Member.findOne({ id: member.id })
-    if (!user) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
+    const member = await Member.findOne({ id: user.id })
+    if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
 
     const action = args[1].toLowerCase()
 
