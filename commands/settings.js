@@ -85,7 +85,7 @@ module.exports = class extends Command {
     await this.update(guild, setting.dbField, value)
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args, guild }) {
     if (!args[0]) {
       return this.overview({ message, guild })
     } else {
@@ -138,6 +138,5 @@ module.exports = class extends Command {
         timestamp: new Date()
       }
     }).catch(e => {})
-    // message.channel.send(JSON.stringify(guild)).catch(e => {})
   }
 }

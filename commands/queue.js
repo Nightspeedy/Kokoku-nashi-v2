@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     const voiceChannel = message.member.voiceChannel
     if (!voiceChannel) return this.error({ message: 'Please join a voice channel before using this command!' }, { message })
     // const permissions = voiceChannel.permissionsFor(this.bot.user)

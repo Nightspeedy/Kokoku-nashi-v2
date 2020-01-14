@@ -19,31 +19,23 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color, member }) {
+  async run ({ message, args, member }) {
     if (args[0] && !args[1]) {
       if (args[0] === 'reset') {
-        await member.updateOne({ description: 'Much mystery' }).catch(e => {
-          return this.error(ERROR.OTHER, { message, args })
-        })
-        member = await Member.findOne({ id: message.author.id })
-        if (member.description === 'Much mystery') {
-          message.channel.send('Successfully updated profile information!').catch(e => {})
-        } else {
-          message.channel.send('Profile information was not updated!').catch(e => {})
+        try {
+          await member.updateOne({ description: 'Much mystery' })
+          return message.channel.send('Successfully updated profile information!').catch(e => {})
+        } catch (e) {
+          return message.channel.send('Profile information was not updated!').catch(e => {})
         }
       } else {
         const newDescription = String(args[0])
-
         if (newDescription.length > 256) return this.error({ message: 'Your description may not be longer then 256 characters!' }, { message, args })
-
-        await member.updateOne({ description: args[0] }).catch(e => {
-          return this.error(ERROR.OTHER, { message, args })
-        })
-        member = await Member.findOne({ id: message.author.id })
-        if (member.description === args[0]) {
-          message.channel.send('Successfully updated profile information!').catch(e => {})
-        } else {
-          message.channel.send('Profile information was not updated!').catch(e => {})
+        try {
+          await member.updateOne({ description: args[0] })
+          return message.channel.send('Successfully updated profile information!').catch(e => {})
+        } catch (e) {
+          return message.channel.send('Profile information was not updated!').catch(e => {})
         }
       }
     } else {

@@ -1,7 +1,6 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const PERMISSIONS = require('@lib/permissions')
-const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
@@ -17,18 +16,16 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     // Check for a queue
     var queue = await Queue.findOne({ id: message.guild.id })
     if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
 
     if (!queue) {
-      return message.channel.send("There's nothing to be reset!")
+      return this.error({ message: 'There is nothing to be reset!' }, { message })
     }
-    if (message.guild.voiceConnection) {
-      await queue.delete()
-      return message.channel.send('Successfuly reset music!')
-    }
-    return this.error(ERROR.BOT_NOT_IN_VC, { message })
+
+    await queue.delete()
+    return message.channel.send('Successfuly reset music!')
   }
 }

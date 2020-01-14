@@ -35,16 +35,11 @@ module.exports = class extends Command {
       seconds
     ]
     const str = [
-      'Days',
-      'Hours',
-      'Minutes',
-      'Seconds'
+      'Day' + time[0] === 1 ? '' : 's',
+      'Hour' + time[1] === 1 ? '' : 's',
+      'Minute' + time[2] === 1 ? '' : 's',
+      'Second' + time[3] === 1 ? '' : 's'
     ]
-
-    if (time[0] === 1) str[0] = 'Day'
-    if (time[1] === 1) str[1] = 'Hour'
-    if (time[2] === 1) str[2] = 'Minute'
-    if (time[3] === 1) str[3] = 'Second'
 
     const onlineTime = `${time[0]} ${str[0]}, ${time[1]} ${str[1]}, ${time[2]} ${str[2]}, ${time[3]} ${str[3]}`
     const shard = '#' + this.bot.shard.id

@@ -27,10 +27,6 @@ module.exports = class extends Command {
     if (!memberToKick) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
     if (guild.mustHaveReason && !reason) return this.error({ message: 'You must provide a reason with this action!' }, { message, args })
 
-    // TODO: Check guild DB to see if a reason needs to be forced.
-
-    // if (guild.mustHaveReason && !reason) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
-
     try {
       memberToKick.kick(reason).catch(e => {
         return this.error(ERROR.NO_PERMISSION, { message, args })

@@ -84,7 +84,7 @@ module.exports = class extends Command {
     }
   }
 
-  // very basic, make prettier later
+  // TODO: Make this prettier, it's very basic
   async list ({ message, args }) {
     const fields = []
 

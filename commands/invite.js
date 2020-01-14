@@ -14,14 +14,14 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, color, args }) {
+  async run ({ message, color }) {
     // Make a copy of the current message object
     const preservedMessage = message
     const embed = new RichEmbed().setTitle('Bot invite').setColor(color).addField('Invite me with this link', '[Click here to invite me](https://discordapp.com/api/oauth2/authorize?client_id=503687810885353472&permissions=2146958839&scope=bot)')
     // If DM is successfull, add a reaction to the copied message object
-    message.author.send(embed).then(message => { preservedMessage.react('524627369386967042') }).catch(e => {
+    message.author.send(embed).then(() => { preservedMessage.react('524627369386967042') }).catch(e => {
       // If DM failed, send error
-      this.error({ message: "I coultn't DM you, have you disabled it in your account settings?" }, { message, args })
+      this.error({ message: "I coultn't DM you, have you disabled it in your account settings?" }, { message })
     })
   }
 }

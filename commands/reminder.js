@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild }) {
+  async run ({ message, args }) {
     const minutes = parseInt(args[0])
     const content = args.slice(1).join(' ')
 

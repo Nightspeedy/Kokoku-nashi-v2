@@ -18,27 +18,22 @@ module.exports = class extends Command {
     this.fetch.guild = true
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     if (!args[0]) return
-    const preservedMsg = message
 
     switch (args[0]) {
       case 'add':
-        if (!args[1] || !args[2]) return
-        message.delete()
-
+        if (!args[1]) return
         try {
           const key = await Steamkeys.find({ key: args[2] })
           if (key[0]) return message.channel.send('That key already exists!')
           await Steamkeys.create({ name: `${args[1]}`, key: `${args[2]}` })
-          preservedMsg.channel.send('Added key to database.')
+          message.channel.send('Added key to database.')
         } catch (e) {
-          preservedMsg.channel.send('Something went wrong...')
+          message.channel.send('Something went wrong...')
           return console.log(e)
         }
-
-        return
-
+        break
       case 'remove':
         try {
           if (!args[1]) return
@@ -49,5 +44,6 @@ module.exports = class extends Command {
         }
         break
     }
+    message.delete()
   }
 }

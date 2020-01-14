@@ -21,6 +21,7 @@ module.exports = class extends Command {
     if (!args[0]) {
       this.success('List of available guides', 'settings\npermissions\nwelcome/leave', { message })
     } else {
+      // TODO: Make these guides database entries, and fetch them instead of having them hard coded
       switch (args[0].toLowerCase()) {
         case 'settings':
           this.embed.setTitle('(Guide) Changing settings')

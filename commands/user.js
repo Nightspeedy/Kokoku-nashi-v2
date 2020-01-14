@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.fetch.guild = true
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     // Error checking
     const member = this.mention(args[0], message)
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })

@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     if (!message.member.voiceChannel) return this.error(ERROR.NOT_IN_VC, { message })
     if (!message.guild.voiceConnection) return this.error(ERROR.BOT_NOT_IN_VC, { message })
 

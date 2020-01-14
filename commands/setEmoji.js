@@ -21,7 +21,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color, member }) {
+  async run ({ message, args, member }) {
     if (args[0]) {
       const emoji = (isEmoji.exec(args[0]) || [])[0]
       if (!emoji) return this.error({ message: 'That doesn\'t seem like a valid emoji. Try something else!' }, { message })

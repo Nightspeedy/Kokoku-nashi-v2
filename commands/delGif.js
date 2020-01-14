@@ -17,7 +17,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     if (!args[0] || !args[1]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (!args[1].endsWith('.gif')) return this.error({ message: "Can't remove image from the DB, image is not a valid GIF" })

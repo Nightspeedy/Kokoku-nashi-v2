@@ -19,7 +19,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args, guild }) {
     const counting = await Counting.findOne({ id: message.guild.id })
 
     if (!counting) return

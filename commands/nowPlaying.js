@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     const voiceChannel = message.member.voiceChannel
     if (!voiceChannel) return this.error({ message: 'Please join a voice channel before using this command!' }, { message })
     // const permissions = voiceChannel.permissionsFor(this.bot.user)
@@ -28,13 +28,9 @@ module.exports = class extends Command {
       if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
       return message.channel.send('No songs are currently playing')
     }
-    if (!queue.isPlaying) {
+    if (!queue.isPlaying || !queue.currentSong) {
+      if (!queue.currentSong) await queue.delete()
       if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
-      return message.channel.send('No songs are currently playing')
-    }
-    if (!queue.currentSong) {
-      if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
-      await queue.delete()
       return message.channel.send('No songs are currently playing')
     }
 

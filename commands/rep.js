@@ -14,12 +14,13 @@ module.exports = class extends Command {
       args: ''
     }) // Pass the appropriate command information to the base class.
 
+    this.fetch.member = true
+
     this.bot = bot
   }
 
-  async run ({ message, color, args }) {
+  async run ({ message, color, args, member }) {
     // Gift by mention
-    const member = await Member.findOne({ id: message.author.id })
     if (member && !args[0]) {
       if (member.repLastGiven + 86100000 > Date.now()) {
         let totalSeconds = (member.repLastGiven + 86100000) - Date.now()
@@ -46,7 +47,6 @@ module.exports = class extends Command {
 
     if (!memberMention) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
 
-    //
     if (member.repLastGiven + 86100000 > Date.now()) {
       let totalSeconds = (member.repLastGiven + 86100000) - Date.now()
 

@@ -16,7 +16,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message, args }) {
     if (!args[0]) {
       const inventory = await Inventory.find({ id: message.author.id })
 

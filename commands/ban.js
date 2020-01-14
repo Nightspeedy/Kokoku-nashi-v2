@@ -13,8 +13,6 @@ module.exports = class extends Command {
       permissions: [PERMISSIONS.BAN]
     }) // Pass the appropriate command information to the base class.
 
-    this.fetch.guild = true
-
     this.bot = bot
   }
 
@@ -32,7 +30,7 @@ module.exports = class extends Command {
 
     try {
       await message.guild.ban(userToBan, { reason: reason })
-      await message.channel.send('Successfully banned user!')
+      return message.channel.send('Successfully banned user!')
     } catch (e) {
       this.error(ERROR.NO_PERMISSION, { message, args })
       console.error(e)

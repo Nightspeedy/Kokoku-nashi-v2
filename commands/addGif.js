@@ -12,32 +12,18 @@ module.exports = class extends Command {
       args: '{type} {image url}'
     }) // Pass the appropriate command information to the base class.
 
-    this.fetch.guild = true
-
     this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     if (!args[0] || !args[1]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
 
     if (!args[1].endsWith('.gif')) return this.error({ message: "Can't add image to db, image is not a valid GIF" })
 
-    switch (args[0]) {
-      case 'hug':
-        this.addGif('hug', args[1], message)
-        break
-      case 'kiss':
-        this.addGif('kiss', args[1], message)
-        break
-      case 'poke':
-        this.addGif('poke', args[1], message)
-        break
-      case 'slap':
-        this.addGif('slap', args[1], message)
-        break
-      default:
-        return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    if (['hug', 'kiss', 'poke', 'slap'].includes(args[0])) {
+      return this.addGif(args[0], args[1], message)
     }
+    return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
   }
 
   async addGif (type, gifUrl, message) {

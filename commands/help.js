@@ -38,9 +38,6 @@ module.exports = class extends Command {
     const embed = new RichEmbed()
       .setColor(color)
 
-    // Total commands, will get value later
-    let i = 0
-
     if (args[0]) {
       const command = args[0]
 
@@ -54,6 +51,8 @@ module.exports = class extends Command {
         .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon't include example brackets in your command ( [] or {} )\n\n ${cmddesc}`)
         .addField('Usage:', `k!${command} ${cmdargs}`)
     } else {
+    // Total commands, will get value later
+      let i
       this.bot.cmdhandler.commands.forEach(cmd => {
         if (object[cmd.type].indexOf(`\`${cmd.name}\``) > -1) return
         i++

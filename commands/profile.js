@@ -57,8 +57,9 @@ module.exports = class extends Command {
     return shot
   }
 
-  async run ({ message, args, background, customMessage, onGenerated }) {
+  async run ({ message, args, background, customMessage, onGenerated, member }) {
     let user = message.author
+    let dbMember = member
 
     if (args[0]) {
       user = await this.mention(args[0], message)
@@ -67,7 +68,6 @@ module.exports = class extends Command {
 
     if (user.bot) return this.error({ message: "Bots don't have profiles!" }, { message })
 
-    let dbMember = await Member.findOne({ id: user.id })
     if (!dbMember) {
       dbMember = Member.create({ id: user.id })
     }

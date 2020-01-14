@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, color }) {
     const collection = await Strings.find({ })
     const embed = new RichEmbed()
       .setTitle('List of key-value pairs')

@@ -15,7 +15,7 @@ module.exports = class extends Command {
     this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args, color }) {
     let order = 'reputation'
 
     if (args && args[0] && args[0].charAt(0) === 'l') {
