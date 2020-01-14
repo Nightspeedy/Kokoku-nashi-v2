@@ -7,9 +7,9 @@ module.exports = class extends Command {
   constructor () {
     super({
       name: 'transfer',
-      description: 'Check your, or someone elses wallet.',
+      description: 'Transfer money to someone else.',
       type: TYPES.UTILITY,
-      args: '{amount} {@mention}'
+      args: '{@mention} {amount}'
     })
     this.orbt = bot.ORBT
   }
