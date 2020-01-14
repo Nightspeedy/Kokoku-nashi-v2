@@ -4,7 +4,7 @@ const ERROR = require('@lib/errors')
 const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor () {
+  constructor (bot) {
     super({
       name: 'daily',
       description: 'Claim your daily kokoin.',

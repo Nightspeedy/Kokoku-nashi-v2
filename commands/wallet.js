@@ -5,7 +5,7 @@ const { Attachment } = require('discord.js')
 var QRCode = require('qrcode')
 
 module.exports = class extends Command {
-  constructor () {
+  constructor (bot) {
     super({
       name: 'wallet',
       description: 'Check your, or someone elses wallet.',

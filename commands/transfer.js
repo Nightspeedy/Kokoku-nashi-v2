@@ -4,7 +4,7 @@ const ERROR = require('@lib/errors')
 const { Strings } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor () {
+  constructor (bot) {
     super({
       name: 'transfer',
       description: 'Transfer money to someone else.',

@@ -1,6 +1,5 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
-const { RichEmbed } = require('discord.js')
 const { Inventory } = require('@lib/models')
 
 module.exports = class extends Command {

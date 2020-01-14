@@ -18,7 +18,7 @@ module.exports = class extends Command {
     const embed = new RichEmbed()
       .setColor(color)
 
-    const user = message.author
+    let user = message.author
     if (args[0]) {
       user = await this.mention(args[0], message)
     }
