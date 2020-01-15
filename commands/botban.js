@@ -1,6 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
+const { OWNERS } = require('@lib/consts')
 
 module.exports = class extends Command {
   constructor () {
@@ -16,6 +17,7 @@ module.exports = class extends Command {
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message })
     if (member.isBanned) return this.error({ message: 'User is already banned!' }, { message })
+    if (OWNERS.indexOf(member.id) !== -1) return this.error({ message: 'Members of the Kōkoku Nashi team can not be banned!' }, { message })
     try {
       await member.updateOne({ isBanned: true })
       message.channel.send(`<@${member.id}> was banned from interacting with Kōkoku Nashi`)

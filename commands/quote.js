@@ -15,9 +15,12 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
     // This uses the last fetched message from the user.
-
-    const mentioned = await this.mention(args[0])
-    var quoted = mentioned ? mentioned.lastMessage : await message.channel.fetchMessage(`${args[0]}`) || null
+    if (args[0]) {
+      const mentioned = await this.mention(args[0])
+      var quoted = mentioned ? mentioned.lastMessage : undefined
+    } else {
+      return this.error({ message: 'Please specify a message or member to quote.' }, { message })
+    }
 
     if (!quoted) {
       try {
@@ -33,9 +36,12 @@ module.exports = class extends Command {
 
     const embed = new RichEmbed()
       .setAuthor(quoted.author.tag, quoted.author.displayAvatarURL)
-      .setDescription(quoted.cleanContent)
+      .setTitle(quoted.cleanContent)
+      .setDescription(`[Link to message](${quoted.url})`)
       .setTimestamp(quoted.createdTimestamp)
-      .setFooter(`\n[Link to message](${quoted.url})` + quoted.embeds.length ? 'Message contained an embed.' : '')
+    if (quoted.embeds) {
+      embed.setFooter('Message contained an embed.')
+    }
 
     await message.channel.send(embed)
   }

@@ -1,6 +1,7 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const { Queue } = require('@lib/models')
+const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
   constructor () {
@@ -15,7 +16,7 @@ module.exports = class extends Command {
 
   async run ({ message }) {
     const voiceChannel = message.member.voiceChannel
-    if (!voiceChannel) return this.error({ message: 'Please join a voice channel before using this command!' }, { message })
+    if (!voiceChannel) return this.error(ERROR.NOT_IN_VC, message)
     // const permissions = voiceChannel.permissionsFor(this.bot.user)
     // TODO: Make a check and see if the bot has permissions to speak and connect to the vc, does not currently work
     // if(!permissions.has("CONNECT") || !permissions.has("SPEAK")) return this.error({message: "The bot has no permission to join or speak in the voice channel you're currently connected to"}, message)
