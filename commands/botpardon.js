@@ -17,7 +17,7 @@ module.exports = class extends Command {
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message })
     if (!member.isBanned) return this.error({ message: 'User is not banned!' }, { message })
-    if (OWNERS.indexOf(member.id) === -1) return this.error({ message: 'Members of the Kōkoku Nashi team can not be banned!' })
+    if (OWNERS.includes(member.id)) return this.error({ message: 'Members of the Kōkoku Nashi team can not be banned!' })
     try {
       await member.updateOne({ isBanned: false })
       message.channel.send(`<@${member.id}> was unbanned from interacting with Kōkoku Nashi`)
