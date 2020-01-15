@@ -7,7 +7,7 @@ module.exports = class extends Command {
   constructor () {
     super({
       name: 'stop',
-      description: 'Stops the audio playback',
+      description: 'Stops the audio playback, and clears the queue',
       type: TYPES.MUSIC,
       args: ''
     })
@@ -47,6 +47,6 @@ module.exports = class extends Command {
     } else if (reaction._emoji.name === 'no') {
       return confirmation.delete()
     }
-    return this.error({ message: 'You are not connected' }, message)
+    return this.error(ERROR.NOT_IN_VC, message)
   }
 }
