@@ -24,7 +24,7 @@ module.exports = class extends Command {
       .setDescription(`image not loading? click [here](${gif})`)
 
     if (args[0]) {
-      const user = this.mention(args[0], message)
+      const user = await this.mention(args[0], message)
       if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
 
       embed.setTitle(`${message.author.username} slapped ${user.username}`)

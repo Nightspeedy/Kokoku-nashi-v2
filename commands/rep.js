@@ -34,7 +34,7 @@ module.exports = class extends Command {
       }
     }
 
-    const user = this.mention(args[0], message)
+    const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
     if (user.bot) return this.error({ message: 'Bots dont have profiles!' }, { message, args })
     if (message.author.id === user.id) return this.error({ message: 'You cannot give yourself reputation!' }, { message, args })

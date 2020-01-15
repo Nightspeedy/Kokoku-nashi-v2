@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
     const me = message.member
-    const user = this.mention(args[0], message)
+    const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
     if (me.id === user.id) return this.error(ERROR.INVALID_ARGUMENTS, { message })

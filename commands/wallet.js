@@ -16,7 +16,7 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args }) {
-    const member = args[0] ? this.mention(args[0], message) : message.author
+    const member = args[0] ? await this.mention(args[0], message) : message.author
 
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 

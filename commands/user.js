@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
   async run ({ message, args }) {
     // Error checking
-    const user = this.mention(args[0], message)
+    const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
 
     const member = await Member.findOne({ id: user.id })
