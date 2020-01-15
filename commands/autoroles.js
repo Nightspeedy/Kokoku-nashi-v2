@@ -15,6 +15,7 @@ module.exports = class extends Command {
       args: '{add/remove/list} [role ID]',
       permissions: [PERMISSIONS.AUTOROLES]
     })
+    this.fetch.guild = true
   }
 
   async run ({ message, args, guild }) {
