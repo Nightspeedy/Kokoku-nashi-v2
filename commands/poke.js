@@ -23,14 +23,16 @@ module.exports = class extends Command {
       .setDescription(`image not loading? click [here](${gif})`)
 
     if (!args) {
-      embed.setTitle('You poked yourself! Silly :3').setImage(gif)
+      embed.setTitle('You poked yourself! Silly :3')
+        .setImage(gif)
 
       return message.channel.send(embed).catch(e => {})
     }
 
     const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-    embed.setTitle(`${message.author.username} poked ${user.username}!`).setImage(gif)
+    embed.setTitle(`${message.author.username} poked ${user.username}!`)
+      .setImage(gif)
     message.channel.send(embed).catch(e => {})
   }
 }
