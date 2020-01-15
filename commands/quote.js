@@ -16,14 +16,8 @@ module.exports = class extends Command {
   async run ({ message, args }) {
     // This uses the last fetched message from the user.
 
-    if (args[0]) {
-      const mentioned = await this.mention(args[0])
-      var quoted = mentioned ? mentioned.lastMessage : undefined
-    } else {
-      return this.error({ message: 'Please specify a message or member to quote.' }, { message })
-    }
     const mentioned = await this.mention(args[0])
-    const quoted = mentioned ? mentioned.lastMessage : await message.channel.fetchMessage(`${args[0]}`) || null
+    var quoted = mentioned ? mentioned.lastMessage : await message.channel.fetchMessage(`${args[0]}`) || null
 
     if (!quoted) {
       try {
