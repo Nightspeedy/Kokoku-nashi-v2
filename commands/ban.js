@@ -16,7 +16,7 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, guild }) {
-    const userToBan = this.mention(args[0], message) || await this.bot.fetchUser(args[0]) || undefined
+    const userToBan = await this.mention(args[0], message) || await this.bot.fetchUser(args[0]) || undefined
     const reason = args[1]
     // const days = args[2]
 
