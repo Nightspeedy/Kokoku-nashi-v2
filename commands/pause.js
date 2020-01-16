@@ -24,7 +24,7 @@ module.exports = class extends Command {
     var queue = await Queue.findOne({ id: message.guild.id })
 
     if (!queue || !queue.isPlaying || !queue.currentSong) {
-      if (queue && !queue.currentSong) await queue.delete()
+      if (queue && !queue.currentSong) await queue.deleteOne()
       if (message.guild.me.voiceChannel) message.guild.me.voiceChannel.leave()
       return message.channel.send('No songs are currently playing')
     }

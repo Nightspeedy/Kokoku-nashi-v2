@@ -11,7 +11,6 @@ module.exports = class extends Command {
       type: TYPES.BOT_OWNER,
       args: '{type} {image url}'
     })
-    this.fetch.guild = true
   }
 
   async run ({ message, args }) {

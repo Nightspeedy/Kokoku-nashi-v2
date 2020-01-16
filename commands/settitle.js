@@ -20,9 +20,9 @@ module.exports = class extends Command {
       if (args[0] === 'reset') {
         try {
           await member.updateOne({ title: 'Very title' })
-          message.channel.send('Successfully updated profile information!').catch(e => {})
+          return message.channel.send('Successfully updated profile information!').catch(e => {})
         } catch (e) {
-          message.channel.send('Profile information was not updated!').catch(e => {})
+          return message.channel.send('Profile information was not updated!').catch(e => {})
         }
       } else {
         const newTitle = String(args[0])
@@ -31,9 +31,9 @@ module.exports = class extends Command {
 
         try {
           await member.updateOne({ title: args[0] })
-          message.channel.send('Successfully updated profile information!').catch(e => {})
+          return message.channel.send('Successfully updated profile information!').catch(e => {})
         } catch (e) {
-          message.channel.send('Profile information was not updated!').catch(e => {})
+          return message.channel.send('Profile information was not updated!').catch(e => {})
         }
       }
       // If a user provides a 2nd argument return this error
