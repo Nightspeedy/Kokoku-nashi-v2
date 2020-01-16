@@ -4,18 +4,16 @@ const { Queue } = require('@lib/models')
 const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'stop',
-      description: 'Stops the audio playback',
+      description: 'Stops the audio playback, and clears the queue',
       type: TYPES.MUSIC,
       args: ''
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     if (!message.member.voiceChannel) return this.error(ERROR.NOT_IN_VC, { message })
     if (!message.guild.voiceConnection) return this.error(ERROR.BOT_NOT_IN_VC, { message })
 
@@ -49,6 +47,6 @@ module.exports = class extends Command {
     } else if (reaction._emoji.name === 'no') {
       return confirmation.delete()
     }
-    return this.error({ message: 'You are not connected' }, message)
+    return this.error(ERROR.NOT_IN_VC, { message })
   }
 }

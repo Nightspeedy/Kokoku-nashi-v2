@@ -5,17 +5,14 @@ const { Background, Inventory, Member, BackgroundCategories } = require('@lib/mo
 // const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'backgrounds',
       aliases: ['background', 'bg', 'theme'],
       description: 'Customize your profile!',
       type: TYPES.SOCIAL,
-      args: '{buy/set/view/list} [name]',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: '{buy/set/view/list} [name]'
+    })
   }
 
   async run ({ message, args }) {

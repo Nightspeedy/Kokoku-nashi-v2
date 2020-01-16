@@ -3,19 +3,17 @@ const TYPES = require('@lib/types')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'queue',
       description: 'Check the song queue',
       type: TYPES.MUSIC,
       args: '',
       aliases: ['songqueue', 'sq', 'que']
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  async run ({ message, args, color }) {
+  async run ({ message }) {
     const voiceChannel = message.member.voiceChannel
     if (!voiceChannel) return this.error({ message: 'Please join a voice channel before using this command!' }, { message })
     // const permissions = voiceChannel.permissionsFor(this.bot.user)

@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { RichEmbed, MessageMentions } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'say',
       description: 'Make the bot say something',
       type: TYPES.UTILITY,
       args: '[#channel] {...message}',
-      cooldownTime: 10 * 1000
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      cooldownTime: 10
+    })
   }
 
   async run ({ message, args }) {
@@ -70,7 +68,7 @@ module.exports = class extends Command {
     // Put the message in an embed.
     const embed = new RichEmbed(content)
       .setFooter(message.author.tag, message.author.displayAvatarURL)
-      .setTitle(content)
+      .setDescription(content) // Title has a short char limit.
       .setTimestamp(new Date())
 
     message.delete()

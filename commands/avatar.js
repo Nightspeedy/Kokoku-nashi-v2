@@ -5,39 +5,31 @@ const ERROR = require('@lib/errors')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'avatar',
       description: "Get your avater, or someone else's",
       type: TYPES.UTILITY,
       args: '[@user]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {
     const embed = new RichEmbed()
       .setColor(color)
 
-    if (!args[0]) {
-      embed.setTitle(message.author.tag)
-        .setColor(color)
-        .setDescription(`Here you go, |[Click me](${message.author.displayAvatarURL})|`)
-        .setImage(message.author.displayAvatarURL)
-
-      message.channel.send(embed).catch(e => {})
-    }
+    let user = message.author
     if (args[0]) {
-      const member = await this.mention(args[0], message)
-      if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-
-      embed.setTitle(member.tag)
-        .setColor(color)
-        .setDescription(`Here you go, |[Click me](${member.displayAvatarURL})|`)
-        .setImage(member.displayAvatarURL)
-
-      message.channel.send(embed).catch(e => {})
+      user = await this.mention(args[0], message)
     }
+
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+
+    embed.setTitle(user.tag)
+      .setColor(color)
+      .setDescription(`Here you go, |[Click me](${user.displayAvatarURL})|`)
+      .setImage(user.displayAvatarURL)
+
+    await message.channel.send(embed).catch(e => {})
   }
 }

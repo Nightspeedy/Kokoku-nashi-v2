@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'quote',
       aliases: ['q'],
       description: 'Quote a specific message, or a user\'s last message.',
       type: TYPES.SOCIAL,
       args: '{message id | @user}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {

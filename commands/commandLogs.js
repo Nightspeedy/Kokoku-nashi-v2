@@ -5,27 +5,26 @@ const ERROR = require('@lib/errors')
 const { CommandLogs } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'commandlogs',
       aliases: ['cmdlog'],
       description: 'Searh the command logs.',
       type: TYPES.BOT_OWNER,
-      args: '@mention',
-      bot
-    }) // Pass the appropriate command information to the base class.
+      args: '@mention'
+    })
   }
 
   async run ({ message, args }) {
-    const member = args[0] ? this.mention(args[0], message) : message.author
-    if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+    const user = args[0] ? await this.mention(args[0], message) : message.author
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
-    const logs = await CommandLogs.find({ user: member.id }).sort({ timestamp: -1 }).limit(5)
+    const logs = await CommandLogs.find({ user: user.id }).sort({ timestamp: -1 }).limit(5)
 
     message.channel.send({
       embed: {
         color: 0x3A6AE9,
-        title: `Command Logs for ${member.tag}`,
+        title: `Command Logs for ${user.tag}`,
         description: '',
         fields: logs.map(log => ({
           name: log.command,

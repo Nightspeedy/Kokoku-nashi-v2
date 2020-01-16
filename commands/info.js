@@ -6,16 +6,14 @@ const { Member } = require('@lib/models')
 const version = require('../package.json').version
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'info',
       aliases: ['uptime', 'onlinetime', 'shardinfo', 'ping', 'pong'],
-      description: 'Shows the shard\'s uptime!',
+      description: "Shows the shard's uptime!",
       type: TYPES.UTILITY,
       args: '[@mention]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, color }) {
@@ -35,16 +33,12 @@ module.exports = class extends Command {
       seconds
     ]
     const str = [
-      'Days',
-      'Hours',
-      'Minutes',
-      'Seconds'
+      'Day',
+      'Hour',
+      'Minute',
+      'Second'
     ]
-
-    if (time[0] === 1) str[0] = 'Day'
-    if (time[1] === 1) str[1] = 'Hour'
-    if (time[2] === 1) str[2] = 'Minute'
-    if (time[3] === 1) str[3] = 'Second'
+    for (let i = 0; i < str.length; i++) { if (time[i] !== 1) str[i] += 's' }
 
     const onlineTime = `${time[0]} ${str[0]}, ${time[1]} ${str[1]}, ${time[2]} ${str[2]}, ${time[3]} ${str[3]}`
     const shard = '#' + this.bot.shard.id
@@ -68,8 +62,8 @@ module.exports = class extends Command {
         .addField('Shard ID', shard)
         .addField('Shard Guilds', `In ${this.bot.guilds.size} Guilds`)
         .addField('Total Guilds', `In ${this.bot.guilds.size} Guilds.`)
-        .addField('Total users in Database', `Total users ${totalUsers}`)
-        .addField('API latency', Math.round(this.bot.ping) + 'ms')
+        .addField('Total users', `${totalUsers}`)
+        .addField('API latency', Math.floor(this.bot.ping) + 'ms')
         .addField('Shard latency', `${sent.createdTimestamp - message.createdTimestamp}ms`)
         .addField('Shard uptime', onlineTime)
 

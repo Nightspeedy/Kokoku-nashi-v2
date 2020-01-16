@@ -3,19 +3,17 @@ const TYPES = require('@lib/types')
 const ERROR = require('@lib/errors')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'reminder',
       aliases: ['remind'],
       description: 'Reminds you of something in several minutes.',
       type: TYPES.UTILITY,
       args: '{time in minutes} {...message to send}'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  async run ({ message, args, guild }) {
+  async run ({ message, args }) {
     const minutes = parseInt(args[0])
     const content = args.slice(1).join(' ')
 

@@ -5,15 +5,13 @@ const { RichEmbed } = require('discord.js')
 const { Gifs } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'kiss',
       description: 'Gives your best friend a kiss.',
       type: TYPES.SOCIAL,
       args: '[@mention]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {
@@ -26,15 +24,15 @@ module.exports = class extends Command {
 
     if (!args[0]) {
       embed.setTitle('I kissed you! :kissing_heart:')
-      await embed.setImage(gif)
+      embed.setImage(gif)
 
       message.channel.send(embed).catch(e => {})
     } else if (args[0]) {
       const member = await this.mention(args[0], message)
       if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
       embed.setTitle(`${message.author.username} kissed ${member.username}! :blush:`)
-      await embed.setImage(gif)
-      message.channel.send(embed).catch(e => {})
+      embed.setImage(gif)
+      await message.channel.send(embed).catch(e => {})
     }
   }
 }

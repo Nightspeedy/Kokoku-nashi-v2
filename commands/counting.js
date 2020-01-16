@@ -5,21 +5,18 @@ const { Counting } = require('@lib/models')
 const PERMISSIONS = require('@lib/permissions')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'counting',
       description: 'Configure the counting feature. To use; make a channel called Counting. {NUMBER} will be replaced with the last counted value \nAvailable: \nk!counting enable\nk!counting disable\nk!counting set-number [Number]\nk!counting set-description "description"\nk!counting set-double-message "Message to send for double posts"\nk!counting set-wrong-number "Message to send when someone counts a wrong number"',
       type: TYPES.MOD_COMMAND,
       args: '{Setting} {Value}',
       permissions: [PERMISSIONS.COUNTING]
-    }) // Pass the appropriate command information to the base class.
-
+    })
     this.fetch.guild = true
-
-    this.bot = bot
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args, guild }) {
     const counting = await Counting.findOne({ id: message.guild.id })
 
     if (!counting) return

@@ -4,7 +4,7 @@ const ERROR = require('@lib/errors')
 const PERMISSIONS = require('@lib/permissions')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'settings',
       aliases: ['config', 'configuration'],
@@ -12,11 +12,8 @@ module.exports = class extends Command {
       args: '{setting} {setting argument}',
       type: TYPES.MOD_COMMAND,
       permissions: [PERMISSIONS.SETTINGS]
-    }) // Pass the appropriate command information to the base class.
-
+    })
     this.fetch.guild = true
-
-    this.bot = bot
 
     // Metadata for the different types,
     // right now just used for help usage
@@ -40,13 +37,34 @@ module.exports = class extends Command {
       { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
       { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' },
       { type: 'toggle', name: 'autoroles', prettyName: 'Autoroles', dbField: 'autoRolesEnabled' }
-
-    ]
-    this.categories = [
-
     ]
 
     this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type].usage}` })
+  }
+
+  async run ({ message, args, guild }) {
+    if (!args[0]) {
+      return this.overview({ message, guild })
+    } else {
+      // Get the setting from this.settings
+      const setting = this.settings.find(setting => setting.name === args[0].toLowerCase())
+      if (!setting) return this.error({ message: 'Couldn\'t find that setting.' }, { message })
+
+      try {
+        // Check if setting needs premium and, if so, the guild has premuim.
+        if (setting.needsPremium && !guild.isPremium) return this.error(ERROR.NEEDS_PREMIUM, { message })
+
+        // This class has functions named after the possible types.
+        // Therefore you can do this[type]() to run the types handler.
+        // Ex. {type=text}, this[setting.type]() === this.text()
+        this[setting.type]({ message, args, guild, setting })
+
+        return this.success('Setting Updated', `<:Enabled:524627369386967042> Successfully updated \`${setting.name}\``, { message })
+      } catch (e) {
+        console.error(e)
+        return this.error(ERROR.TRY_AGAIN, { message })
+      }
+    }
   }
 
   // Updates a single field in a provided document.
@@ -85,31 +103,6 @@ module.exports = class extends Command {
     await this.update(guild, setting.dbField, value)
   }
 
-  async run ({ message, args, guild, color }) {
-    if (!args[0]) {
-      return this.overview({ message, guild })
-    } else {
-      // Get the setting from this.settings
-      const setting = this.settings.find(setting => setting.name === args[0].toLowerCase())
-      if (!setting) return this.error({ message: 'Couldn\'t find that setting.' }, { message })
-
-      try {
-        // Check if setting needs premium and, if so, the guild has premuim.
-        if (setting.needsPremium && !guild.isPremium) return this.error(ERROR.NEEDS_PREMIUM, { message })
-
-        // This class has functions named after the possible types.
-        // Therefore you can do this[type]() to run the types handler.
-        // Ex. {type=text}, this[setting.type]() === this.text()
-        this[setting.type]({ message, args, guild, setting })
-
-        return this.success('Setting Updated', `<:Enabled:524627369386967042> Successfully updated \`${setting.name}\``, { message })
-      } catch (e) {
-        console.error(e)
-        return this.error(ERROR.TRY_AGAIN, { message })
-      }
-    }
-  }
-
   async overview ({ message, guild }) {
     const fields = { text: [], channel: [], toggle: [] }
     const [enabled, disabled] = ['<:Enabled:524627369386967042>', '<:Disabled:524627368757690398>']
@@ -138,6 +131,5 @@ module.exports = class extends Command {
         timestamp: new Date()
       }
     }).catch(e => {})
-    // message.channel.send(JSON.stringify(guild)).catch(e => {})
   }
 }

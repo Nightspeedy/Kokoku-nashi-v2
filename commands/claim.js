@@ -11,15 +11,13 @@ module.exports = class extends Command {
       alias: ['claim', 'dailies'],
       type: TYPES.UTILITY,
       args: ''
-    }) // Pass the appropriate command information to the base class.
+    })
 
     this.wallet = bot.config.wallet
     this.orbt = bot.ORBT
-
-    this.fetch.member = true
   }
 
-  async run ({ message, args, member, color }) {
+  async run ({ message, member }) {
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
     const aDay = 1000 * 60 * 60 * 24

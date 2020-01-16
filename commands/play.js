@@ -1,23 +1,24 @@
 const Command = require('@lib/command')
 const TYPES = require('@lib/types')
 const ytdl = require('ytdl-core')
+const ERROR = require('@lib/errors')
 const { Queue } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'play',
       description: 'Play a song',
       type: TYPES.MUSIC,
       args: '[YT_URL]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  async run ({ message, args, color }) {
+  // TODO: Rewrite this entire command and improve its stability and speed.
+
+  async run ({ message, args }) {
     const voiceChannel = message.member.voiceChannel
-    if (!voiceChannel) return this.error({ message: 'Please join a voice channel before using this command!' }, { message })
+    if (!voiceChannel) return this.error(ERROR.NOT_IN_VC, message)
     // const permissions = voiceChannel.permissionsFor(this.bot.user)
     // TODO: Make a check and see if the bot has permissions to speak and connect to the vc, does not currently work
     // if(!permissions.has("CONNECT") || !permissions.has("SPEAK")) return this.error({message: "The bot has no permission to join or speak in the voice channel you're currently connected to"}, message)

@@ -10,17 +10,13 @@ module.exports = class extends Command {
       name: 'wallet',
       description: 'Check your, or someone elses wallet.',
       type: TYPES.UTILITY,
-      args: '[@mention]',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
+      args: '[@mention]'
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
-  async run ({ message, args, guild, color }) {
-    const member = args[0] ? this.mention(args[0], message) : message.author
+  async run ({ message, args }) {
+    const member = args[0] ? await this.mention(args[0], message) : message.author
 
     if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 

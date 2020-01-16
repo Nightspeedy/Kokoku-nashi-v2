@@ -4,16 +4,13 @@ const { RichEmbed } = require('discord.js')
 const { Strings, DisabledCommand } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'help',
       description: "The help command, you're using this dummy!",
       type: TYPES.UTILITY,
       args: '[Command]'
-    }) // Pass the appropriate command information to the base class.
-    this.fetch.member = true // Fetch the Member object from DB on trigger.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args, color }) {
@@ -38,9 +35,6 @@ module.exports = class extends Command {
     const embed = new RichEmbed()
       .setColor(color)
 
-    // Total commands, will get value later
-    let i = 0
-
     if (args[0]) {
       const command = args[0]
 
@@ -54,6 +48,8 @@ module.exports = class extends Command {
         .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon't include example brackets in your command ( [] or {} )\n\n ${cmddesc}`)
         .addField('Usage:', `k!${command} ${cmdargs}`)
     } else {
+      // Total commands, will get value later
+      let i = 0
       this.bot.cmdhandler.commands.forEach(cmd => {
         if (object[cmd.type].indexOf(`\`${cmd.name}\``) > -1) return
         i++

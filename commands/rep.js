@@ -5,21 +5,18 @@ const { RichEmbed } = require('discord.js')
 const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'reputation',
       aliases: ['rep', 'giverep'],
       description: 'Send the bot invite URL via DM',
       type: TYPES.SOCIAL,
       args: ''
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
-  async run ({ message, color, args }) {
+  async run ({ message, color, args, member }) {
     // Gift by mention
-    const member = await Member.findOne({ id: message.author.id })
     if (member && !args[0]) {
       if (member.repLastGiven + 86100000 > Date.now()) {
         let totalSeconds = (member.repLastGiven + 86100000) - Date.now()
@@ -37,7 +34,7 @@ module.exports = class extends Command {
       }
     }
 
-    const user = this.mention(args[0], message)
+    const user = await this.mention(args[0], message)
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
     if (user.bot) return this.error({ message: 'Bots dont have profiles!' }, { message, args })
     if (message.author.id === user.id) return this.error({ message: 'You cannot give yourself reputation!' }, { message, args })
@@ -46,7 +43,6 @@ module.exports = class extends Command {
 
     if (!memberMention) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
 
-    //
     if (member.repLastGiven + 86100000 > Date.now()) {
       let totalSeconds = (member.repLastGiven + 86100000) - Date.now()
 

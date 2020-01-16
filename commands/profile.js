@@ -10,18 +10,14 @@ const twemoji = require('twemoji')
 const pageres = new Pageres()
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'profile',
       aliases: ['account', 'me'],
-      description: 'Shows your, or someone\'s profile!',
+      description: "Shows your, or someone's profile!",
       type: TYPES.SOCIAL,
       args: '[@mention]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.member = true
-
-    this.bot = bot
+    })
   }
 
   async shot (profile, author, bg) {
@@ -57,7 +53,7 @@ module.exports = class extends Command {
     return shot
   }
 
-  async run ({ message, args, background, customMessage, onGenerated }) {
+  async run ({ message, args, background, customMessage, onGenerated, member }) {
     let user = message.author
 
     if (args[0]) {
@@ -67,14 +63,13 @@ module.exports = class extends Command {
 
     if (user.bot) return this.error({ message: "Bots don't have profiles!" }, { message })
 
-    let dbMember = await Member.findOne({ id: user.id })
-    if (!dbMember) {
-      dbMember = Member.create({ id: user.id })
+    if (!member) {
+      member = Member.create({ id: user.id })
     }
 
     const cardMsg = await message.channel.send('Generating profile...')
 
-    const buffer = await this.shot(dbMember, user, background)
+    const buffer = await this.shot(member, user, background)
 
     const image = new Attachment(buffer, 'profile.png')
     cardMsg.delete()

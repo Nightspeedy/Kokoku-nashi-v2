@@ -7,24 +7,19 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'transfer',
-      description: 'Check your, or someone elses wallet.',
+      description: 'Transfer money to someone else.',
       type: TYPES.UTILITY,
-      args: '{amount} {@mention}',
-      bot
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+      args: '{@mention} {amount}'
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     const me = message.member
-    const member = this.mention(args[0], message)
-    if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+    const user = await this.mention(args[0], message)
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
-    if (me.id === member.id) return this.error(ERROR.INVALID_ARGUMENTS, { message })
+    if (me.id === user.id) return this.error(ERROR.INVALID_ARGUMENTS, { message })
 
     const amount = parseFloat(args[1])
     if (isNaN(amount) || amount <= 0) return this.error(ERROR.INVALID_ARGUMENTS, { message })
@@ -37,7 +32,7 @@ module.exports = class extends Command {
       embed: {
         title: 'Confirm Transaction',
         color: 0x3A6AE9,
-        description: `Do you want to send ${amount} Kokoin to ${member.username}?`
+        description: `Do you want to send ${amount} Kokoin to ${user.username}?`
       }
     })
 
@@ -47,7 +42,7 @@ module.exports = class extends Command {
     const filter = (reaction, user) => {
       return ['no', 'yes'].includes(reaction.emoji.name) && user.id === message.author.id
     }
-    const embeds = this.orbt.embeds(amount, member.username)
+    const embeds = this.orbt.embeds(amount, user.username)
 
     try {
       const collected = await confirmation.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
@@ -55,7 +50,7 @@ module.exports = class extends Command {
 
       if (reaction._emoji.name === 'yes') {
         try {
-          const transaction = await this.orbt.transfer(me.id, member.id, amount)
+          const transaction = await this.orbt.transfer(me.id, user.id, amount)
           confirmation.edit({ embed: embeds.queued })
 
           transaction.status.on('processing', () => {

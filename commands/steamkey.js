@@ -9,36 +9,27 @@ module.exports = class extends Command {
       description: 'Adds/Removes/Lists steam keys',
       type: TYPES.BOT_OWNER,
       args: '{add/remove/list} [Game name] [Steam key]',
-      bot,
-      cooldownTime: 30 * 1000 // 30 seconds
-    }) // Pass the appropriate command information to the base class.
-
+      cooldownTime: 0
+    })
     this.orbt = bot.ORBT
-
-    this.fetch.guild = true
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     if (!args[0]) return
-    const preservedMsg = message
 
     switch (args[0]) {
       case 'add':
-        if (!args[1] || !args[2]) return
-        message.delete()
-
+        if (!args[1]) return
         try {
           const key = await Steamkeys.find({ key: args[2] })
           if (key[0]) return message.channel.send('That key already exists!')
           await Steamkeys.create({ name: `${args[1]}`, key: `${args[2]}` })
-          preservedMsg.channel.send('Added key to database.')
+          message.channel.send('Added key to database.')
         } catch (e) {
-          preservedMsg.channel.send('Something went wrong...')
+          message.channel.send('Something went wrong...')
           return console.log(e)
         }
-
-        return
-
+        break
       case 'remove':
         try {
           if (!args[1]) return
@@ -49,5 +40,6 @@ module.exports = class extends Command {
         }
         break
     }
+    message.delete()
   }
 }

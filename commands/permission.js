@@ -7,7 +7,7 @@ const { Permission } = require('@lib/models') // eslint-disable-line
 // const { RichEmbed } = require('discord.js')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'permissions',
       aliases: ['perms'],
@@ -15,9 +15,16 @@ module.exports = class extends Command {
       type: TYPES.GUILD_OWNER,
       args: '{set, list} {role name/id} {permission} {true/false}',
       permissions: [PERMISSIONS.GUILD_OWNER]
-    }) // Pass the appropriate command information to the base class.
+    })
+  }
 
-    this.bot = bot
+  async run ({ message, args }) {
+    if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    switch (args[0].toLowerCase()) {
+      case 'set': await this.set({ message, args }); break
+      case 'list': await this.list({ message, args }); break
+      default: return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    }
   }
 
   async set ({ message, args }) {
@@ -84,7 +91,7 @@ module.exports = class extends Command {
     }
   }
 
-  // very basic, make prettier later
+  // TODO: Make this prettier, it's very basic
   async list ({ message, args }) {
     const fields = []
 
@@ -131,14 +138,5 @@ module.exports = class extends Command {
         fields: fields
       }
     }).catch(e => { console.error(e) })
-  }
-
-  async run ({ message, args }) {
-    if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
-    switch (args[0].toLowerCase()) {
-      case 'set': await this.set({ message, args }); break
-      case 'list': await this.list({ message, args }); break
-      default: return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
-    }
   }
 }

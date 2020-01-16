@@ -3,16 +3,14 @@ const TYPES = require('@lib/types')
 const { DisabledCommand } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'disable',
       description: 'Disable a command.',
       type: TYPES.GUILD_OWNER,
       args: '{command}',
       cooldownTime: 2
-    }) // Pass the appropriate command information to the base class.
-
-    this.bot = bot
+    })
   }
 
   async run ({ message, args }) {

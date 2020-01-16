@@ -4,24 +4,22 @@ const ERROR = require('@lib/errors')
 const { Member, Background } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor (bot) {
+  constructor () {
     super({
       name: 'user',
       description: 'Change user variables (levels/reputation/exp and much more)',
       type: TYPES.BOT_OWNER,
       args: '{@mention} {variable} [new value]'
-    }) // Pass the appropriate command information to the base class.
-
-    this.fetch.guild = true
+    })
   }
 
-  async run ({ message, args, guild, color }) {
+  async run ({ message, args }) {
     // Error checking
-    const member = this.mention(args[0], message)
-    if (!member) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
+    const user = await this.mention(args[0], message)
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
 
-    const user = await Member.findOne({ id: member.id })
-    if (!user) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
+    const member = await Member.findOne({ id: user.id })
+    if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
 
     const action = args[1].toLowerCase()
 
