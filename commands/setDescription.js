@@ -24,7 +24,7 @@ module.exports = class extends Command {
         }
       } else {
         const newDescription = String(args[0])
-        if (newDescription.length > 256) return this.error({ message: 'Your description may not be longer then 256 characters!' }, { message, args })
+        if (newDescription.length > 32) return this.error({ message: 'Your description may not be longer than 32 characters!' }, { message, args })
         try {
           await member.updateOne({ description: args[0] })
           return message.channel.send('Successfully updated profile information!').catch(e => {})
