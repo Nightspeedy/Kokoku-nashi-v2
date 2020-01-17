@@ -8,6 +8,7 @@ module.exports = class extends Command {
   constructor () {
     super({
       name: 'avatar',
+      aliases: ['av', 'profileimage'],
       description: "Get your avater, or someone else's",
       type: TYPES.UTILITY,
       args: '[@user]'
