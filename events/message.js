@@ -20,6 +20,4 @@ module.exports = class extends Event {
 
     this.cmdhandler.handle(message)
   }
-
-  // TODO: add this to commandHandler, and ONLY execute if it is a command
 }
