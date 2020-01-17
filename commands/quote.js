@@ -16,7 +16,10 @@ module.exports = class extends Command {
   async run ({ message, args }) {
     // This uses the last fetched message from the user.
     if (args[0]) {
-      const mentioned = await this.mention(args[0])
+      let mentioned = await this.mention(args[0], message)
+      if (mentioned) {
+        mentioned = await message.guild.fetchMember(mentioned)
+      }
       var quoted = mentioned ? mentioned.lastMessage : undefined
     } else {
       return this.error({ message: 'Please specify a message or member to quote.' }, { message })

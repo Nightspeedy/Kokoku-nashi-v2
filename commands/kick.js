@@ -18,7 +18,13 @@ module.exports = class extends Command {
   async run ({ message, args, guild }) {
     if (!message.guild.me.hasPermission('KICK_MEMBERS')) return this.error(ERROR.BOT_NO_PERMISSION, { message, args })
 
-    const memberToKick = await this.mention(args[0], message)
+    let memberToKick
+    try {
+      memberToKick = await message.guild.fetchMember(await this.mention(args[0], message))
+    } catch (e) {
+      if (!(e.name === 'DiscordAPIError' && e.message === 'Unknown Member' && e.code === 10007)) throw e
+      return this.error(ERROR.MEMBER_NOT_FOUND, { message, args })
+    }
     const reason = args[1]
 
     if (!memberToKick) return this.error(ERROR.UNKNOWN_MEMBER, { message, args })
