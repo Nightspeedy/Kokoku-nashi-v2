@@ -20,39 +20,6 @@ module.exports = class extends Command {
     })
   }
 
-  async shot (profile, author, bg) {
-    const background = (bg || profile.selectedBackground) ? await Background.findOne({ name: bg || profile.selectedBackground }) : {}
-    const emoji = await new Promise(resolve => twemoji.parse(
-      profile.emoji,
-      { callback: function (icon, options) { resolve(icon + '.png') } }))
-
-    let wallet = await this.bot.ORBT.wallet(author.id)
-    if (!wallet) wallet = { value: 0 }
-
-    const queries = {
-      avatar: author.avatarURL,
-      level: profile.level,
-      currentXP: profile.exp,
-      nextXP: profile.level * 200,
-      name: author.username,
-      emojiAlt: profile.emoji,
-      emojiLink: emoji,
-      title: profile.title,
-      description: profile.description,
-      reps: profile.reputation,
-      credits: wallet.value.toFixed(0),
-      backgroundURL: background.url || '',
-      filters: background.filters || 'none',
-      css: background.css || ''
-    }
-    const queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
-
-    const shot = Buffer.from((await pageres
-      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'], { delay: 0.2 })
-      .run())[0])
-    return shot
-  }
-
   async run ({ message, args, background, customMessage, onGenerated, member }) {
     let user = message.author
 
@@ -86,5 +53,38 @@ module.exports = class extends Command {
     pageres._source = []
     pageres.sizes = ['400x600']
     pageres.stats = { urls: 0, sizes: 1, screenshots: 0 }
+  }
+
+  async shot (profile, author, bg) {
+    const background = (bg || profile.selectedBackground) ? await Background.findOne({ name: bg || profile.selectedBackground }) : {}
+    const emoji = await new Promise(resolve => twemoji.parse(
+      profile.emoji,
+      { callback: function (icon, options) { resolve(icon + '.png') } }))
+
+    let wallet = await this.bot.ORBT.wallet(author.id)
+    if (!wallet) wallet = { value: 0 }
+
+    const queries = {
+      avatar: author.avatarURL,
+      level: profile.level,
+      currentXP: profile.exp,
+      nextXP: profile.level * 200,
+      name: author.username,
+      emojiAlt: profile.emoji,
+      emojiLink: emoji,
+      title: profile.title,
+      description: profile.description,
+      reps: profile.reputation,
+      credits: wallet.value.toFixed(0),
+      backgroundURL: background.url || '',
+      filters: background.filters || 'none',
+      css: background.css || ''
+    }
+    const queryString = encodeURIComponent(Buffer.from(JSON.stringify(queries)).toString('base64'))
+
+    const shot = Buffer.from((await pageres
+      .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'], { delay: 0.2 })
+      .run())[0])
+    return shot
   }
 }
