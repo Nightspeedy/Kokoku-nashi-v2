@@ -26,7 +26,7 @@ module.exports = class extends Command {
       embed.setTitle('I kissed you! :kissing_heart:')
         .setImage(gif)
 
-      return await message.channel.send(embed).catch(e => {})
+      return message.channel.send(embed).catch(e => {})
     }
 
     const user = await this.mention(args[0], message)
