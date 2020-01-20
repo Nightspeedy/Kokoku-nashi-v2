@@ -20,6 +20,41 @@ module.exports = class extends Command {
     })
   }
 
+  async run ({ message, args, background, customMessage, onGenerated, member }) {
+    let user = message.author
+
+    if (args[0]) {
+      user = await this.mention(args[0], message)
+      if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+    }
+
+    if (user.bot) return this.error({ message: "Bots don't have profiles!" }, { message })
+
+    if (member.id !== user.id) {
+      member = await Member.findOne({ id: user.id })
+    }
+
+    const cardMsg = await message.channel.send('Generating profile...')
+
+    const buffer = await this.shot(member, user, background)
+
+    const image = new Attachment(buffer, 'profile.png')
+    cardMsg.delete()
+
+    const sentMessage = await message.channel.send(customMessage || `:sparkles: **Profile card for ${user.username}** :sparkles:`, {
+      files: [image]
+    })
+
+    onGenerated && onGenerated(sentMessage.attachments.first().url)
+
+    // Reset pageres, Dumb hack to prevent memory leaks
+    pageres.items = []
+    pageres.urls = []
+    pageres._source = []
+    pageres.sizes = ['400x600']
+    pageres.stats = { urls: 0, sizes: 1, screenshots: 0 }
+  }
+
   async shot (profile, author, bg) {
     const background = (bg || profile.selectedBackground) ? await Background.findOne({ name: bg || profile.selectedBackground }) : {}
     const emoji = await new Promise(resolve => twemoji.parse(
@@ -51,40 +86,5 @@ module.exports = class extends Command {
       .src(`http://localhost:8080/profile/card?data=${queryString}`, ['400x600'], { delay: 0.2 })
       .run())[0])
     return shot
-  }
-
-  async run ({ message, args, background, customMessage, onGenerated, member }) {
-    let user = message.author
-
-    if (args[0]) {
-      user = await this.mention(args[0], message)
-      if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-    }
-
-    if (user.bot) return this.error({ message: "Bots don't have profiles!" }, { message })
-
-    if (!member) {
-      member = Member.create({ id: user.id })
-    }
-
-    const cardMsg = await message.channel.send('Generating profile...')
-
-    const buffer = await this.shot(member, user, background)
-
-    const image = new Attachment(buffer, 'profile.png')
-    cardMsg.delete()
-
-    const sentMessage = await message.channel.send(customMessage || `:sparkles: **Profile card for ${user.username}** :sparkles:`, {
-      files: [image]
-    })
-
-    onGenerated && onGenerated(sentMessage.attachments.first().url)
-
-    // Reset pageres, Dumb hack to prevent memory leaks
-    pageres.items = []
-    pageres.urls = []
-    pageres._source = []
-    pageres.sizes = ['400x600']
-    pageres.stats = { urls: 0, sizes: 1, screenshots: 0 }
   }
 }
