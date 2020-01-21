@@ -29,10 +29,9 @@ module.exports = class extends Command {
   async action_reset ({ member, message }) {//eslint-disable-line
     const userID = member.id
     await member.deleteOne()
-    await Member.create({ id: userID })
-    member = await Member.findOne({ id: userID })
+    member = await Member.create({ id: userID })
     if (!member) {
-      return this.error({ message: 'Couldn\'t create new profile' }, { message })
+      return this.error({ message: 'Couldn\'t reset profile!' }, { message })
     } else {
       this.success('Profile has been reset', 'Successfully reset user profile', { message })
     }
