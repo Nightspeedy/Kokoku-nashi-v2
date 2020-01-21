@@ -24,15 +24,15 @@ module.exports = class extends Command {
 
     if (!args[0]) {
       embed.setTitle('I kissed you! :kissing_heart:')
-      embed.setImage(gif)
+        .setImage(gif)
 
-      message.channel.send(embed).catch(e => {})
-    } else if (args[0]) {
-      const member = await this.mention(args[0], message)
-      if (typeof member !== 'object') return this.error(ERROR.MEMBER_NOT_FOUND, { message })
-      embed.setTitle(`${message.author.username} kissed ${member.username}! :blush:`)
-      embed.setImage(gif)
-      await message.channel.send(embed).catch(e => {})
+      return message.channel.send(embed).catch(e => {})
     }
+
+    const user = await this.mention(args[0], message)
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+    embed.setTitle(`${message.author.username} kissed ${user.username}! :blush:`)
+      .setImage(gif)
+    await message.channel.send(embed)
   }
 }
