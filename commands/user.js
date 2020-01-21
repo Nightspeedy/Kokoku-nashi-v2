@@ -27,9 +27,8 @@ module.exports = class extends Command {
 
   // Reset a user profile
   async action_reset ({ member, message }) {//eslint-disable-line
-    const userID = member.id
     await member.deleteOne()
-    member = await Member.create({ id: userID })
+    member = await Member.create({ id: member.id })
     if (!member) {
       return this.error({ message: 'Couldn\'t reset profile!' }, { message })
     } else {
