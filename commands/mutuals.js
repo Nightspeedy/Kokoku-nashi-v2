@@ -1,3 +1,6 @@
+const Command = require('@lib/command')
+const TYPES = require('@lib/types')
+
 module.exports = class extends Command {
   constructor () {
     super({
@@ -10,8 +13,13 @@ module.exports = class extends Command {
   }
 
   async run ({ message }) {
-    `this.guilds.filter(async guild=>await guild.fetchMember())`
-
-    this.bot.shard.broadcastEval('')
+    const shared = await this.bot.utils.mutuals(message.author)
+    await message.channel.send('Sending a list of mutual guilds to your DMs')
+    await message.author.send({
+      embed: {
+        title: 'These are the guilds you share with me.',
+        description: shared.map(guild => `${guild.name} [Link](https://discordapp.com/channels/${guild.id} "link to guild")`).join('\n')
+      }
+    })
   }
 }

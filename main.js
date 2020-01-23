@@ -3,6 +3,7 @@ const DatabaseConnection = require('@lib/database')
 const Handler = require('@lib/eventHandler')
 const ORBTConnection = require('@lib/orbt')
 const TimedActionHandler = require('@lib/timedActionHandler')
+const Utils = require('@lib/utility')
 
 module.exports = class Main {
   constructor () {
@@ -23,6 +24,9 @@ module.exports = class Main {
     this.devPrefix = this.config.devPrefix
 
     this.bot.config = this.config
+
+    // Adding utility methods
+    this.bot.utils = new Utils(this.bot)
 
     // Setting up database
     this.DB = new DatabaseConnection(this.bot, this.config.db)
