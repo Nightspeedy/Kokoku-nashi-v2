@@ -19,7 +19,7 @@ module.exports = class extends Command {
     const user = args[0] ? await this.mention(args[0], message) : message.author
     if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
 
-    const logs = await CommandLogs.find({ user: user.id }).sort({ timestamp: -1 }).limit(5)
+    const logs = await CommandLogs.find({ user: user.id }).sort({ timestamp: -1 }).limit(25)
 
     message.channel.send({
       embed: {
