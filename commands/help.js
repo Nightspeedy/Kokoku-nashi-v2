@@ -36,17 +36,17 @@ module.exports = class extends Command {
       .setColor(color)
 
     if (args[0]) {
-      const command = args[0]
+      const cmd = this.bot.cmdhandler.commands.get(args[0])
 
-      if (!this.bot.cmdhandler.commands.get(command)) return this.error({ message: `Command '${command}' is unknown!` }, { message, args })
+      if (!cmd) return this.error({ message: `Command '${args[0]}' is unknown!` }, { message, args })
 
-      const cmddesc = this.bot.cmdhandler.commands.get(command).description
-      const cmdargs = this.bot.cmdhandler.commands.get(command).args
-
-      embed.setTitle('Command help: ' + args[0])
+      embed.setTitle('Command help: ' + cmd.name)
         .setColor(color)
-        .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon't include example brackets in your command ( [] or {} )\n\n ${cmddesc}`)
-        .addField('Usage:', `k!${command} ${cmdargs}`)
+        .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon't include example brackets in your command ( [] or {} )\n\n ${cmd.description}`)
+      if (cmd.aliases.length > 0) {
+        embed.addField('Aliases:', `\`${cmd.aliases.join('`, `')}\``)
+      }
+      embed.addField('Usage:', `k!${cmd.name} ${cmd.args}`)
     } else {
       // Total commands, will get value later
       let i = 0
