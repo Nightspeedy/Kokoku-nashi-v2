@@ -9,6 +9,7 @@
   "author": "Nightspeedy",
   "license": "All rights reserved",
   "dependencies": {
+    "aki-api": "^3.2.1",
     "deep-object-diff": "^1.1.0",
     "diff": "^4.0.1",
     "discord.js": "^11.5.1",
