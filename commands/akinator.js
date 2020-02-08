@@ -10,6 +10,7 @@ module.exports = class extends Command {
       name: 'akinator',
       aliases: ['aki'],
       description: 'Let Akinator guess the character you have in mind!',
+      args: '',
       type: TYPES.GAMES
     })
 
