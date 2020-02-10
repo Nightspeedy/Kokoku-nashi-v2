@@ -53,18 +53,24 @@ module.exports = class extends Command {
     }
 
     const embed = new RichEmbed()
-    step === 79 ? embed.setTitle('Akinator - Final question') : embed.setTitle('Akinator')
+    step === 80 ? embed.setTitle('Akinator - Final question') : embed.setTitle('Akinator')
     embed.setDescription(`**Q${step}:** ${data.question ? data.question : data.nextQuestion}`)
-      .setFooter('Possible answers are: Yes, No, Don\'t know, Probably, Probably not.')
+      .setFooter('Possible answers are: Yes, No, Don\'t know, Probably, Probably not, Exit.')
     await message.channel.send(embed)
 
     const filter = m => {
+      data.answers.push('Exit')
       return m.author.id === message.author.id && data.answers.map(answer => answer.toLowerCase()).includes(m.content.toLowerCase())
     }
 
     collector = await message.channel.createMessageCollector(filter, { time: 60000, maxMatches: 1 })
 
     collector.on('collect', collected => {
+      if (collected.content.toLowerCase() === 'exit') {
+        message.channel.send('The game has been stopped')
+        return collector.stop()
+      }
+
       const answerId = data.answers.map(answer => answer.toLowerCase()).indexOf(collected.content.toLowerCase())
 
       Akinator.step(region, session, signature, answerId, data.nextStep || 0)
