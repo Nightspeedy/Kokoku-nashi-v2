@@ -78,7 +78,7 @@ Throw an error embed when something goes wrong.
 | BOT_NO_PERMISSION       | { message: 'I don\'t have permission to do this!' }                                                            |
 | ROLE_NOT_FOUND          | { message: 'This role does not exist!' }                                                                       |
 | INSUFFICIENT_FUNDS      | { message: 'You don\'t have the funds to do this!' }                                                           |
-| TIMEOUT(date)           | { message: 'You can't do that yet! Time remaining: XX hours, XX minutes and XX seconds.' }                               |
+| TIMEOUT(date)           | { message: 'You can't do that yet! Time remaining: XX hours, XX minutes and XX seconds.' }                     |
 | OTHER                   | { message: 'Unknown error! It has been sent to my developers for further investigation!' }                     |
 
 #### Usage
@@ -116,3 +116,65 @@ return this.success(
     { message }
 )
 ```
+<a name='command-run'>
+
+### Run
+
+</a>
+
+The main function, to be overridden by class extension
+
+#### Usage
+
+```js
+
+const Command = require('@lib/command') // The command file this class extends from.
+const TYPES = require('@lib/types')
+const ERROR = require('@lib/errors')
+const { RichEmbed } = require('discord.js')
+
+module.exports = class extends Command {
+  constructor () {
+    super({
+      name: 'avatar', // The name of the command
+      aliases: ['av', 'profileimage'], // The command aliases, this is an array
+      description: "Get your avater, or someone else's", // The command description
+      type: TYPES.UTILITY, // The type of command, this will put it in a certain category
+      args: '[@user]' // Any arguments this command takes
+    })
+  }
+
+  async run ({ message, args, color }) { // The overridden run function
+    const embed = new RichEmbed()
+      .setColor(color)
+
+    let user = message.author
+    if (args[0]) {
+      user = await this.mention(args[0], message)
+    }
+
+    if (!user) return this.error(ERROR.MEMBER_NOT_FOUND, { message })
+
+    embed.setTitle(user.tag)
+      .setColor(color)
+      .setDescription(`Here you go, |[Click me](${user.displayAvatarURL})|`)
+      .setImage(user.displayAvatarURL)
+
+    await message.channel.send(embed).catch(e => {})
+  }
+}
+
+```
+
+#### Types
+
+| Types.js Exports        |  Brief explanation                                                  |
+|-------------------------|---------------------------------------------------------------------|
+| TYPES.GENERAL           | The general commands, able to be used by anyone                     |
+| TYPES.MOD_COMMAND       | Commands that need a specific Kokoku Nashi permission.              |
+| TYPES.GUILD_OWNER       | Commands that are only able to be used by the guild owner.          |
+| TYPES.BOT_OWNER         | Commands that can only be used by Bot owners                        |
+| TYPES.UTILITY           | Utility commands, handy commands that do handy things               |
+| TYPES.SOCIAL            | Social commands, things like k!profile, or k!reputation             |
+| TYPES.GAMES             | Game commands, these are for text-based games                       |
+| TYPES.MUSIC             | Music commands, pretty self explanatory                             |
