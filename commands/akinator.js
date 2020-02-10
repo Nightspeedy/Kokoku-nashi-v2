@@ -47,18 +47,18 @@ module.exports = class extends Command {
 
   async guess (data, message, session, region, step, signature) {
     if (data.progress) {
-      if (data.progress > 80) {
+      if (data.progress > 80 || step > 80) {
         return this.win(data, message, session, region, signature)
       }
     }
 
     const embed = new RichEmbed()
-      .setTitle('Akinator')
-      .setDescription(`**Q${step}:** ${data.question ? data.question : data.nextQuestion}`)
+    step === 79 ? embed.setTitle('Akinator - Final question') : embed.setTitle('Akinator')
+    embed.setDescription(`**Q${step}:** ${data.question ? data.question : data.nextQuestion}`)
       .setFooter('Possible answers are: Yes, No, Don\'t know, Probably, Probably not.')
     await message.channel.send(embed)
 
-    function filter (m) {
+    const filter = m => {
       return m.author.id === message.author.id && data.answers.map(answer => answer.toLowerCase()).includes(m.content.toLowerCase())
     }
 
@@ -88,7 +88,7 @@ module.exports = class extends Command {
 
     await message.channel.send('I think I got it!', { embed })
 
-    function filter (m) {
+    const filter = m => {
       return m.author.id === message.author.id && ['yes', 'no'].includes(m.content.toLowerCase())
     }
 
