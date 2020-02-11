@@ -35,11 +35,19 @@ module.exports = class extends Command {
   }
 
   async run ({ message, args, color }) {
-    let region = 'en'
-    let data = await Akinator.start(region)
-    if (!data) {
-      region = 'en2'
-      data = await Akinator.start(region)
+    let data, region
+    try {
+      data = await Akinator.start('en')
+      region = 'en'
+    } catch (e) {
+      console.log(e)
+      try {
+        data = await Akinator.start('en2')
+        region = 'en2'
+      } catch (e) {
+        console.log(e)
+        return message.channel.send('The akinator servers are having technical difficulties, Please try again later')
+      }
     }
     await message.channel.send(`**Akinator:** ${this.startMessages[Math.floor(Math.random() * this.startMessages.length)]}`)
     await this.guess(data, message, data.session, region, 1, data.signature)
