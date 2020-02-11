@@ -144,7 +144,7 @@ module.exports = class extends Command {
     })
   }
 
-  async run ({ message, args, color }) { // The overridden run function
+  async run ({ message, args, member, guild, color }) { // The overridden run function
     const embed = new RichEmbed()
       .setColor(color)
 
