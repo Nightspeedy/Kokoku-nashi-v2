@@ -35,8 +35,9 @@ module.exports = class extends Command {
       { type: 'channel', name: 'logchannel', prettyName: 'Log Channel', dbField: 'logChannel' },
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
       { type: 'toggle', name: 'sendleavemessages', prettyName: 'Send Leave Messages', dbField: 'enableLeaveMessage' },
-      { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages', dbField: 'enableBanMessage' },
-      { type: 'toggle', name: 'autoroles', prettyName: 'Autoroles', dbField: 'autoRolesEnabled' }
+      { type: 'toggle', name: 'sendbanmessages', prettyName: 'Send Ban Messages (broken)', dbField: 'enableBanMessage' },
+      { type: 'toggle', name: 'autoroles', prettyName: 'Autoroles', dbField: 'autoRolesEnabled' },
+      { type: 'toggle', name: 'sendlogfiles', prettyName: 'Enable log files', dbField: 'enableLogfiles' }
     ]
 
     this.settings.forEach(setting => { this.description += `\n${setting.name} ${this.types[setting.type].usage}` })
