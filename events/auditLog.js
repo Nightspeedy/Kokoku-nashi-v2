@@ -14,7 +14,7 @@ module.exports = class extends Event {
         if (args[0].author && args[0].author.bot) return
 
         const guild = await Guild.findOne({ id: (args[0].guild).id })
-        if (!guild.logChannel) return
+        if (!guild.logChannel || !guild.enableLogfiles) return
 
         const body = event.message(...args)
         const isObject = typeof (body) === 'object'
