@@ -47,6 +47,5 @@ module.exports = class extends Command {
     } else if (reaction._emoji.name === 'no') {
       return confirmation.delete()
     }
-    return this.error(ERROR.NOT_IN_VC, { message })
   }
 }

@@ -29,15 +29,21 @@ module.exports = class extends Command {
     if (args[0]) {
       try {
         var video = await ytdl.getInfo(args[0])
-        // const check = video.title
-        // this is a bit of a weird wonky way of finding out whether or not video is null, but it works.
       } catch (e) {
+        return this.error({ message: 'Invalid  youtube link!' }, { message })
+      }
+    } else {
+      if (queue && queue.paused) {
+        message.guild.voiceConnection.dispatcher.resume()
+        await queue.updateOne({ paused: false })
+        return message.channel.send('Resumed playback.')
+      } else {
         return this.error({ message: 'Invalid  youtube link!' }, { message })
       }
     }
 
     if (!queue && args[0]) {
-      await Queue.create({
+      queue = await Queue.create({
         id: message.guild.id,
         textChannel: message.channel.id,
         voiceChannel: voiceChannel,
@@ -46,8 +52,6 @@ module.exports = class extends Command {
           url: video.video_url
         }
       })
-
-      queue = await Queue.findOne({ id: message.guild.id })
       await queue.updateOne({ isPlaying: true })
       this.play(voiceChannel, message, undefined)
     } else {
