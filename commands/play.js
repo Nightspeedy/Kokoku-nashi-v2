@@ -19,9 +19,6 @@ module.exports = class extends Command {
   async run ({ message, args }) {
     const voiceChannel = message.member.voiceChannel
     if (!voiceChannel) return this.error(ERROR.NOT_IN_VC, message)
-    // const permissions = voiceChannel.permissionsFor(this.bot.user)
-    // TODO: Make a check and see if the bot has permissions to speak and connect to the vc, does not currently work
-    // if(!permissions.has("CONNECT") || !permissions.has("SPEAK")) return this.error({message: "The bot has no permission to join or speak in the voice channel you're currently connected to"}, message)
 
     // Check for a queue
     var queue = await Queue.findOne({ id: message.guild.id })
@@ -32,7 +29,7 @@ module.exports = class extends Command {
         // const check = video.title
         // this is a bit of a weird wonky way of finding out whether or not video is null, but it works.
       } catch (e) {
-        return this.error({ message: 'Invalid  youtube link!' }, { message })
+        return this.error({ message: 'Invalid YouTube URL!' }, { message })
       }
     }
 
