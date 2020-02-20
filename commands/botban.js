@@ -13,8 +13,9 @@ module.exports = class extends Command {
     })
   }
 
-  async run ({ message, args, member }) {
+  async run ({ message, args }) {
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
+    const member = this.mention(args[0], message)
     if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message })
     if (member.isBanned) return this.error({ message: 'User is already banned!' }, { message })
     if (OWNERS.includes(member.id)) return this.error({ message: 'Members of the Kōkoku Nashi team can not be banned!' }, { message })
