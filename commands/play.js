@@ -35,7 +35,7 @@ module.exports = class extends Command {
         await queue.updateOne({ paused: false })
         return message.channel.send('Resumed playback.')
       } else {
-        return this.error({ message: 'Invalid  youtube link!' }, { message })
+        return this.error({ message: 'Invalid YouTube URL!' }, { message })
       }
     }
 
