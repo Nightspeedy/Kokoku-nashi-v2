@@ -1,5 +1,5 @@
 const Event = require('@lib/event')
-const { Guild, Member } = require('@lib/models')
+const { Guild } = require('@lib/models')
 
 module.exports = class extends Event {
   constructor (main) {
@@ -14,9 +14,6 @@ module.exports = class extends Event {
       const guild = await Guild.findOne({ id: message.guild.id })
       if (!guild) Guild.create({ id: message.guild.id })
     }
-
-    const user = await Member.findOne({ id: message.author.id })
-    if (!user && !message.author.bot) Member.create({ id: message.author.id })
 
     this.cmdhandler.handle(message)
   }
