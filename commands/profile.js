@@ -32,6 +32,7 @@ module.exports = class extends Command {
 
     if (member.id !== user.id) {
       member = await Member.findOne({ id: user.id })
+      if (!member) return this.error(ERROR.UNKNOWN_MEMBER, { message })
     }
 
     const cardMsg = await message.channel.send('Generating profile...')
