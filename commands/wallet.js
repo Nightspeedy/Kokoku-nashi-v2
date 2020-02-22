@@ -8,6 +8,7 @@ module.exports = class extends Command {
   constructor (bot) {
     super({
       name: 'wallet',
+      aliases: ['bal', 'balance'],
       description: 'Check your, or someone elses wallet.',
       type: TYPES.UTILITY,
       args: '[@mention]'
