@@ -33,7 +33,7 @@ module.exports = class extends Command {
           break
         case 3:
           message.channel.send('Update complete, rebooting...')
-          // child = await child_process.spawn('pm2', ['restart', 'Kokoku Nashi'])
+          childProcess = await child_process.spawn('pm2', ['restart', 'Kokoku Nashi'])
           break
         default:
           return
