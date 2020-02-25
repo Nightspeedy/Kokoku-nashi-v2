@@ -46,6 +46,9 @@ module.exports = class extends Command {
       if (cmd.aliases.length > 0) {
         embed.addField('Aliases:', `\`${cmd.aliases.join('`, `')}\``)
       }
+      if (cmd.permissions.length > 0) {
+        embed.addField('Permissions required to execute', cmd.permissions[0])
+      }
       embed.addField('Usage:', `k!${cmd.name} ${cmd.args}`)
     } else {
       // Total commands, will get value later
