@@ -11,52 +11,48 @@ module.exports = class extends Command {
     })
   }
 
-  async run ({ message, args }) {
-    var msg
-    this.update(message, msg, 1)
+  async run ({ message }) {
+    this.update(message, undefined, 1)
   }
 
   async update (message, msg, step) {
-    var childProcess, currentAction, upToDate
-    upToDate = false
-    try {
-      switch (step) {
-        case 1:
-          currentAction = 'Checking for updates, and pulling latest version...'
-          msg = await message.channel.send(currentAction)
-          childProcess = await child_process.spawn('git', ['pull'])
-          break
-        case 2:
-          currentAction = 'Installing dependencies...'
-          msg = await message.channel.send(currentAction)
-          childProcess = await child_process.spawn('npm', ['install'])
-          break
-        case 3:
-          message.channel.send('Update complete, rebooting...')
-          childProcess = await child_process.spawn('pm2', ['restart', 'Kokoku Nashi'])
-          break
-        default:
-          return
-      }
-      childProcess.stdout.on('data', data => {
-        if (data.toString().trim() === 'Already up to date.') {
-          upToDate = true
-        }
-      })
-      childProcess.stderr.on('data', data => {
-        message.channel.send(data.toString().trim())
-      })
-      childProcess.on('close', async (code) => {
-        if (code !== 0) {
-          msg.edit('Process exited with non-zero exit code')
-        } else {
-          if (upToDate) return msg.edit('Already up to date!')
-          msg.edit(`${currentAction} Done!`)
-          this.update(message, msg, step + 1)
-        }
-      })
-    } catch (e) {
-      console.log(e)
+    let childProcess, currentAction
+    let upToDate = false
+
+    switch (step) {
+      case 1:
+        currentAction = 'Checking for updates, and pulling latest version...'
+        msg = await message.channel.send(currentAction)
+        childProcess = await child_process.spawn('git', ['pull'])
+        break
+      case 2:
+        currentAction = 'Installing dependencies...'
+        msg = await message.channel.send(currentAction)
+        childProcess = await child_process.spawn('npm', ['install'])
+        break
+      case 3:
+        await message.channel.send('Update complete, rebooting')
+        childProcess = await child_process.spawn('pm2', ['restart', 'Kokoku Nashi'])
+        break
+      default:
+        return
     }
+    childProcess.stdout.on('data', data => {
+      if (data.toString().trim() === 'Already up to date.') {
+        upToDate = true
+      }
+    })
+    childProcess.stderr.on('data', data => {
+      message.channel.send(data.toString().trim())
+    })
+    childProcess.on('close', async (code) => {
+      if (code !== 0) {
+        msg.edit('Process exited with non-zero exit code')
+      } else {
+        if (upToDate) return msg.edit('Already up to date!')
+        msg.edit(`${currentAction} Done!`)
+        this.update(message, msg, step + 1)
+      }
+    })
   }
 }
