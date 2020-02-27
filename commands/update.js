@@ -36,7 +36,7 @@ module.exports = class extends Command {
         key = await Strings.findOne({ key: 'updated' })
         if (key) await key.delete()
         await Strings.create({ key: 'updated', value: `true-${msg.channel.id}-${msg.id}` })
-        childProcess = await child_process.spawn('pm2', ['restart', '0'])
+        childProcess = await child_process.spawn('pm2', ['restart', 'Kokoku Nashi'])
         break
       default:
         return
