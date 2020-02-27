@@ -42,9 +42,13 @@ module.exports = class extends Command {
 
       embed.setTitle('Command help: ' + cmd.name)
         .setColor(color)
-        .setDescription(`Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon't include example brackets in your command ( [] or {} )\n\n ${cmd.description}`)
+        .setDescription('Arguments enclosed in square brackets ( [] ) are OPTIONAL!\nArguments enclosed in curly braces ( {} ) are REQUIRED! \n\nDon\'t include example brackets in your command ( [] or {} )')
+        .addField('Description', cmd.description)
       if (cmd.aliases.length > 0) {
         embed.addField('Aliases:', `\`${cmd.aliases.join('`, `')}\``)
+      }
+      if (cmd.permissions.length > 0) {
+        embed.addField('Permissions required to execute', `\`${cmd.permissions.join('`, `')}\``)
       }
       embed.addField('Usage:', `k!${cmd.name} ${cmd.args}`)
     } else {
