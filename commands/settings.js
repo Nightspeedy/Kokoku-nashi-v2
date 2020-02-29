@@ -20,6 +20,7 @@ module.exports = class extends Command {
     this.types = {
       text: { usage: '{"String in quotations"}' },
       channel: { usage: '{#channelMention}' },
+      role: { usage: '{@role}' },
       toggle: { usage: '{on/off}' }
     }
     // This array contains all the possible settings
@@ -31,6 +32,7 @@ module.exports = class extends Command {
       { type: 'text', name: 'welcomemessage', prettyName: 'Welcome Message', dbField: 'welcomeMessage', limit: 100, premiumLimit: 1000 },
       { type: 'text', name: 'leavemessage', prettyName: 'Leave Message', dbField: 'leaveMessage', limit: 100, premiumLimit: 1000 },
       { type: 'text', name: 'banmessage', prettyName: 'Ban Message', dbField: 'banMessage', limit: 100, premiumLimit: 1000 },
+      { type: 'role', name: 'muteRole', prettyName: 'Mute Role', dbField: 'muteRole' },
       { type: 'channel', name: 'joinleavechannel', prettyName: 'Join/Leave Channel', dbField: 'joinLeaveChannel' },
       { type: 'channel', name: 'logchannel', prettyName: 'Log Channel', dbField: 'logChannel' },
       { type: 'toggle', name: 'sendwelcomemessages', prettyName: 'Send Welcome Messages', dbField: 'enableWelcomeMessage' },
@@ -86,6 +88,15 @@ module.exports = class extends Command {
     await this.update(guild, setting.dbField, value)
   }
 
+  // The handler for {type:role}
+  // Gets the first mentioned role and updates
+  // the guild document if role isnt undefined.
+  async role ({ message, guild, setting }) {
+    const role = message.mentions.roles.first()
+    if (!role) return this.error(ERROR.INVALID_CHANNEL, { message })
+    await this.update(guild, setting.dbField, role.id)
+  }
+
   // The handler for {type:channel}
   // Gets the first mentioned channel and updates
   // the guild document if channel isnt undefined.
@@ -105,13 +116,14 @@ module.exports = class extends Command {
   }
 
   async overview ({ message, guild }) {
-    const fields = { text: [], channel: [], toggle: [] }
+    const fields = { text: [], role: [], channel: [], toggle: [] }
     const [enabled, disabled] = ['<:Enabled:524627369386967042>', '<:Disabled:524627368757690398>']
 
     this.settings.forEach(setting => {
       switch (setting.type) {
         case 'text': fields.text.push(`${setting.prettyName} *[${setting.name}]:*\n${guild[setting.dbField]}\n`); break
-        case 'channel': fields.channel.push(`${setting.prettyName} *[${setting.name}]*: ${guild[setting.dbField] ? `<#${guild[setting.dbField]}>` : 'No channel set.'}`); break
+        case 'role': fields.role.push(`${setting.prettyName} *[${setting.name}]:* ${guild[setting.dbField]}`); break
+        case 'channel': fields.channel.push(`${setting.prettyName} *[${setting.name}]:* ${guild[setting.dbField] ? `<#${guild[setting.dbField]}>` : 'No channel set.'}`); break
         case 'toggle': fields.toggle.push(`${guild[setting.dbField] ? enabled : disabled} ${setting.prettyName} *[${setting.name}]*`); break
       }
     })
@@ -123,6 +135,8 @@ module.exports = class extends Command {
         description: 'Here you can see all the current settings for your server :D\n',
         fields: [
           { name: 'Channels', value: fields.channel.join('\n') },
+          { name: '\u200b', value: '\u200b' }, // Empty
+          { name: 'Roles', value: fields.role.join('\n') },
           { name: '\u200b', value: '\u200b' }, // Empty
           { name: 'Messages', value: fields.text.join('\n') },
           { name: '\u200b', value: '\u200b' }, // Empty
