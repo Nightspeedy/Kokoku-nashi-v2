@@ -5,7 +5,7 @@ const { OWNERS } = require('@lib/consts')
 const { Member } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor() {
+  constructor () {
     super({
       name: 'botban',
       description: 'Bans a user from interacting with Kōkoku Nashi',
@@ -14,7 +14,7 @@ module.exports = class extends Command {
     })
   }
 
-  async run({ message, args }) {
+  async run ({ message, args }) {
     if (!args[0]) return this.error(ERROR.INVALID_ARGUMENTS, { message, args })
     const user = await this.mention(args[0], message)
     const member = await Member.findOne({ id: user.id })
