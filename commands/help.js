@@ -70,6 +70,6 @@ module.exports = class extends Command {
         .addField('Bot owner commands', object.botOwner)
         .setFooter('Total commands: ' + i)
     }
-    message.channel.send(embed).catch(e => {})
+    message.channel.send(embed).catch(e => { })
   }
 }
