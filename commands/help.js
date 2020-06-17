@@ -15,7 +15,6 @@ module.exports = class extends Command {
 
   async run({ message, args, color }) {
 
-    console.log("check 2")
     // Instead of having 20 variables, i put them in an object
     const object = {
       general: '-',
