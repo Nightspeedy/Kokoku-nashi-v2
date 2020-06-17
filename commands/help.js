@@ -4,7 +4,7 @@ const { RichEmbed } = require('discord.js')
 const { Strings, DisabledCommand } = require('@lib/models')
 
 module.exports = class extends Command {
-  constructor () {
+  constructor() {
     super({
       name: 'help',
       description: "The help command, you're using this dummy!",
@@ -13,7 +13,9 @@ module.exports = class extends Command {
     })
   }
 
-  async run ({ message, args, color }) {
+  async run({ message, args, color }) {
+
+    console.log("check 2")
     // Instead of having 20 variables, i put them in an object
     const object = {
       general: '-',
@@ -70,6 +72,6 @@ module.exports = class extends Command {
         .addField('Bot owner commands', object.botOwner)
         .setFooter('Total commands: ' + i)
     }
-    message.channel.send(embed).catch(e => {})
+    message.channel.send(embed).catch(e => { })
   }
 }
